@@ -44,4 +44,4 @@ const exampleDataSlice = createSlice({
 });
 
 export const { addMonth, removeMonth } = exampleDataSlice.actions;
-export default exampleDataSlice.reducer;
+export const exampleDataReducer = exampleDataSlice.reducer;
