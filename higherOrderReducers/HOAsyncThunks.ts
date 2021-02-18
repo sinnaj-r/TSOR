@@ -3,6 +3,7 @@ import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { IDObject } from './HOOdataReducer';
 import { makeRequest } from './makeRequest';
 import { RootState } from '../store';
+
 /**
  * Creates Async Thunk Actions for use in our HOReducer.
  * All HTTP-Methods are supported.

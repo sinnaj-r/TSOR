@@ -10,10 +10,10 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import {
-  createAsyncThunksForAPI,
+  ActionsKeys,
   ActionsType,
   ApiActionKeys,
-  ActionsKeys,
+  createAsyncThunksForAPI,
 } from './HOAsyncThunks';
 
 export type IDObject = { id: string };
