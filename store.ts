@@ -4,6 +4,7 @@ import {
   PAUSE,
   PERSIST,
   persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
   REHYDRATE,
@@ -38,3 +39,4 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type RootDispatch = typeof store.dispatch;
 export const resetStoreAction = () => ({ type: 'store/reset' });
+export const persistor = persistStore(store);
