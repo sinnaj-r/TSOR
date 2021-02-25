@@ -1,5 +1,4 @@
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
-import { RootState } from '../store';
 
 export type Product = {
   id: string;
@@ -14,7 +13,7 @@ const {
 
 export const {
   get: productGet,
-  getById: productgetById,
+  getById: productGetById,
   post: productPost,
   patch: productPatch,
   deleteById: productDeleteById,
@@ -26,11 +25,15 @@ export const {
   selectAll: productSelectAll,
   selectTotal: productSelectTotal,
   selectById: productSelectById,
-} = adapter.getSelectors((state: RootState) => state.product);
+} = adapter.getSelectors(
+  (state: { product: ReturnType<typeof productsSlice['reducer']> }) =>
+    state.product,
+);
 
 export const {
   setFilter: productSetFilter,
   dismissError: productDismissError,
+  clear: productClear,
 } = productsSlice.actions;
 
 export const productsReducer = productsSlice.reducer;

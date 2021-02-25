@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import buildQuery, { QueryOptions } from 'odata-query';
-import { store } from '../store';
+import type { RootState } from '../store';
 
 export const ROUTES = {
   product: 'sap.odm.product/Product',
@@ -19,11 +19,10 @@ export const makeRequest = async <T>(
   method: AxiosRequestConfig['method'],
   route: keyof typeof ROUTES,
   query: Partial<QueryOptions<T>>,
+  settings: RootState['settings'],
   data?: any,
 ) => {
-  const {
-    settings: { graphUrl, graphLandscape, authToken },
-  } = store.getState();
+  const { graphUrl, graphLandscape, authToken } = settings;
   const result = await axios.request({
     method,
     url: `${graphUrl}/${ROUTES[route]}/${buildQuery(query)}`,

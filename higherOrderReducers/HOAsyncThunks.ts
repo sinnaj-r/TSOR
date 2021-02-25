@@ -1,8 +1,8 @@
 import { QueryOptions } from 'odata-query';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { IDObject } from './HOOdataReducer';
+import type { IDObject } from './HOOdataReducer';
 import { makeRequest } from './makeRequest';
-import { RootState } from '../store';
+import type { RootState } from '../store';
 
 /**
  * Creates Async Thunk Actions for use in our HOReducer.
@@ -22,7 +22,8 @@ export const createAsyncThunksForAPI = <T extends IDObject>(
       const filter = thunkAPI.getState().product.filter as Partial<
         QueryOptions<T>
       >;
-      return makeRequest<T>('GET', 'product', filter);
+      const { settings } = thunkAPI.getState();
+      return makeRequest<T>('GET', 'product', filter, settings);
     },
   ),
   getById: createAsyncThunk<T[], string, { state: RootState }>(

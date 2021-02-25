@@ -87,6 +87,12 @@ export const createApiSlice = <T extends IDObject>(apiName: string) => {
         state.error = undefined;
         state.loading = 'idle';
       },
+      clear(state) {
+        state.error = undefined;
+        state.loading = 'idle';
+        state.filter = {};
+        adapter.removeAll(state as GenericState<T>);
+      },
     },
     extraReducers: (builder) =>
       createExtraReducers<T>(apiName, actions, adapter, builder),
