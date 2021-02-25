@@ -6,6 +6,18 @@ export const ROUTES = {
   product: 'sap.odm.product/Product',
 };
 
+class RequestError extends Error {
+  errorBody: { message: string };
+
+  errorCode: number | undefined;
+
+  constructor(errorBody: { message: string }, errorCode?: number) {
+    super(`${errorBody.message} (${errorCode})`);
+    this.errorBody = errorBody;
+    this.errorCode = errorCode;
+  }
+}
+
 /**
  * Execute a HTTP Request. Directly returns the result data.
  * @template T
@@ -23,14 +35,18 @@ export const makeRequest = async <T>(
   data?: any,
 ) => {
   const { graphUrl, graphLandscape, authToken } = settings;
-  const result = await axios.request({
-    method,
-    url: `${graphUrl}/${ROUTES[route]}/${buildQuery(query)}`,
-    data,
-    headers: {
-      Authorization: authToken,
-      Landscape: graphLandscape,
-    },
-  });
-  return result.data.value as T[];
+  try {
+    const result = await axios.request({
+      method,
+      url: `${graphUrl}/${ROUTES[route]}/${buildQuery(query)}`,
+      data,
+      headers: {
+        Authorization: authToken,
+        Landscape: graphLandscape,
+      },
+    });
+    return result.data.value as T[];
+  } catch (err) {
+    throw new RequestError(err.response.data, err.response.status);
+  }
 };
