@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ValueOf } from '../../../types/typeHelper';
 
-type SettingsState = {
+export type SettingsState = {
   graphUrl: string;
   graphLandscape: string;
   authToken: string;
