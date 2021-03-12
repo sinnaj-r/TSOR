@@ -38,7 +38,17 @@ type BuPaAddressData = {
   websites: BuPaWebsite;
   communicationPreferences: any;
 };
-
+type BuPaIndustry = {
+  industrySector: {
+    name: string;
+    descr?: string;
+    code: '91';
+  };
+  industrySystemType: {
+    code: '0001';
+  };
+  isStandardIndustry: boolean;
+};
 export type BuPa = {
   id: string;
   businessPartnerType: 'organization' | 'person';
@@ -50,6 +60,12 @@ export type BuPa = {
       formattedOrgNameLine3?: string;
       formattedOrgNameLine4?: string;
     };
+    legalForm?: {
+      name: string;
+      descr: null;
+      code: '01';
+    };
+    industries?: BuPaIndustry[];
   };
 };
 
