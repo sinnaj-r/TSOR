@@ -1,5 +1,6 @@
 import { QueryOptions } from 'odata-query';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { ROUTES } from '../ROUTES';
 import type { IDObject } from './HOOdataReducer';
 import { makeRequest } from './makeRequest';
 import type { RootState } from '../store';
@@ -13,17 +14,17 @@ import type { RootState } from '../store';
  * @returns {ActionsType<T>}
  */
 export const createAsyncThunksForAPI = <T extends IDObject>(
-  apiName: string,
+  apiName: keyof typeof ROUTES,
 ): ActionsType<T> => ({
   get: createAsyncThunk<T[], void, { state: RootState }>(
     `${apiName}/GET`,
     async (_, thunkAPI) => {
       // eslint-disable-next-line no-debugger
-      const filter = thunkAPI.getState().product.filter as Partial<
+      const filter = thunkAPI.getState()[apiName].filter as Partial<
         QueryOptions<T>
       >;
       const { settings } = thunkAPI.getState();
-      return makeRequest<T>('GET', 'product', filter, settings);
+      return makeRequest<T>('GET', apiName, filter, settings);
     },
   ),
   getById: createAsyncThunk<T[], string, { state: RootState }>(

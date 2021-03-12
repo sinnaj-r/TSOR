@@ -9,6 +9,7 @@ import {
   EntityAdapter,
   PayloadAction,
 } from '@reduxjs/toolkit';
+import { ROUTES } from '../ROUTES';
 import {
   ActionsKeys,
   ActionsType,
@@ -67,7 +68,9 @@ const createExtraReducers = <T extends IDObject>(
  * @param {string} apiName
  * @returns
  */
-export const createApiSlice = <T extends IDObject>(apiName: string) => {
+export const createApiSlice = <T extends IDObject>(
+  apiName: keyof typeof ROUTES,
+) => {
   const actions = createAsyncThunksForAPI<T>(apiName);
   const adapter = createAdapter<T>();
   const slice = createSlice({

@@ -1,10 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import buildQuery, { QueryOptions } from 'odata-query';
+import { ROUTES } from '../ROUTES';
 import type { RootState } from '../store';
-
-export const ROUTES = {
-  product: 'sap.odm.product/Product',
-};
 
 class RequestError extends Error {
   errorBody: { message: string };
