@@ -4,13 +4,10 @@ import { ROUTES } from '../ROUTES';
 import type { RootState } from '../store';
 
 class RequestError extends Error {
-  errorBody: { message: string };
-
   errorCode: number | undefined;
 
-  constructor(errorBody: { message: string }, errorCode?: number) {
-    super(`${errorBody.message} (${errorCode})`);
-    this.errorBody = errorBody;
+  constructor(errorBody: string, errorCode?: number) {
+    super(`${errorBody} (${errorCode})`);
     this.errorCode = errorCode;
   }
 }
@@ -59,6 +56,11 @@ export const makeRequest = async <T>(
 
     return result.data.value as T[];
   } catch (err) {
-    throw new RequestError(err.response.data, err.response.status);
+    throw new RequestError(
+      typeof err.response.data === 'string'
+        ? err.response.data
+        : err.response.statusText,
+      err.response.status,
+    );
   }
 };
