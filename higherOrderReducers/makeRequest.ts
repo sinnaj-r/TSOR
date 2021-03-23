@@ -40,22 +40,25 @@ export const makeRequest = async <T>(
   const { graphUrl, graphLandscape, authToken } = settings;
   const urlArgs = buildQuery(query);
   const delimiter = urlArgs.startsWith('?') ? '' : '/';
+
+  const headers: { [key: string]: string } = {
+    Landscape: graphLandscape,
+    'x-requested-with': 'XMLHttpRequest',
+  };
+  if (authToken) {
+    headers.Authorization = authToken;
+  }
+
   try {
     const result = await axios.request({
       method,
       url: `${URL_PREFIX}${graphUrl}/${ROUTES[route]}${delimiter}${urlArgs}`,
       data,
-      headers: {
-        // Authorization: authToken,
-        Landscape: graphLandscape,
-        'x-requested-with': 'XMLHttpRequest',
-      },
+      headers,
     });
 
     return result.data.value as T[];
   } catch (err) {
-    console.log(err);
-
     throw new RequestError(err.response.data, err.response.status);
   }
 };
