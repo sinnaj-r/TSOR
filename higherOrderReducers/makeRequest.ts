@@ -15,6 +15,12 @@ class RequestError extends Error {
   }
 }
 
+const ENABLE_CORS_PROXY = true;
+
+const URL_PREFIX: string = ENABLE_CORS_PROXY
+  ? 'https://corsproxy.cfapps.eu10.hana.ondemand.com/'
+  : '';
+
 /**
  * Execute a HTTP Request. Directly returns the result data.
  * @template T
@@ -32,18 +38,24 @@ export const makeRequest = async <T>(
   data?: any,
 ) => {
   const { graphUrl, graphLandscape, authToken } = settings;
+  const urlArgs = buildQuery(query);
+  const delimiter = urlArgs.startsWith('?') ? '' : '/';
   try {
     const result = await axios.request({
       method,
-      url: `${graphUrl}/${ROUTES[route]}/${buildQuery(query)}`,
+      url: `${URL_PREFIX}${graphUrl}/${ROUTES[route]}${delimiter}${urlArgs}`,
       data,
       headers: {
-        Authorization: authToken,
+        // Authorization: authToken,
         Landscape: graphLandscape,
+        'x-requested-with': 'XMLHttpRequest',
       },
     });
+
     return result.data.value as T[];
   } catch (err) {
+    console.log(err);
+
     throw new RequestError(err.response.data, err.response.status);
   }
 };
