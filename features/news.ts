@@ -5,6 +5,8 @@ export type NewsItem = {
   title: string;
   url: string;
   description?: string;
+  pubDate: string;
+  source: string;
 };
 
 const {
