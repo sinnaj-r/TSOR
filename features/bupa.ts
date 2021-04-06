@@ -97,6 +97,7 @@ export const {
   setFilter: buPaSetFilter,
   dismissError: buPaDismissError,
   clear: buPaClear,
+  setAll: buPaSetAll,
 } = buPasSlice.actions;
 
 export const buPasReducer = buPasSlice.reducer;

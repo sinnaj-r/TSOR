@@ -37,6 +37,7 @@ export const {
   setFilter: newsSetFilter,
   dismissError: newsDismissError,
   clear: newsClear,
+  setAll: newsSetAll,
 } = newsSlice.actions;
 
 export const newsReducer = newsSlice.reducer;

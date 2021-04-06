@@ -1,20 +1,13 @@
 import { QueryOptions } from 'odata-query';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { ROUTES } from '../ROUTES';
+import { resolveComposition } from '../compositions';
+import { RouteKey } from '../ROUTES';
 import type { IDObject } from './HOOdataReducer';
 import { makeRequest } from './makeRequest';
 import type { RootState } from '../store';
 
-/**
- * Creates Async Thunk Actions for use in our HOReducer.
- * All HTTP-Methods are supported.
- *
- * @template T
- * @param {string} apiName
- * @returns {ActionsType<T>}
- */
 export const createAsyncThunksForAPI = <T extends IDObject>(
-  apiName: keyof typeof ROUTES,
+  apiName: RouteKey,
 ): ActionsType<T> => ({
   get: createAsyncThunk<T[], void, { state: RootState }>(
     `${apiName}/GET`,
@@ -24,7 +17,10 @@ export const createAsyncThunksForAPI = <T extends IDObject>(
         QueryOptions<T>
       >;
       const { settings } = thunkAPI.getState();
-      return makeRequest<T>('GET', apiName, filter, settings);
+      const result = await makeRequest<T>('GET', apiName, filter, settings);
+
+      const data = resolveComposition(thunkAPI.dispatch, result, apiName);
+      return data;
     },
   ),
   getById: createAsyncThunk<T[], string, { state: RootState }>(

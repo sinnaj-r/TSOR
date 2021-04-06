@@ -1,3 +1,4 @@
+import { EntityAdapter } from '@reduxjs/toolkit';
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
 
 export type Product = {
@@ -25,7 +26,7 @@ export const {
   selectAll: productSelectAll,
   selectTotal: productSelectTotal,
   selectById: productSelectById,
-} = adapter.getSelectors(
+} = (adapter as EntityAdapter<Product>).getSelectors(
   (state: { product: ReturnType<typeof productsSlice['reducer']> }) =>
     state.product,
 );
@@ -34,6 +35,7 @@ export const {
   setFilter: productSetFilter,
   dismissError: productDismissError,
   clear: productClear,
+  setAll: productSetAll,
 } = productsSlice.actions;
 
 export const productsReducer = productsSlice.reducer;

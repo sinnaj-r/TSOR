@@ -7,9 +7,11 @@ import {
   Dictionary,
   Draft,
   EntityAdapter,
+  EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { ROUTES } from '../ROUTES';
+import { RouteKey } from '../ROUTES';
+
 import {
   ActionsKeys,
   ActionsType,
@@ -39,7 +41,7 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  * @param {ActionReducerMapBuilder<GenericState<T>>} builder
  */
 const createExtraReducers = <T extends IDObject>(
-  apiName: string,
+  apiName: RouteKey,
   thunks: ActionsType<T>,
   adapter: EntityAdapter<T>,
   builder: ActionReducerMapBuilder<GenericState<T>>,
@@ -69,10 +71,10 @@ const createExtraReducers = <T extends IDObject>(
  * @returns
  */
 export const createApiSlice = <T extends IDObject>(
-  apiName: keyof typeof ROUTES,
+  apiName: RouteKey,
+  adapter = createAdapter<T>(),
 ) => {
   const actions = createAsyncThunksForAPI<T>(apiName);
-  const adapter = createAdapter<T>();
   const slice = createSlice({
     name: apiName,
     initialState: {
@@ -95,6 +97,9 @@ export const createApiSlice = <T extends IDObject>(
         state.loading = 'idle';
         state.filter = {};
         adapter.removeAll(state as GenericState<T>);
+      },
+      setAll(state, action: PayloadAction<T[]>) {
+        adapter.setAll(state as EntityState<T>, action.payload);
       },
     },
     extraReducers: (builder) =>
