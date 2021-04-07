@@ -6,14 +6,14 @@ import type { IDObject } from './higherOrderReducers/HOOdataReducer';
 import { RouteKey } from './ROUTES';
 
 export type CompositionMapType = {
-  [key: string]: [{ path: string; type: string }];
+  [key: string]: [{ path: string; apiName: RouteKey }];
 };
 
 export const CompositionMap: CompositionMapType = {
   buPa: [
     {
       path: 'customerInformation.salesOpportunities',
-      type: 'opportunity/setAll',
+      apiName: 'opportunity',
     },
   ],
 };
@@ -55,7 +55,10 @@ export const resolveComposition = <T extends IDObject>(
           objectPath.set(item, composition.path, compositionItem.id);
         }
       }
-      dispatch({ type: composition.type, payload: compositionItems });
+      dispatch({
+        type: `${composition.apiName}/setAll`,
+        payload: compositionItems,
+      });
     }
   });
   return changedItems;
