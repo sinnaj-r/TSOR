@@ -1,13 +1,5 @@
+import { NewsItem } from '../../../types/NewsItem';
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
-
-export type NewsItem = {
-  id: string;
-  title: string;
-  url: string;
-  description?: string;
-  pubDate: string;
-  source: string;
-};
 
 const {
   slice: newsSlice,

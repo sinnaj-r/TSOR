@@ -1,9 +1,5 @@
+import { Product } from '../../../types/Product';
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
-
-export type Product = {
-  id: string;
-  name: string;
-};
 
 const {
   slice: productsSlice,
