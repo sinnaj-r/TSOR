@@ -1,4 +1,5 @@
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
+import { CustomerOpportunity } from './opportunity';
 
 type BuPaCountry = {
   name: string;
@@ -7,7 +8,7 @@ type BuPaCountry = {
   code: string;
   currency?: any;
 };
-type BuPaTelefonNumber = {
+type BuPaTelephoneNumber = {
   id: string;
   isDefault: boolean;
   country: BuPaCountry;
@@ -33,8 +34,8 @@ type BuPaAddressData = {
   postalAddressType: 'organizationPostalAddress';
   organizationPostalAddress: any;
   emailAddresses: BuPaEmailAddress[];
-  phoneNumbers: BuPaTelefonNumber[];
-  faxNumbers: BuPaTelefonNumber[];
+  phoneNumbers: BuPaTelephoneNumber[];
+  faxNumbers: BuPaTelephoneNumber[];
   websites: BuPaWebsite;
   communicationPreferences: any;
 };
@@ -48,6 +49,15 @@ type BuPaIndustry = {
     code: '0001';
   };
   isStandardIndustry: boolean;
+};
+type BuPaCustomerInformation = {
+  isOrderBlocked?: boolean;
+  orderBlockedReason?: number;
+  isDeliveryBlocked?: boolean;
+  deliveryBlockedReason?: number;
+  isBillingBlocked?: boolean;
+  billingBlockedReason?: number;
+  salesOpportunities?: CustomerOpportunity[];
 };
 export type BuPa = {
   id: string;
@@ -67,6 +77,7 @@ export type BuPa = {
     };
     industries?: BuPaIndustry[];
   };
+  customerInformation?: BuPaCustomerInformation;
 };
 
 const {
