@@ -10,7 +10,7 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { RouteKey } from '../ROUTES';
+import { RouteKeyType } from '../ROUTES';
 
 import {
   ActionsKeys,
@@ -41,7 +41,7 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  * @param {ActionReducerMapBuilder<GenericState<T>>} builder
  */
 const createExtraReducers = <T extends IDObject>(
-  apiName: RouteKey,
+  apiName: RouteKeyType,
   thunks: ActionsType<T>,
   adapter: EntityAdapter<T>,
   builder: ActionReducerMapBuilder<GenericState<T>>,
@@ -71,7 +71,7 @@ const createExtraReducers = <T extends IDObject>(
  * @returns
  */
 export const createApiSlice = <T extends IDObject>(
-  apiName: RouteKey,
+  apiName: RouteKeyType,
   adapter = createAdapter<T>(),
 ) => {
   const actions = createAsyncThunksForAPI<T>(apiName);

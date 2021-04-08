@@ -1,13 +1,13 @@
 import { QueryOptions } from 'odata-query';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { resolveComposition } from '../compositions';
-import { RouteKey } from '../ROUTES';
+import { RouteKeyType } from '../ROUTES';
 import type { IDObject } from './HOOdataReducer';
 import { makeRequest } from './makeRequest';
 import type { RootState } from '../store';
 
 export const createAsyncThunksForAPI = <T extends IDObject>(
-  apiName: RouteKey,
+  apiName: RouteKeyType,
 ): ActionsType<T> => ({
   get: createAsyncThunk<T[], void, { state: RootState }>(
     `${apiName}/GET`,

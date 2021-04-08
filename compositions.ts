@@ -3,10 +3,10 @@ import objectPath from 'object-path';
 import type { RootDispatch } from './store';
 
 import type { IDObject } from './higherOrderReducers/HOOdataReducer';
-import { RouteKey } from './ROUTES';
+import { RouteKeyType } from './ROUTES';
 
 export type CompositionMapType = {
-  [key: string]: [{ path: string; apiName: RouteKey }];
+  [key: string]: [{ path: string; apiName: RouteKeyType }];
 };
 
 export const CompositionMap: CompositionMapType = {
@@ -30,7 +30,7 @@ export const CompositionMap: CompositionMapType = {
 export const resolveComposition = <T extends IDObject>(
   dispatch: RootDispatch,
   items: T[],
-  apiName: RouteKey,
+  apiName: RouteKeyType,
 ) => {
   const changedItems = produce(items, (draft) => {
     for (const composition of CompositionMap[apiName] || []) {

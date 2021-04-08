@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import buildQuery, { QueryOptions } from 'odata-query';
-import { RouteKey, ROUTES } from '../ROUTES';
+import { RouteKeyType, ROUTES } from '../ROUTES';
 
 import type { RootState } from '../store';
 
@@ -23,14 +23,14 @@ const URL_PREFIX: string = ENABLE_CORS_PROXY
  * Execute a HTTP Request. Directly returns the result data.
  * @template T
  * @param {AxiosRequestConfig['method']} method The HTTP Method
- * @param {RouteKey ROUTES} route The Route (see the ROUTES-Object)
+ * @param {RouteKeyType} route The Route (see the ROUTES-Object)
  * @param {Partial<QueryOptions<T>>} query An Query-Object in the format of the 'odata-query' package
  * @param {*} [data]
  * @returns
  */
 export const makeRequest = async <T>(
   method: AxiosRequestConfig['method'],
-  route: RouteKey,
+  route: RouteKeyType,
   query: Partial<QueryOptions<T>>,
   settings: RootState['settings'],
   data?: any,
