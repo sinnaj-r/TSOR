@@ -1,11 +1,11 @@
-import { BuPa } from '../../../types/BuPa';
+import { BusinessPartnerType } from '../../../types/BusinessPartner';
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
 
 const {
   slice: buPasSlice,
   actions: buPaActions,
   adapter,
-} = createApiSlice<BuPa>('buPa');
+} = createApiSlice<BusinessPartnerType>('buPa');
 
 export const {
   get: buPaGet,
