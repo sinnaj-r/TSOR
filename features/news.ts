@@ -1,11 +1,11 @@
-import { NewsItem } from '../../../types/NewsItem';
+import { NewsItemType } from '../../../types/NewsItem';
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
 
 const {
   slice: newsSlice,
   actions: newsActions,
   adapter,
-} = createApiSlice<NewsItem>('news');
+} = createApiSlice<NewsItemType>('news');
 
 export const {
   get: newsGet,

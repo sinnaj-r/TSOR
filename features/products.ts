@@ -1,11 +1,11 @@
-import { Product } from '../../../types/Product';
+import { ProductType } from '../../../types/Product';
 import { createApiSlice } from '../higherOrderReducers/HOOdataReducer';
 
 const {
   slice: productsSlice,
   actions: productActions,
   adapter,
-} = createApiSlice<Product>('product');
+} = createApiSlice<ProductType>('product');
 
 export const {
   get: productGet,
