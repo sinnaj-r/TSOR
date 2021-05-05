@@ -1,8 +1,6 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import buildQuery, { QueryOptions } from 'odata-query';
-import { RouteKeyType, ROUTES } from '../ROUTES';
-
-import type { RootState } from '../store';
+import axios, { AxiosRequestConfig } from "axios";
+import buildQuery, { QueryOptions } from "odata-query";
+import { GenericState } from "../../types/GenericState";
 
 class RequestError extends Error {
   errorCode: number | undefined;
@@ -16,8 +14,8 @@ class RequestError extends Error {
 const ENABLE_CORS_PROXY = false;
 
 const URL_PREFIX: string = ENABLE_CORS_PROXY
-  ? 'https://corsproxy.cfapps.eu10.hana.ondemand.com/'
-  : '';
+  ? "https://corsproxy.cfapps.eu10.hana.ondemand.com/"
+  : "";
 
 /**
  * Execute a HTTP Request. Directly returns the result data.
@@ -28,20 +26,20 @@ const URL_PREFIX: string = ENABLE_CORS_PROXY
  * @param {*} [data]
  * @returns
  */
-export const makeRequest = async <T>(
-  method: AxiosRequestConfig['method'],
-  route: RouteKeyType,
+export const makeRequest = async <K, T, S extends GenericState>(
+  method: AxiosRequestConfig["method"],
+  route: K,
   query: Partial<QueryOptions<T>>,
-  settings: RootState['settings'],
-  data?: any,
+  settings: S["settings"],
+  data?: any
 ) => {
   const { graphUrl, graphLandscape, authToken } = settings;
   const urlArgs = buildQuery(query);
-  const delimiter = urlArgs.startsWith('?') ? '' : '/';
+  const delimiter = urlArgs.startsWith("?") ? "" : "/";
 
   const headers: { [key: string]: string } = {
     Landscape: graphLandscape,
-    'x-requested-with': 'XMLHttpRequest',
+    "x-requested-with": "XMLHttpRequest",
   };
   if (authToken) {
     headers.Authorization = authToken;
@@ -58,10 +56,10 @@ export const makeRequest = async <T>(
     return result.data.value as T[];
   } catch (err) {
     throw new RequestError(
-      typeof err.response.data === 'string'
+      typeof err.response.data === "string"
         ? err.response.data
         : err.response.statusText,
-      err.response.status,
+      err.response.status
     );
   }
 };

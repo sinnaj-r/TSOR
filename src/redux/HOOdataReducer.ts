@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { QueryOptions } from 'odata-query';
+import { QueryOptions } from "odata-query";
 import {
   ActionReducerMapBuilder,
   createEntityAdapter,
@@ -9,25 +9,18 @@ import {
   EntityAdapter,
   EntityState,
   PayloadAction,
-} from '@reduxjs/toolkit';
-import { RouteKeyType } from '../ROUTES';
+} from "@reduxjs/toolkit";
 
 import {
   ActionsKeys,
-  ActionsType,
+  AsyncActionsType,
   ApiActionKeys,
   createAsyncThunksForAPI,
-} from './HOAsyncThunks';
-
-export type IDObject = { id: string };
-
-export type GenericState<T extends IDObject> = {
-  filter: Partial<QueryOptions<T>>;
-  ids: (string | number)[];
-  entities: Dictionary<T>;
-  loading: 'idle' | 'pending' | 'rejected';
-  error?: any;
-};
+} from "./HOAsyncThunks";
+import { IDObject } from "../../types/IDObject";
+import { GenericSliceState } from "../../types/GenericSliceState";
+import { GenericReducers } from "../../types/GenericReducers";
+import { GenericState } from "../../types/GenericState";
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 
@@ -36,30 +29,43 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  *
  * @template T
  * @param {string} apiName
- * @param {ActionsType<T>} thunks
+ * @param {AsyncActionsType<T>} thunkActions
  * @param {EntityAdapter<T>} adapter
- * @param {ActionReducerMapBuilder<GenericState<T>>} builder
+ * @param {ActionReducerMapBuilder<GenericSliceState<T>>} builder
  */
-const createExtraReducers = <T extends IDObject>(
-  apiName: RouteKeyType,
-  thunks: ActionsType<T>,
+const createExtraReducers = <
+  K extends string,
+  T extends IDObject,
+  S extends GenericState
+>(
+  apiName: K,
+  thunkActions: AsyncActionsType<T, S>,
   adapter: EntityAdapter<T>,
-  builder: ActionReducerMapBuilder<GenericState<T>>,
+  builder: ActionReducerMapBuilder<GenericSliceState<T>>
 ) => {
   for (const key of ApiActionKeys) {
-    builder.addCase(thunks[key as ActionsKeys].fulfilled, (state, action) => {
-      state.loading = 'idle';
-      state.error = undefined;
-      adapter.setAll(state as GenericState<T>, action.payload);
-    });
-    builder.addCase(thunks[key as ActionsKeys].pending, (state, _action) => {
-      state.loading = 'pending';
-      state.error = undefined;
-    });
-    builder.addCase(thunks[key as ActionsKeys].rejected, (state, action) => {
-      state.loading = 'rejected';
-      state.error = action.error;
-    });
+    builder.addCase(
+      thunkActions[key as ActionsKeys].fulfilled,
+      (state, action) => {
+        state.loading = "idle";
+        state.error = undefined;
+        adapter.setAll(state as GenericSliceState<T>, action.payload);
+      }
+    );
+    builder.addCase(
+      thunkActions[key as ActionsKeys].pending,
+      (state, _action) => {
+        state.loading = "pending";
+        state.error = undefined;
+      }
+    );
+    builder.addCase(
+      thunkActions[key as ActionsKeys].rejected,
+      (state, action) => {
+        state.loading = "rejected";
+        state.error = action.error;
+      }
+    );
   }
 };
 
@@ -70,40 +76,44 @@ const createExtraReducers = <T extends IDObject>(
  * @param {string} apiName
  * @returns
  */
-export const createApiSlice = <T extends IDObject>(
-  apiName: RouteKeyType,
-  adapter = createAdapter<T>(),
+export const createApiSlice = <
+  K extends string,
+  T extends IDObject,
+  S extends GenericState
+>(
+  apiName: K,
+  adapter = createAdapter<T>()
 ) => {
-  const actions = createAsyncThunksForAPI<T>(apiName);
+  const actions = createAsyncThunksForAPI<T, S>(apiName);
   const slice = createSlice({
     name: apiName,
     initialState: {
       ...adapter.getInitialState({
-        loading: 'idle',
+        loading: "idle",
       }),
       filter: {},
-    } as GenericState<T>,
+    } as GenericSliceState<T>,
     reducers: {
-      setFilter(state, action: PayloadAction<GenericState<T>['filter']>) {
+      setFilter(state, action: PayloadAction<GenericSliceState<T>["filter"]>) {
         // eslint-disable-next-line no-param-reassign
-        state.filter = action.payload as Draft<Partial<QueryOptions<T>>>;
+        (state.filter as Partial<QueryOptions<T>>) = action.payload;
       },
       dismissError(state) {
         state.error = undefined;
-        state.loading = 'idle';
+        state.loading = "idle";
       },
       clear(state) {
         state.error = undefined;
-        state.loading = 'idle';
+        state.loading = "idle";
         state.filter = {};
-        adapter.removeAll(state as GenericState<T>);
+        adapter.removeAll(state as GenericSliceState<T>);
       },
       setAll(state, action: PayloadAction<T[]>) {
         adapter.setAll(state as EntityState<T>, action.payload);
       },
-    },
+    } as GenericReducers<T>,
     extraReducers: (builder) =>
-      createExtraReducers<T>(apiName, actions, adapter, builder),
+      createExtraReducers<K, T, S>(apiName, actions, adapter, builder),
   });
   return { actions, slice, adapter };
 };
