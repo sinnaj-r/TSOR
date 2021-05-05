@@ -1,7 +1,7 @@
 {
-  "name": "TSOR",
+  "name": "tsor",
   "version": "0.0.1",
-  "description": "An TypeScript ODATA Redux Toolkit",
+  "description": "An TypeScript-ODATA-Redux-Toolkit",
   "main": "index.ts",
   "author": "Jannis Rosenbaum",
   "license": "All Rights Reserverd",
@@ -9,7 +9,8 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
     "axios": "^0.21.1",
-    "odata-query": "../odata-query",
+    "odata-query": "git+ssh://git@gitlab.hpi.de:epicbp2020/jannis-ba-code/odata-query.git#bachelor-thesis",
+    "cloud-sdk-js": "git+ssh://git@gitlab.hpi.de:epicbp2020/jannis-ba-code/cloud-sdk-js.git#bachelor-thesis",
     "redux": "^4.1.0",
     "redux-persist": "^6.0.0"
   },
