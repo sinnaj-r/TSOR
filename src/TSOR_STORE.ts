@@ -1,10 +1,14 @@
 import {
   Action,
+  AnyAction,
+  combineReducers,
   configureStore,
   getDefaultMiddleware,
   Reducer,
   ReducersMapObject,
   Store,
+  ThunkAction,
+  ThunkDispatch,
 } from "@reduxjs/toolkit";
 import {
   FLUSH,
@@ -52,8 +56,11 @@ export class TSOR_STORE<S, A extends Action<any>> {
     });
     this.persistor = persistStore(this.store);
   }
-  getState() {
+  getState(): S & PersistPartial {
     return this.store.getState();
+  }
+  dispatch<R>(action: ThunkAction<R, S, void, A>): R {
+    return (this.store.dispatch as ThunkDispatch<S, void, A>)(action);
   }
 }
 

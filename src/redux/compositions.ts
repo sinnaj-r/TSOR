@@ -1,19 +1,17 @@
-import { produce, current } from 'immer';
-import objectPath from 'object-path';
-import type { RootDispatch } from './store';
+import { produce, current } from "immer";
+import { Dispatch } from "redux";
+import { IDObject } from "../../types/IDObject";
+import objectPath from "object-path";
 
-import type { IDObject } from './higherOrderReducers/HOOdataReducer';
-import { RouteKeyType } from './ROUTES';
-
-export type CompositionMapType = {
-  [key: string]: [{ path: string; apiName: RouteKeyType }];
+export type CompositionMapType<K> = {
+  [key: string]: [{ path: string; apiName: K }];
 };
 
-export const CompositionMap: CompositionMapType = {
+export const CompositionMap: CompositionMapType<"opportunity"> = {
   buPa: [
     {
-      path: 'customerInformation.salesOpportunities',
-      apiName: 'opportunity',
+      path: "customerInformation.salesOpportunities",
+      apiName: "opportunity",
     },
   ],
 };
@@ -27,10 +25,14 @@ export const CompositionMap: CompositionMapType = {
  * @param items The Items from which the compositions should be extracted.
  * @param apiName
  */
-export const resolveComposition = <T extends IDObject>(
-  dispatch: RootDispatch,
+export const resolveComposition = <
+  T extends IDObject,
+  K extends string,
+  D extends Dispatch
+>(
+  dispatch: D,
   items: T[],
-  apiName: RouteKeyType,
+  apiName: K
 ) => {
   const changedItems = produce(items, (draft) => {
     for (const composition of CompositionMap[apiName] || []) {
@@ -48,7 +50,7 @@ export const resolveComposition = <T extends IDObject>(
           objectPath.set(
             item,
             composition.path,
-            compositionItem.map((elm: any) => elm.id),
+            compositionItem.map((elm: any) => elm.id)
           );
         } else {
           compositionItems.push(current(compositionItem));

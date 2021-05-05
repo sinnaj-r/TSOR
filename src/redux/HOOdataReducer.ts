@@ -20,7 +20,6 @@ import {
 import { IDObject } from "../../types/IDObject";
 import { GenericSliceState } from "../../types/GenericSliceState";
 import { GenericReducers } from "../../types/GenericReducers";
-import { GenericState } from "../../types/GenericState";
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 
@@ -33,11 +32,7 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  * @param {EntityAdapter<T>} adapter
  * @param {ActionReducerMapBuilder<GenericSliceState<T>>} builder
  */
-const createExtraReducers = <
-  K extends string,
-  T extends IDObject,
-  S extends GenericState
->(
+const createExtraReducers = <K extends string, T extends IDObject, S>(
   apiName: K,
   thunkActions: AsyncActionsType<T, S>,
   adapter: EntityAdapter<T>,
@@ -79,12 +74,13 @@ const createExtraReducers = <
 export const createApiSlice = <
   K extends string,
   T extends IDObject,
-  S extends GenericState
+  S extends Record<string, any>
 >(
   apiName: K,
-  adapter = createAdapter<T>()
+  adapter = createAdapter<T>(),
+  apiPrefix: string = apiName
 ) => {
-  const actions = createAsyncThunksForAPI<T, S>(apiName);
+  const actions = createAsyncThunksForAPI<T, S>(apiName, apiPrefix);
   const slice = createSlice({
     name: apiName,
     initialState: {

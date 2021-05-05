@@ -13,22 +13,13 @@ import {
   getDefaultMiddleware,
   Reducer,
 } from "@reduxjs/toolkit";
-import {
-  FLUSH,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-  REHYDRATE,
-} from "redux-persist/es/constants";
-import { GenericState } from "../types/GenericState";
 import { GenericSliceState } from "../types/GenericSliceState";
 import { GenericReducers } from "../types/GenericReducers";
 
 export type TAsyncActions<
   K extends string,
   T extends IDObject
-> = AsyncActionsType<T, Record<K, GenericSliceState<T>>>;
+> = AsyncActionsType<T, any>;
 
 export type TBaseActions<T extends IDObject> = CaseReducerActions<
   GenericReducers<T>
@@ -40,23 +31,27 @@ export type TActions<K extends string, T extends IDObject> = TAsyncActions<
 > &
   TBaseActions<T>;
 
-export class TSOR_SLICE<K extends string, T extends IDObject> {
+export class TSOR_SLICE<
+  K extends string,
+  T extends IDObject,
+  S extends Record<string, any>
+> {
   private _actions: TAsyncActions<K, T>;
   private _baseActions: TBaseActions<T>;
-  selectors: EntitySelectors<T, Record<K, GenericSliceState<T>>>;
+  selectors: EntitySelectors<T, S>;
   reducer: Reducer<GenericSliceState<T>, AnyAction>;
   routeKey: K;
-  constructor(routeKey: K) {
-    const { adapter, actions, slice } = createApiSlice<
-      K,
-      T,
-      Record<K, GenericSliceState<T>>
-    >(routeKey);
+  constructor(routeName: K, routeSuffix: string = routeName) {
+    const { adapter, actions, slice } = createApiSlice<K, T, S>(
+      routeName,
+      undefined,
+      routeSuffix
+    );
     this.reducer = slice.reducer;
     this._actions = actions;
     this._baseActions = slice.actions;
-    this.selectors = adapter.getSelectors((state) => state[routeKey]);
-    this.routeKey = routeKey;
+    this.selectors = adapter.getSelectors((state) => state[routeName]);
+    this.routeKey = routeName;
   }
   getActions(): TActions<K, T> {
     return { ...this._actions, ...this._baseActions };

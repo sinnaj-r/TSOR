@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import buildQuery, { QueryOptions } from "odata-query";
-import { GenericState } from "../../types/GenericState";
+import { SettingsState } from "../../types/SettingsState";
 
 class RequestError extends Error {
   errorCode: number | undefined;
@@ -13,10 +13,6 @@ class RequestError extends Error {
 
 const ENABLE_CORS_PROXY = false;
 
-const URL_PREFIX: string = ENABLE_CORS_PROXY
-  ? "https://corsproxy.cfapps.eu10.hana.ondemand.com/"
-  : "";
-
 /**
  * Execute a HTTP Request. Directly returns the result data.
  * @template T
@@ -26,13 +22,14 @@ const URL_PREFIX: string = ENABLE_CORS_PROXY
  * @param {*} [data]
  * @returns
  */
-export const makeRequest = async <K, T, S extends GenericState>(
+export const makeRequest = async <K, T, S>(
   method: AxiosRequestConfig["method"],
-  route: K,
+  apiPrefix: string,
   query: Partial<QueryOptions<T>>,
-  settings: S["settings"],
+  settings: SettingsState,
   data?: any
 ) => {
+  // TODO Types
   const { graphUrl, graphLandscape, authToken } = settings;
   const urlArgs = buildQuery(query);
   const delimiter = urlArgs.startsWith("?") ? "" : "/";
@@ -48,7 +45,7 @@ export const makeRequest = async <K, T, S extends GenericState>(
   try {
     const result = await axios.request({
       method,
-      url: `${URL_PREFIX}${graphUrl}/${ROUTES[route]}${delimiter}${urlArgs}`,
+      url: `${graphUrl}/${apiPrefix}${delimiter}${urlArgs}`,
       data,
       headers,
     });

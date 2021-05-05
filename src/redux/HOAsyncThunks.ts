@@ -4,30 +4,34 @@ import { resolveComposition } from "./compositions";
 import { makeRequest } from "./makeRequest";
 import { QueryOptions } from "odata-query";
 import { GenericSliceState } from "../../types/GenericSliceState";
-import { GenericState } from "../../types/GenericState";
 
-export const createAsyncThunksForAPI = <
-  T extends IDObject,
-  S extends GenericState
->(
-  apiName: keyof S
+export const createAsyncThunksForAPI = <T extends IDObject, S>(
+  apiName: keyof S,
+  apiPrefix: string
 ): AsyncActionsType<T, S> => ({
   get: createAsyncThunk<T[], void, { state: S }>(
     `${apiName}/GET`,
     async (_, thunkAPI) => {
       // eslint-disable-next-line no-debugger
-      const filter = thunkAPI.getState()[apiName].filter as Partial<
+      // TODO Types
+      const filter = (thunkAPI.getState() as any)[apiName].filter as Partial<
         QueryOptions<T>
       >;
-      const { settings } = thunkAPI.getState();
+      // TODO Types
+      const { settings } = thunkAPI.getState() as any;
       const result = await makeRequest<typeof apiName, T, S>(
         "GET",
-        apiName,
+        apiPrefix,
         filter,
-        settings
+        settings as any
       );
 
-      const data = resolveComposition(thunkAPI.dispatch, result, apiName);
+      const data = resolveComposition(
+        thunkAPI.dispatch,
+        result,
+        //TODO Type
+        apiName as string
+      );
       return data;
     }
   ),
