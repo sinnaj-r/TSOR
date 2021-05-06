@@ -13,24 +13,47 @@
     "axios-mock-adapter": "^1.19.0",
     "immer": "^9.0.2",
     "object-path": "^0.11.5",
-    "odata-query": "git+ssh://git@gitlab.hpi.de:epicbp2020/jannis-ba-code/odata-query.git#bachelor-thesis",
+    "odata-query": "git+https://gitlab.hpi.de/epicbp2020/jannis-ba-code/odata-query.git#bachelor-thesis",
     "redux": "^4.1.0",
-    "redux-persist": "^6.0.0",
-    "tslib": "^2.2.0"
+    "redux-persist": "^6.0.0"
   },
   "module": "index.ts",
   "devDependencies": {
     "@types/chai": "^4.2.17",
     "@types/mocha": "^8.2.2",
     "@types/moxios": "^0.4.11",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "chai": "^4.3.4",
+    "depcheck": "^1.4.0",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-unused-imports": "^1.1.0",
+    "eslint-watch": "^7.0.0",
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
+    "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register --require tests/hooks.ts  tests/**/*.test.ts",
-    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register --require tests/hooks.ts tests/**/*.test.ts",
+    "coverage": "nyc yarn test",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src --color",
+    "lint:all": "yarn lint:strict && yarn lint:ts && yarn lint:depcheck ",
+    "lint:ts": "tsc --noEmit",
+    "lint:ts-watch": "tsc -w --noEmit",
+    "lint:watch": "esw -w --changed --ext .js,.jsx,.ts,.tsx src --color",
+    "lint:depcheck": "depcheck --config=./.depcheckrc .",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --color --fix && yarn format --loglevel silent",
+    "lint:strict": "eslint --ext .js,.jsx,.ts,.tsx src --color --max-warnings=0",
+    "format": "prettier --no-editorconfig --ignore-unknown --write '**/(*.js|*.ts|*.jsx|*.tsx|*.md)'",
+    "format:check": "prettier -c --no-editorconfig --ignore-unknown --write '**/(*.js|*.ts|*.jsx|*.tsx|*.md)'",
+    "format:precommit": "pretty-quick --staged --ignore-path .editorconfig"
   }
 }

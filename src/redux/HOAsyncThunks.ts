@@ -1,13 +1,12 @@
-import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
-import { IDObject } from "../../types/IDObject";
-import { resolveComposition } from "./compositions";
-import { makeRequest } from "./makeRequest";
-import { QueryOptions } from "odata-query";
-import { GenericSliceState } from "../../types/GenericSliceState";
+import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { QueryOptions } from 'odata-query';
+import { IDObject } from '../../types/IDObject';
+import { resolveComposition } from './compositions';
+import { makeRequest } from './makeRequest';
 
 export const createAsyncThunksForAPI = <T extends IDObject, S>(
   apiName: keyof S,
-  apiPrefix: string
+  apiPrefix: string,
 ): AsyncActionsType<T, S> => ({
   get: createAsyncThunk<T[], void, { state: S }>(
     `${apiName}/GET`,
@@ -20,27 +19,27 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       // TODO Types
       const { settings } = thunkAPI.getState() as any;
       const result = await makeRequest<typeof apiName, T, S>(
-        "GET",
+        'GET',
         apiPrefix,
         filter,
-        settings as any
+        settings as any,
       );
 
       const data = resolveComposition(
         thunkAPI.dispatch,
         result,
-        //TODO Type
-        apiName as string
+        // TODO Type
+        apiName as string,
       );
       return data;
-    }
+    },
   ),
   getById: createAsyncThunk<T[], string, { state: S }>(
     `${apiName}/GET_BY_ID`,
     async () => {
       const response: any = {}; // Fetch Data here
       return response.data as T[];
-    }
+    },
   ),
   post: createAsyncThunk<T[], T, { state: S }>(`${apiName}/POST`, async () => {
     const response: any = {}; // Fetch Data here
@@ -51,14 +50,14 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
     async () => {
       const response: any = {}; // Fetch Data here
       return response.data as T[];
-    }
+    },
   ),
   deleteById: createAsyncThunk<T[], string, { state: S }>(
     `${apiName}/DELETE`,
     async () => {
       const response: any = {}; // Fetch Data here
       return response.data as T[];
-    }
+    },
   ),
 });
 
@@ -78,9 +77,9 @@ export type AsyncActionsType<T, S> = {
 
 export type ActionsKeys = keyof AsyncActionsType<null, null>;
 export const ApiActionKeys: ActionsKeys[] = [
-  "get",
-  "getById",
-  "post",
-  "patch",
-  "deleteById",
+  'get',
+  'getById',
+  'post',
+  'patch',
+  'deleteById',
 ];

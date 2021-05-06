@@ -1,6 +1,6 @@
-import axios, { AxiosRequestConfig } from "axios";
-import buildQuery, { QueryOptions } from "odata-query";
-import { SettingsState } from "../../types/SettingsState";
+import axios, { AxiosRequestConfig } from 'axios';
+import buildQuery, { QueryOptions } from 'odata-query';
+import { SettingsState } from '../../types/SettingsState';
 
 class RequestError extends Error {
   errorCode: number | undefined;
@@ -11,8 +11,6 @@ class RequestError extends Error {
   }
 }
 
-const ENABLE_CORS_PROXY = false;
-
 /**
  * Execute a HTTP Request. Directly returns the result data.
  * @template T
@@ -22,21 +20,22 @@ const ENABLE_CORS_PROXY = false;
  * @param {*} [data]
  * @returns
  */
+// eslint-disable-next-line unused-imports/no-unused-vars
 export const makeRequest = async <K, T, S>(
-  method: AxiosRequestConfig["method"],
+  method: AxiosRequestConfig['method'],
   apiPrefix: string,
   query: Partial<QueryOptions<T>>,
   settings: SettingsState,
-  data?: any
+  data?: any,
 ) => {
   // TODO Types
   const { graphUrl, graphLandscape, authToken } = settings;
   const urlArgs = buildQuery(query);
-  const delimiter = urlArgs.startsWith("?") ? "" : "/";
+  const delimiter = urlArgs.startsWith('?') ? '' : '/';
 
   const headers: { [key: string]: string } = {
     Landscape: graphLandscape,
-    "x-requested-with": "XMLHttpRequest",
+    'x-requested-with': 'XMLHttpRequest',
   };
   if (authToken) {
     headers.Authorization = authToken;
@@ -53,10 +52,10 @@ export const makeRequest = async <K, T, S>(
     return result.data.value as T[];
   } catch (err) {
     throw new RequestError(
-      typeof err.response.data === "string"
+      typeof err.response.data === 'string'
         ? err.response.data
         : err.response.statusText,
-      err.response.status
+      err.response.status,
     );
   }
 };

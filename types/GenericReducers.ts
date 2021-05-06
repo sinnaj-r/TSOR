@@ -2,11 +2,11 @@ import {
   CaseReducer,
   PayloadAction,
   SliceCaseReducers,
-} from "@reduxjs/toolkit";
-import { Draft } from "immer";
-import { QueryOptions } from "odata-query";
-import { GenericSliceState } from "./GenericSliceState";
-import { IDObject } from "./IDObject";
+} from '@reduxjs/toolkit';
+import { Draft } from 'immer';
+import { QueryOptions } from 'odata-query';
+import { GenericSliceState } from './GenericSliceState';
+import { IDObject } from './IDObject';
 
 export type GenericReducers<T extends IDObject> = {
   setFilter: CaseReducer<

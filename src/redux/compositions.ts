@@ -1,17 +1,17 @@
-import { produce, current } from "immer";
-import { Dispatch } from "redux";
-import { IDObject } from "../../types/IDObject";
-import objectPath from "object-path";
+import { produce, current } from 'immer';
+import { Dispatch } from 'redux';
+import objectPath from 'object-path';
+import { IDObject } from '../../types/IDObject';
 
 export type CompositionMapType<K> = {
   [key: string]: [{ path: string; apiName: K }];
 };
 
-export const CompositionMap: CompositionMapType<"opportunity"> = {
+export const CompositionMap: CompositionMapType<'opportunity'> = {
   buPa: [
     {
-      path: "customerInformation.salesOpportunities",
-      apiName: "opportunity",
+      path: 'customerInformation.salesOpportunities',
+      apiName: 'opportunity',
     },
   ],
 };
@@ -32,7 +32,7 @@ export const resolveComposition = <
 >(
   dispatch: D,
   items: T[],
-  apiName: K
+  apiName: K,
 ) => {
   const changedItems = produce(items, (draft) => {
     for (const composition of CompositionMap[apiName] || []) {
@@ -50,7 +50,7 @@ export const resolveComposition = <
           objectPath.set(
             item,
             composition.path,
-            compositionItem.map((elm: any) => elm.id)
+            compositionItem.map((elm: any) => elm.id),
           );
         } else {
           compositionItems.push(current(compositionItem));

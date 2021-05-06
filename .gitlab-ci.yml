@@ -1,0 +1,45 @@
+# cache using branch name
+# https://gitlab.com/help/ci/caching/index.md
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .yarn
+
+stages:
+  - test
+
+before_script:
+  - echo -e "machine gitlab.hpi.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc
+  - yarn install --cache-folder .yarn --network-timeout 100000 --prefer-offline
+
+checkFormat:
+  dependencies: []
+  needs: []
+  stage: test
+  image: node:14
+  before_script:
+    - yarn global add --network-timeout 100000 --cache-folder .yarn prettier
+  script:
+    - yarn format:check
+  only:
+    - merge_requests
+    - master
+
+test-lint:
+  stage: test
+  image: node:14
+  dependencies: []
+  needs: []
+  script:
+    - yarn lint:all
+    - yarn run coverage
+  only:
+    - merge_requests
+    - master
+  artifacts:
+    when: always
+    paths:
+      - coverage
+    reports:
+      cobertura: coverage/cobertura-coverage.xml
+    expire_in: 10 days
