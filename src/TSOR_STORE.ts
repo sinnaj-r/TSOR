@@ -4,7 +4,6 @@ import {
   getDefaultMiddleware,
   Reducer,
   Store,
-  ThunkAction,
   ThunkDispatch,
 } from '@reduxjs/toolkit';
 import {
@@ -33,6 +32,8 @@ export class TSOR_STORE<S, A extends Action<any>> {
 
   store: Store<ReturnType<Reducer<S & PersistPartial, A>>>;
 
+  dispatch: ThunkDispatch<S, void, A>;
+
   constructor(reducer: Reducer<S, A>) {
     const resettableRootReducer = (state: any, action: any) => {
       if (action.type === 'store/reset') {
@@ -55,14 +56,11 @@ export class TSOR_STORE<S, A extends Action<any>> {
       middleware,
     });
     this.persistor = persistStore(this.store);
+    this.dispatch = this.store.dispatch as ThunkDispatch<S, void, A>;
   }
 
   getState(): S & PersistPartial {
     return this.store.getState();
-  }
-
-  dispatch<R>(action: ThunkAction<R, S, void, A>): R {
-    return (this.store.dispatch as ThunkDispatch<S, void, A>)(action);
   }
 }
 

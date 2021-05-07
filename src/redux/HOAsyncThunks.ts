@@ -36,27 +36,41 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
   ),
   getById: createAsyncThunk<T[], string, { state: S }>(
     `${apiName}/GET_BY_ID`,
-    async () => {
-      const response: any = {}; // Fetch Data here
-      return response.data as T[];
+    async (key, thunkAPI) => {
+      const filter = (thunkAPI.getState() as any)[apiName].filter as Partial<
+        QueryOptions<T>
+      >;
+      // TODO Types
+      const { settings } = thunkAPI.getState() as any;
+      const result = await makeRequest<typeof apiName, T, S>(
+        'GET',
+        apiPrefix,
+        { ...filter, key },
+        settings,
+      );
+
+      const data = resolveComposition(
+        thunkAPI.dispatch,
+        result,
+        // TODO Type
+        apiName as string,
+      );
+      return data;
     },
   ),
   post: createAsyncThunk<T[], T, { state: S }>(`${apiName}/POST`, async () => {
-    const response: any = {}; // Fetch Data here
-    return response.data as T[];
+    throw Error('Not Implemented!');
   }),
   patch: createAsyncThunk<T[], Partial<T> & { id: string }, { state: S }>(
     `${apiName}/PATCH`,
     async () => {
-      const response: any = {}; // Fetch Data here
-      return response.data as T[];
+      throw Error('Not Implemented!');
     },
   ),
   deleteById: createAsyncThunk<T[], string, { state: S }>(
     `${apiName}/DELETE`,
     async () => {
-      const response: any = {}; // Fetch Data here
-      return response.data as T[];
+      throw Error('Not Implemented!');
     },
   ),
 });

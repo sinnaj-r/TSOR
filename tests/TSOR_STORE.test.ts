@@ -1,10 +1,12 @@
+/* eslint-disable max-lines */
 import { expect } from 'chai';
 import { AnyAction, combineReducers } from 'redux';
 import { createSettingsSlice } from '../src/redux/settings';
 import { TSOR_SLICE } from '../src/TSOR_SLICE';
-import { TSOR_STORE } from '../src/TSOR_STORE';
+import { resetStoreAction, TSOR_STORE } from '../src/TSOR_STORE';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { SettingsState } from '../types/SettingsState';
+import { mock } from './hooks';
 import { ExampleItem1Type, ExampleItem2Type } from './TestTypes';
 
 describe('TSOR Store', () => {
@@ -20,8 +22,15 @@ describe('TSOR Store', () => {
   const applySelector = (
     selectorName: keyof typeof slice1['selectors'],
     id?: string,
+    sliceId = 1,
   ) => {
-    const selector = slice1.selectors[selectorName];
+    let slice;
+    if (sliceId === 1) {
+      slice = slice1;
+    } else {
+      slice = slice2;
+    }
+    const selector = slice.selectors[selectorName];
     const state = store.getState();
     return selector(state, id!);
   };
@@ -46,6 +55,17 @@ describe('TSOR Store', () => {
     });
     store = new TSOR_STORE(reducer);
   });
+
+  const expectNoError = () => {
+    expect(store.getState().exampleItem1.error).to.be.undefined;
+    expect(store.getState().exampleItem1.loading).to.equal('idle');
+  };
+
+  const checkForError = (errMsg: string) => {
+    expect(store.getState().exampleItem1.error?.message).to.equal(errMsg);
+    expect(store.getState().exampleItem1.loading).to.equal('rejected');
+  };
+
   it('can create an store', () => {
     expect(store).to.be.instanceOf(TSOR_STORE);
   });
@@ -56,19 +76,67 @@ describe('TSOR Store', () => {
     expect(applySelector('selectTotal')).to.be.equal(0);
     expect(applySelector('selectById', 'test')).to.be.undefined;
   });
-  it('can add an item', async () => {
+  it('can get items & add them to the store', async () => {
     await store.dispatch(slice1.getActions().get());
-    expect(store.getState().exampleItem1.error).to.be.undefined;
+    expectNoError();
     const item = slice1.selectors.selectById(store.getState(), '1');
     expect(item).to.haveOwnProperty('description', 'Test 1');
   });
-  it('sets correct error');
-  it('can dismiss error');
+  it('can get a single item & add it to the store', async () => {
+    await store.dispatch(slice1.getActions().getById('1'));
+    expectNoError();
+    const item = slice1.selectors.selectById(store.getState(), '1');
+    expect(item).to.haveOwnProperty('description', 'Test 1');
+  });
+
+  it('sets correct error', async () => {
+    await store.dispatch(slice1.getActions().getById('42'));
+    checkForError('Not Found (404)');
+  });
+  it('can dismiss error', async () => {
+    await store.dispatch(slice1.getActions().getById('42'));
+    checkForError('Not Found (404)');
+
+    await store.dispatch(slice1.getActions().dismissError());
+    expectNoError();
+  });
   it('sets pending correct');
-  it('can set filter');
-  it('can clear');
+  it('can set filter', async () => {
+    await store.dispatch(
+      slice1.getActions().setFilter({
+        filter: {
+          description: 'Test',
+        },
+      }),
+    );
+    await store.dispatch(slice1.getActions().get());
+
+    mock.history.get[mock.history.get.length - 1].url?.includes(
+      "$filter=description eq 'Test'",
+    );
+  });
+  it('can clear', async () => {
+    await store.dispatch(slice1.getActions().get());
+    await store.dispatch(slice2.getActions().get());
+
+    expect(applySelector('selectTotal')).to.be.equal(2);
+    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(2);
+    await store.dispatch(slice1.getActions().clear());
+    expect(applySelector('selectTotal')).to.be.equal(0);
+    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(2);
+  });
+
+  it('can reset store', async () => {
+    await store.dispatch(slice1.getActions().get());
+    await store.dispatch(slice2.getActions().get());
+
+    expect(applySelector('selectTotal')).to.be.equal(2);
+    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(2);
+    await store.dispatch(resetStoreAction());
+    expect(applySelector('selectTotal')).to.be.equal(0);
+    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(0);
+  });
   it('can setAll');
-  it('can reset store');
   it('can use all http methods');
   it('can resolve compositions');
   it('can interact with settings');

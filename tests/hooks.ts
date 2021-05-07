@@ -2,13 +2,13 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 // This sets the mock adapter on the default instance
-var mock = new MockAdapter(axios);
+export const mock = new MockAdapter(axios);
 
 export const mochaHooks = {
   beforeAll() {
     console.log('installing moxios');
 
-    mock.onGet(/.*ExampleItem1.*/).reply(200, {
+    mock.onGet(/.*ExampleItem1\/.*/).reply(200, {
       value: [
         {
           id: '1',
@@ -24,7 +24,8 @@ export const mochaHooks = {
         },
       ],
     });
-    mock.onGet(/.*ExampleItem2.*/).reply(200, {
+
+    mock.onGet(/.*ExampleItem2\/.*/).reply(200, {
       value: [
         {
           id: '1',
@@ -42,5 +43,14 @@ export const mochaHooks = {
         },
       ],
     });
+
+    mock.onGet(/.*ExampleItem1\('1'\).*/).reply(200, {
+      id: '1',
+      description: 'Test 1',
+      num1: 1,
+      num2: 2,
+    });
+
+    mock.onGet(/.*ExampleItem1\('42'\).*/).reply(404, 'Not Found');
   },
 };

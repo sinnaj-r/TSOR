@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import buildQuery, { QueryOptions } from 'odata-query';
+import { IDObject } from '../../types/IDObject';
 import { SettingsState } from '../../types/SettingsState';
 
-class RequestError extends Error {
+export class RequestError extends Error {
   errorCode: number | undefined;
 
   constructor(errorBody: string, errorCode?: number) {
@@ -10,6 +11,13 @@ class RequestError extends Error {
     this.errorCode = errorCode;
   }
 }
+
+export type ODataResponse<T> =
+  | string
+  | {
+      value: T[];
+    }
+  | T;
 
 /**
  * Execute a HTTP Request. Directly returns the result data.
@@ -21,7 +29,7 @@ class RequestError extends Error {
  * @returns
  */
 // eslint-disable-next-line unused-imports/no-unused-vars
-export const makeRequest = async <K, T, S>(
+export const makeRequest = async <K, T extends IDObject, S>(
   method: AxiosRequestConfig['method'],
   apiPrefix: string,
   query: Partial<QueryOptions<T>>,
@@ -31,7 +39,7 @@ export const makeRequest = async <K, T, S>(
   // TODO Types
   const { graphUrl, graphLandscape, authToken } = settings;
   const urlArgs = buildQuery(query);
-  const delimiter = urlArgs.startsWith('?') ? '' : '/';
+  const delimiter = /^[?(]/.test(urlArgs) ? '' : '/';
 
   const headers: { [key: string]: string } = {
     Landscape: graphLandscape,
@@ -41,15 +49,22 @@ export const makeRequest = async <K, T, S>(
     headers.Authorization = authToken;
   }
 
+  const url = `${graphUrl}/${apiPrefix}${delimiter}${urlArgs}`;
   try {
-    const result = await axios.request({
+    const result = await axios.request<ODataResponse<T>>({
       method,
-      url: `${graphUrl}/${apiPrefix}${delimiter}${urlArgs}`,
+      url,
       data,
       headers,
     });
 
-    return result.data.value as T[];
+    if (typeof result.data === 'string') {
+      throw new RequestError(result.data, result.status);
+    }
+    if (!('value' in result.data)) {
+      return [result.data];
+    }
+    return result.data.value;
   } catch (err) {
     throw new RequestError(
       typeof err.response.data === 'string'
