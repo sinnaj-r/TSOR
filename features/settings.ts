@@ -29,7 +29,7 @@ const settingsSlice = createSlice({
       }>,
     ) {
       const { key, value } = action.payload;
-      state[key] = value;
+      state[key] = value!;
     },
     setMultiple(state, action: PayloadAction<Partial<SettingsState>>) {
       for (const key of Object.keys(
