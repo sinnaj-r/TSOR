@@ -34,7 +34,6 @@ export const makeRequest = async <T>(
   query: Partial<QueryOptions<T>>,
   settings: RootState['settings'],
   data?: any,
-  returnEnvelope: boolean = false,
 ) => {
   const { graphUrl, graphLandscape, authToken } = settings;
   const urlArgs = buildQuery(query);
@@ -56,9 +55,6 @@ export const makeRequest = async <T>(
       headers,
     });
 
-    if (returnEnvelope) {
-      return result.data;
-    }
     return result.data.value as T[];
   } catch (err) {
     throw new RequestError(
