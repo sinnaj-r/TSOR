@@ -7,6 +7,7 @@ export type SettingsState = {
   graphLandscape: string;
   authToken: string;
   currentCustomer?: string;
+  hideOtherActivities: boolean;
 };
 
 export const settingsInitialState: SettingsState = {
@@ -15,6 +16,7 @@ export const settingsInitialState: SettingsState = {
   authToken: '',
   // 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIiLCJ6aWQiOiJlMjYzMTNkZi0yNDgzLTRjNWItOTg5Yi03ZWQwOGJmMjk3YzMiLCJhdWQiOiJkZW1vLmFwaS5ncmFwaC5zYXAiLCJleHAiOjQ2ODg2MDkyMjEsImlhdCI6MTYwMzg3ODE0MiwiaXNzIjoiZGVtby5hcGkuZ3JhcGguc2FwIiwic3ViIjoiZGVtb0BncmFwaC5zYXAifQ.1nJljCX2HTUv9swW4a7HgYhxQGfH_DBTRqHrw66Xwv_oPC8bEFo5LpVqXCUrGCuCBLVr-1vrUhBKlfvZD9lg7D3z2Xc70PrmKcUEufa0m6my61QUprYuwMmN89yzsnQSUVwIikm4Po6Xo_cfWOXVDzr0WCjGaG_PAnikHMWFHhHbGpc3X1u-ATFw7Rq0oiulXWfavWBEKKB1zFxQ91dC1T103X4sYk3A2fk-dII8zL2XZ1CeOTi4_ntAYjJ5mm71jN0CwTrUWsLGOGe3aevcIw2QLqH44z96ZRy43LdOr8FzHaATwpd-i9FwQ7HlH8ZDqfHu-6FxBpiI29tT5CfwIQ',
   currentCustomer: undefined,
+  hideOtherActivities: true,
 };
 
 const settingsSlice = createSlice({
@@ -29,7 +31,7 @@ const settingsSlice = createSlice({
       }>,
     ) {
       const { key, value } = action.payload;
-      state[key] = value!;
+      (state[key] as any) = value!;
     },
     setMultiple(state, action: PayloadAction<Partial<SettingsState>>) {
       for (const key of Object.keys(
