@@ -13,12 +13,6 @@ class RequestError extends Error {
   }
 }
 
-const ENABLE_CORS_PROXY = false;
-
-const URL_PREFIX: string = ENABLE_CORS_PROXY
-  ? 'https://corsproxy.cfapps.eu10.hana.ondemand.com/'
-  : '';
-
 /**
  * Execute a HTTP Request. Directly returns the result data.
  * @template T
@@ -50,7 +44,7 @@ export const makeRequest = async <T>(
   try {
     const result = await axios.request({
       method,
-      url: `${URL_PREFIX}${graphUrl}/${ROUTES[route]}${delimiter}${urlArgs}`,
+      url: `${graphUrl}/${ROUTES[route]}${delimiter}${urlArgs}`,
       data,
       headers,
     });
