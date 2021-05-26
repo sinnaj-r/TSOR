@@ -40,3 +40,8 @@ export type RootState = ReturnType<typeof store.getState>;
 export type RootDispatch = typeof store.dispatch;
 export const resetStoreAction = () => ({ type: 'store/reset' });
 export const persistor = persistStore(store);
+
+// @ts-ignore
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'test-build') {
+  (window as any).store = store;
+}
