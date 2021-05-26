@@ -8,6 +8,7 @@ export type SettingsState = {
   authToken: string;
   currentCustomer?: string;
   hideOtherActivities: boolean;
+  currentColorTheme: string;
 };
 
 export const settingsInitialState: SettingsState = {
@@ -16,6 +17,7 @@ export const settingsInitialState: SettingsState = {
   authToken: '',
   currentCustomer: undefined,
   hideOtherActivities: true,
+  currentColorTheme: 'blue',
 };
 
 const settingsSlice = createSlice({
