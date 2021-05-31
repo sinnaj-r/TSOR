@@ -9,6 +9,7 @@ import { IDObject } from '../types/IDObject';
 import { AsyncActionsType } from './redux/HOAsyncThunks';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { GenericReducers } from '../types/GenericReducers';
+import { CompositionMapType } from './redux/compositions';
 
 export type TAsyncActions<T extends IDObject> = AsyncActionsType<T, any>;
 
@@ -33,11 +34,16 @@ export class TSOR_SLICE<
 
   routeKey: K;
 
-  constructor(routeName: K, routeSuffix: string = routeName) {
+  constructor(
+    routeName: K,
+    routeSuffix: string = routeName,
+    compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
+  ) {
     const { adapter, actions, slice } = createApiSlice<K, T, S>(
       routeName,
       undefined,
       routeSuffix,
+      compositionMap,
     );
     this.reducer = slice.reducer;
     this.actions = actions;

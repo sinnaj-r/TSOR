@@ -1,12 +1,13 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { QueryOptions } from 'odata-query';
 import { IDObject } from '../../types/IDObject';
-import { resolveComposition } from './compositions';
+import { CompositionMapType, resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 
 export const createAsyncThunksForAPI = <T extends IDObject, S>(
   apiName: keyof S,
   apiPrefix: string,
+  compositionMap: CompositionMapType,
 ): AsyncActionsType<T, S> => ({
   get: createAsyncThunk<T[], void, { state: S }>(
     `${apiName}/GET`,
@@ -30,6 +31,7 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
         result,
         // TODO Type
         apiName as string,
+        compositionMap,
       );
       return data;
     },
@@ -54,6 +56,7 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
         result,
         // TODO Type
         apiName as string,
+        compositionMap,
       );
       return data;
     },

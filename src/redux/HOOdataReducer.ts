@@ -18,6 +18,7 @@ import {
 import { IDObject } from '../../types/IDObject';
 import { GenericSliceState } from '../../types/GenericSliceState';
 import { GenericReducers } from '../../types/GenericReducers';
+import { CompositionMapType } from './compositions';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 
@@ -77,8 +78,13 @@ export const createApiSlice = <
   apiName: K,
   adapter = createAdapter<T>(),
   apiPrefix: string = apiName,
+  compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
 ) => {
-  const actions = createAsyncThunksForAPI<T, S>(apiName, apiPrefix);
+  const actions = createAsyncThunksForAPI<T, S>(
+    apiName,
+    apiPrefix,
+    compositionMap,
+  );
   const slice = createSlice({
     name: apiName,
     initialState: {
@@ -105,6 +111,9 @@ export const createApiSlice = <
       },
       setAll(state, action: PayloadAction<T[]>) {
         adapter.setAll(state as EntityState<T>, action.payload);
+      },
+      upsertMany(state, action: PayloadAction<T[]>) {
+        adapter.upsertMany(state as EntityState<T>, action.payload);
       },
     } as GenericReducers<T>,
     extraReducers: (builder) =>

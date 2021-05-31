@@ -37,23 +37,20 @@ export const makeRequest = async <K, T extends IDObject, S>(
   data?: any,
 ) => {
   // TODO Types
-  const { graphUrl, graphLandscape, authToken } = settings;
+  const { url, headers: additionalHeaders } = settings;
   const urlArgs = buildQuery(query);
   const delimiter = /^[?(]/.test(urlArgs) ? '' : '/';
 
   const headers: { [key: string]: string } = {
-    Landscape: graphLandscape,
     'x-requested-with': 'XMLHttpRequest',
+    ...additionalHeaders,
   };
-  if (authToken) {
-    headers.Authorization = authToken;
-  }
 
-  const url = `${graphUrl}/${apiPrefix}${delimiter}${urlArgs}`;
+  const requestUrl = `${url}/${apiPrefix}${delimiter}${urlArgs}`;
   try {
     const result = await axios.request<ODataResponse<T>>({
       method,
-      url,
+      url: requestUrl,
       data,
       headers,
     });
@@ -66,6 +63,7 @@ export const makeRequest = async <K, T extends IDObject, S>(
     }
     return result.data.value;
   } catch (err) {
+    console.error(err);
     throw new RequestError(
       typeof err.response.data === 'string'
         ? err.response.data

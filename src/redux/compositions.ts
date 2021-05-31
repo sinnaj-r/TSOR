@@ -3,18 +3,53 @@ import { Dispatch } from 'redux';
 import objectPath from 'object-path';
 import { IDObject } from '../../types/IDObject';
 
-export type CompositionMapType<K> = {
-  [key: string]: [{ path: string; apiName: K }];
+export type CompositionType = {
+  to: string;
+  isCollection: boolean;
 };
 
-export const CompositionMap: CompositionMapType<'opportunity'> = {
-  buPa: [
-    {
-      path: 'customerInformation.salesOpportunities',
-      apiName: 'opportunity',
-    },
-  ],
+// TODO Better Typing
+export type CompositionMapType = {
+  compositions: { [name: string]: { [key: string]: CompositionType } };
+  apiNames: {
+    [typeName: string]: string;
+  };
 };
+
+export type UsedComposition = {
+  path: string;
+  to: string;
+};
+
+const traverseCompositions = (
+  path: string,
+  compositionMap: CompositionMapType,
+  typeName: string,
+) => {
+  let usedCompositions: UsedComposition[] = [];
+  for (const [prop, composition] of Object.entries(
+    compositionMap.compositions[typeName],
+  )) {
+    if (compositionMap.apiNames[composition.to]) {
+      // TODO What about arrays ?
+      usedCompositions.push({
+        path: `${path}${path ? '.' : ''}${prop}`,
+        to: composition.to,
+      });
+    } else {
+      usedCompositions = [
+        ...usedCompositions,
+        ...traverseCompositions(
+          `${path}${path ? '.' : ''}${prop}`,
+          compositionMap,
+          composition.to,
+        ),
+      ];
+    }
+  }
+  return usedCompositions;
+};
+
 /**
  * Resolve all compositions for a route.
  *
@@ -33,15 +68,26 @@ export const resolveComposition = <
   dispatch: D,
   items: T[],
   apiName: K,
+  compositionMap: CompositionMapType,
 ) => {
   const changedItems = produce(items, (draft) => {
-    for (const composition of CompositionMap[apiName] || []) {
-      // eslint-disable-next-line no-debugger
+    const typeName = Object.entries(compositionMap.apiNames).find(
+      ([_, name]) => apiName === name,
+    )?.[0];
+    if (!typeName) {
+      throw new Error('TODO');
+    }
+    const usefulCompositions = traverseCompositions(
+      '',
+      compositionMap,
+      typeName,
+    );
+    for (const { path, to } of usefulCompositions) {
       const compositionItems: T[] = [];
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < draft.length; i++) {
         const item = draft[i];
-        const compositionItem = objectPath.get(item, composition.path);
+        const compositionItem = objectPath.get(item, path);
         if (!compositionItem) {
           continue;
         }
@@ -49,16 +95,16 @@ export const resolveComposition = <
           compositionItems.push(...current(compositionItem));
           objectPath.set(
             item,
-            composition.path,
+            path,
             compositionItem.map((elm: any) => elm.id),
           );
         } else {
           compositionItems.push(current(compositionItem));
-          objectPath.set(item, composition.path, compositionItem.id);
+          objectPath.set(item, path, compositionItem.id);
         }
       }
       dispatch({
-        type: `${composition.apiName}/setAll`,
+        type: `${compositionMap.apiNames[to]}/upsertMany`,
         payload: compositionItems,
       });
     }

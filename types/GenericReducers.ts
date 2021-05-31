@@ -1,9 +1,4 @@
-import {
-  CaseReducer,
-  PayloadAction,
-  SliceCaseReducers,
-} from '@reduxjs/toolkit';
-import { Draft } from 'immer';
+import { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
 import { QueryOptions } from 'odata-query';
 import { GenericSliceState } from './GenericSliceState';
 import { IDObject } from './IDObject';
@@ -16,4 +11,5 @@ export type GenericReducers<T extends IDObject> = {
   dismissError: CaseReducer<GenericSliceState<T>, PayloadAction<void>>;
   clear: CaseReducer<GenericSliceState<T>, PayloadAction<void>>;
   setAll: CaseReducer<GenericSliceState<T>, PayloadAction<T[]>>;
+  upsertMany: CaseReducer<GenericSliceState<T>, PayloadAction<T[]>>;
 };
