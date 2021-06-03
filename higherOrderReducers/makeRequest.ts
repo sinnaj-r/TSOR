@@ -4,12 +4,15 @@ import { RouteKeyType, ROUTES } from '../ROUTES';
 
 import type { RootState } from '../store';
 
-class RequestError extends Error {
+export class RequestError extends Error {
   errorCode: number | undefined;
 
-  constructor(errorBody: string, errorCode?: number) {
+  errorCodeName: string | undefined;
+
+  constructor(errorBody: string, errorCode?: number, errorCodeName?: string) {
     super(`${errorBody} (${errorCode})`);
     this.errorCode = errorCode;
+    this.errorCodeName = errorCodeName;
   }
 }
 
@@ -56,6 +59,7 @@ export const makeRequest = async <T>(
         ? err.response.data
         : err.response.statusText,
       err.response.status,
+      err.response.statusText,
     );
   }
 };
