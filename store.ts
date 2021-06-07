@@ -12,6 +12,10 @@ import {
 import storage from 'redux-persist/lib/storage';
 import rootReducer from './rootReducer';
 
+const TEST_ENV =
+  // @ts-ignore
+  process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'test-build';
+
 const persistConfig = {
   key: 'root',
   storage,
@@ -27,13 +31,22 @@ const resettableRootReducer = (state: any, action: any) => {
 
 const persistedReducer = persistReducer(persistConfig, resettableRootReducer);
 
+let middlewareOptions: Parameters<typeof getDefaultMiddleware>[0] = {
+  serializableCheck: {
+    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+  },
+};
+
+if (TEST_ENV) {
+  middlewareOptions = {
+    immutableCheck: false,
+    serializableCheck: false,
+  };
+}
+
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }),
+  middleware: getDefaultMiddleware(middlewareOptions),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -42,6 +55,6 @@ export const resetStoreAction = () => ({ type: 'store/reset' });
 export const persistor = persistStore(store);
 
 // @ts-ignore
-if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'test-build') {
+if (TEST_ENV) {
   (window as any).store = store;
 }

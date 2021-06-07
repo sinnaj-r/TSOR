@@ -20,7 +20,8 @@ export const createAsyncThunksForAPI = <T extends IDObject>(
       const result = await makeRequest<T>('GET', apiName, filter, settings);
 
       const data = resolveComposition(thunkAPI.dispatch, result, apiName);
-      return data;
+      const nonNullData = data.filter((item) => item && item.id);
+      return nonNullData;
     },
   ),
   getById: createAsyncThunk<T[], string, { state: RootState }>(
