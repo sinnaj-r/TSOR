@@ -52,6 +52,17 @@ export const makeRequest = async <T>(
       headers,
     });
 
+    // This is a workaround to normalize the id attributes of entities,
+    // as in some cases the id attribute is uppercased.
+    result.data.value = result.data.value.map((item: any) => {
+      if (item.ID && !item.id) {
+        const { ID, ...newItem } = item;
+        return { ...newItem, id: ID };
+      }
+
+      return item;
+    });
+
     return result.data.value as T[];
   } catch (err) {
     throw new RequestError(
