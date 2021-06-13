@@ -34,7 +34,7 @@ export const makeRequest = async <T>(
 ) => {
   const { graphUrl, graphLandscape, authToken } = settings;
   const urlArgs = buildQuery(query);
-  const delimiter = urlArgs.startsWith('?') ? '' : '/';
+  const delimiter = !urlArgs || urlArgs.match(/^[?(]/i) ? '' : '/';
 
   const headers: { [key: string]: string } = {
     Landscape: graphLandscape,
@@ -52,9 +52,11 @@ export const makeRequest = async <T>(
       headers,
     });
 
+    let value: T[] = result.data?.value ?? [result.data];
     // This is a workaround to normalize the id attributes of entities,
     // as in some cases the id attribute is uppercased.
-    result.data.value = result.data.value.map((item: any) => {
+
+    value = value.map((item: any) => {
       if (item.ID && !item.id) {
         const { ID, ...newItem } = item;
         return { ...newItem, id: ID };
@@ -63,7 +65,7 @@ export const makeRequest = async <T>(
       return item;
     });
 
-    return result.data.value as T[];
+    return value;
   } catch (err) {
     throw new RequestError(
       typeof err.response.data === 'string'

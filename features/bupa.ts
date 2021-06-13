@@ -9,7 +9,7 @@ const {
 
 export const {
   get: buPaGet,
-  getById: buPaGetById,
+  getWithFilter: buPaGetWithFilter,
   post: buPaPost,
   patch: buPaPatch,
   deleteById: buPaDeleteById,

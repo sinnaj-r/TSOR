@@ -9,7 +9,7 @@ const {
 
 export const {
   get: newsGet,
-  getById: newsGetById,
+  getWithFilter: newsGetWithFilter,
   post: newsPost,
   patch: newsPatch,
   deleteById: newsDeleteById,

@@ -50,7 +50,7 @@ const createExtraReducers = <T extends IDObject>(
     builder.addCase(thunks[key as ActionsKeys].fulfilled, (state, action) => {
       state.loading = 'idle';
       state.error = undefined;
-      adapter.setAll(state as GenericState<T>, action.payload);
+      adapter.upsertMany(state as GenericState<T>, action.payload);
     });
     builder.addCase(thunks[key as ActionsKeys].pending, (state, _action) => {
       state.loading = 'pending';
@@ -99,7 +99,7 @@ export const createApiSlice = <T extends IDObject>(
         adapter.removeAll(state as GenericState<T>);
       },
       setAll(state, action: PayloadAction<T[]>) {
-        adapter.setAll(state as EntityState<T>, action.payload);
+        adapter.upsertMany(state as EntityState<T>, action.payload);
       },
     },
     extraReducers: (builder) =>

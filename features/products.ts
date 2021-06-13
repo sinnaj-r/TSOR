@@ -9,7 +9,7 @@ const {
 
 export const {
   get: productGet,
-  getById: productGetById,
+  getWithFilter: productGetWithFilter,
   post: productPost,
   patch: productPatch,
   deleteById: productDeleteById,
