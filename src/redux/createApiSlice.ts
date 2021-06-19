@@ -1,68 +1,19 @@
 /* eslint-disable no-param-reassign */
-import { QueryOptions } from 'odata-query';
 import {
-  ActionReducerMapBuilder,
   createEntityAdapter,
   createSlice,
-  EntityAdapter,
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import {
-  ActionsKeys,
-  AsyncActionsType,
-  ApiActionKeys,
-  createAsyncThunksForAPI,
-} from './HOAsyncThunks';
+import { createAsyncThunksForAPI } from './createAsyncThunksForAPI';
 import { IDObject } from '../../types/IDObject';
 import { GenericSliceState } from '../../types/GenericSliceState';
 import { GenericReducers } from '../../types/GenericReducers';
 import { CompositionMapType } from './compositions';
+import { createExtraReducers } from './createExtraReducers';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
-
-/**
- *  This Functions adds the Reducers of our ActionTypes to the HO API Slide.
- *
- * @template T
- * @param {string} apiName
- * @param {AsyncActionsType<T>} thunkActions
- * @param {EntityAdapter<T>} adapter
- * @param {ActionReducerMapBuilder<GenericSliceState<T>>} builder
- */
-const createExtraReducers = <K extends string, T extends IDObject, S>(
-  apiName: K,
-  thunkActions: AsyncActionsType<T, S>,
-  adapter: EntityAdapter<T>,
-  builder: ActionReducerMapBuilder<GenericSliceState<T>>,
-) => {
-  for (const key of ApiActionKeys) {
-    builder.addCase(
-      thunkActions[key as ActionsKeys].fulfilled,
-      (state, action) => {
-        state.loading = 'idle';
-        state.error = undefined;
-        adapter.setAll(state as GenericSliceState<T>, action.payload);
-      },
-    );
-    builder.addCase(
-      thunkActions[key as ActionsKeys].pending,
-      (state, _action) => {
-        state.loading = 'pending';
-        state.error = undefined;
-      },
-    );
-    builder.addCase(
-      thunkActions[key as ActionsKeys].rejected,
-      (state, action) => {
-        state.loading = 'rejected';
-        state.error = action.error;
-      },
-    );
-  }
-};
-
 /**
  * The main HO-Function for creating an Redux-Toolkit Slice for an generic API-Route e.g. product or BuPa
  *

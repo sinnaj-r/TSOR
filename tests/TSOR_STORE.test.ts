@@ -167,4 +167,5 @@ describe('TSOR Store', () => {
   it('invalidates the cache (by being smart)');
   it('uses the authentication magic of the Cloud SDK');
   it('uses normalizr to normalize compositions');
+  it("doesn't create errors when using uppercase properties");
 });

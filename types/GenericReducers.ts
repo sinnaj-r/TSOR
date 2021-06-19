@@ -1,5 +1,4 @@
 import { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-import { QueryOptions } from 'odata-query';
 import { GenericSliceState } from './GenericSliceState';
 import { IDObject } from './IDObject';
 

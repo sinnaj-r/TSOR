@@ -1,6 +1,6 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { QueryOptions } from 'odata-query';
 import { IDObject } from '../../types/IDObject';
+import { QueryOptions } from '../JSONQuery/jsonQuery';
 import { CompositionMapType, resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 
@@ -17,8 +17,10 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       const filter = (thunkAPI.getState() as any)[apiName].filter as Partial<
         QueryOptions<T>
       >;
+
       // TODO Types
       const { settings } = thunkAPI.getState() as any;
+
       const result = await makeRequest<typeof apiName, T, S>(
         'GET',
         apiPrefix,

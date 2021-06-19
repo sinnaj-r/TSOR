@@ -4,9 +4,8 @@ import {
   EntitySelectors,
   Reducer,
 } from '@reduxjs/toolkit';
-import { createApiSlice } from './redux/HOOdataReducer';
 import { IDObject } from '../types/IDObject';
-import { AsyncActionsType } from './redux/HOAsyncThunks';
+import { AsyncActionsType } from './redux/createAsyncThunksForAPI';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { GenericReducers } from '../types/GenericReducers';
 import { CompositionMapType } from './redux/compositions';

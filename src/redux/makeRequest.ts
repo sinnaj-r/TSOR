@@ -1,7 +1,8 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import buildQuery, { QueryOptions } from 'odata-query';
+import { AxiosRequestConfig } from 'axios';
+import { Filter } from '../../../cloud-sdk-js/packages/core/dist';
 import { IDObject } from '../../types/IDObject';
 import { SettingsState } from '../../types/SettingsState';
+import { QueryOptions } from '../JSONQuery/jsonQuery';
 
 export class RequestError extends Error {
   errorCode: number | undefined;
@@ -32,43 +33,13 @@ export type ODataResponse<T> =
 export const makeRequest = async <K, T extends IDObject, S>(
   method: AxiosRequestConfig['method'],
   apiPrefix: string,
-  query: Partial<QueryOptions<T>>,
+  query: QueryOptions<T>,
   settings: SettingsState,
   data?: any,
 ) => {
   // TODO Types
   const { url, headers: additionalHeaders } = settings;
-  const urlArgs = buildQuery(query);
-  const delimiter = /^[?(]/.test(urlArgs) ? '' : '/';
 
-  const headers: { [key: string]: string } = {
-    'x-requested-with': 'XMLHttpRequest',
-    ...additionalHeaders,
-  };
+  for
 
-  const requestUrl = `${url}/${apiPrefix}${delimiter}${urlArgs}`;
-  try {
-    const result = await axios.request<ODataResponse<T>>({
-      method,
-      url: requestUrl,
-      data,
-      headers,
-    });
-
-    if (typeof result.data === 'string') {
-      throw new RequestError(result.data, result.status);
-    }
-    if (!('value' in result.data)) {
-      return [result.data];
-    }
-    return result.data.value;
-  } catch (err) {
-    console.error(err);
-    throw new RequestError(
-      typeof err.response.data === 'string'
-        ? err.response.data
-        : err.response.statusText,
-      err.response.status,
-    );
-  }
 };
