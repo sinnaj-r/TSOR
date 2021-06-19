@@ -1,24 +1,26 @@
 import {
-  GetAllRequestBuilder,
-  GetByKeyRequestBuilder,
-} from '../../cloud-sdk-js/packages/core/dist';
-import {
-  Entity,
+  GetByKeyRequestBuilderV4,
+  GetAllRequestBuilderV4,
+  CreateRequestBuilderV4,
+  UpdateRequestBuilderV4,
+  DeleteRequestBuilderV4,
   RequestBuilder,
-} from '../../cloud-sdk-js/packages/core/dist/odata-common';
+  EntityV4,
+} from '../../cloud-sdk-js/packages/core/dist';
 
-export interface RequestBuilderInstance<T extends Entity>
+export interface RequestBuilderInstance<T extends EntityV4>
   extends RequestBuilder<T> {
-  /**
-   * Returns a request builder for retrieving one `NewsItem` entity based on its keys.
-   * @param id Key property. See [[NewsItem.id]].
-   * @returns A request builder for creating requests to retrieve one `NewsItem` entity based on its keys.
-   */
-  getByKey(id: string): GetByKeyRequestBuilder<T>;
+  getByKey(id: string): GetByKeyRequestBuilderV4<T>;
 
-  /**
-   * Returns a request builder for querying all `NewsItem` entities.
-   * @returns A request builder for creating requests to retrieve all `NewsItem` entities.
-   */
-  getAll(): GetAllRequestBuilder<T>;
+  getAll(): GetAllRequestBuilderV4<T>;
+
+  create(entity: T): CreateRequestBuilderV4<T>;
+
+  update(entity: T): UpdateRequestBuilderV4<T>;
+
+  delete(id: string): DeleteRequestBuilderV4<T>;
+
+  delete(entity: T): DeleteRequestBuilderV4<T>;
+
+  delete(idOrEntity: any): DeleteRequestBuilderV4<T>;
 }

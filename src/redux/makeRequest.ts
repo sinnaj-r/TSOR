@@ -1,5 +1,3 @@
-import { AxiosRequestConfig } from 'axios';
-import { Filter } from '../../../cloud-sdk-js/packages/core/dist';
 import { IDObject } from '../../types/IDObject';
 import { SettingsState } from '../../types/SettingsState';
 import { QueryOptions } from '../JSONQuery/jsonQuery';
@@ -31,15 +29,9 @@ export type ODataResponse<T> =
  */
 // eslint-disable-next-line unused-imports/no-unused-vars
 export const makeRequest = async <K, T extends IDObject, S>(
-  method: AxiosRequestConfig['method'],
-  apiPrefix: string,
   query: QueryOptions<T>,
   settings: SettingsState,
-  data?: any,
 ) => {
   // TODO Types
   const { url, headers: additionalHeaders } = settings;
-
-  for
-
 };

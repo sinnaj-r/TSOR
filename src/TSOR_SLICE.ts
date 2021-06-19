@@ -9,6 +9,7 @@ import { AsyncActionsType } from './redux/createAsyncThunksForAPI';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { GenericReducers } from '../types/GenericReducers';
 import { CompositionMapType } from './redux/compositions';
+import { createApiSlice } from './redux/createApiSlice';
 
 export type TAsyncActions<T extends IDObject> = AsyncActionsType<T, any>;
 

@@ -5,19 +5,24 @@
  */
 
 import {
-  GetAllRequestBuilder,
-  GetByKeyRequestBuilder,
+  Constructable,
+  Expandable,
+  GetAllRequestBuilderV4,
+  GetByKeyRequestBuilderV4,
+  RequestBuilder,
+  StringField,
 } from '../../../cloud-sdk-js/packages/core/dist';
 import {
   AllFields,
   asc,
   desc,
-  Entity,
   OrderableInput,
   Selectable,
-  StringField,
 } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
-import { RequestBuilderInstance } from '../../types/SAPCloudSDKHelper';
+import { getAll, getByKey } from './RequestBuilder';
+
+import { NewsItem } from '../../../example-output/sap-odm-service/NewsItem';
+import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
 
 const COMPARISON_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'] as const;
 const LOGICAL_OPERATORS = ['and', 'or', 'not'] as const;
@@ -53,7 +58,7 @@ export type FilterKey<T> = keyof FilterObject<T>;
 // Expand $expand
 
 export type Expand<T extends Record<string, any>> = Array<
-  keyof T | NestedExpandOptions<T>
+  keyof T | '*' | NestedExpandOptions<T>
 >;
 
 export type ExpandOptions<T> = {
@@ -85,46 +90,62 @@ export type QueryOptionsGetById<T> = {
 };
 
 export const getField = <T extends Entity>(
-  requestBuilder: RequestBuilders<T>,
+  requestBuilder: RequestBuilder<T>,
   field: keyof T | '*',
 ) => {
   if (field === '*') {
     return new AllFields('*', requestBuilder._entityConstructor);
   }
-  return requestBuilder._entityConstructor._allFields.find(
-    (elm) => elm._fieldName === field,
-  )!;
+  const result = new StringField(
+    field as string,
+    requestBuilder._entityConstructor,
+    'Edm.String',
+  );
+
+  return result;
 };
 
 export type QueryOptions<T extends Entity> =
   | QueryOptionsGetAll<T>
   | QueryOptionsGetById<T>;
 
-export const t = <T extends Entity>(
-  requestBuilder: RequestBuilderInstance<T>,
+type RequestType<T extends Entity> =
+  | GetByKeyRequestBuilderV4<T>
+  | GetAllRequestBuilderV4<T>;
+
+export const createRequest = <T extends Entity>(
+  entity: Constructable<T>,
   query: QueryOptions<T>,
 ) => {
-  let req: GetByKeyRequestBuilder<T> | GetAllRequestBuilder<T>;
-
-  const { select, expand } = query;
+  let req: RequestType<T>;
 
   // Is this a GetByKey Request, or not ?
   if ('key' in query) {
-    // The SDK doesn't support expands on GetByKey, therefore we have this workaround
-    if (expand) {
-      req = requestBuilder.getAll();
-      const key = requestBuilder._entityConstructor
-        ._keyFields[0] as StringField<T>;
-
-      req.filter(key.equals(query.key));
-    } else {
-      req = requestBuilder.getByKey(query.key);
-    }
+    req = getByKey<T>(entity, query.key);
   } else {
-    req = requestBuilder.getAll();
-    req = buildQueryGetAll(req, query);
+    req = getAll<T>(entity);
   }
 
+  return buildQuery(req, query);
+};
+
+const buildQuery = <T extends Entity>(
+  requestBuilder: RequestType<T>,
+  query: QueryOptions<T>,
+) => {
+  let req = requestBuilder;
+  if ('filter' in req) {
+    req = buildQueryGetAll(req, query);
+  }
+  return buildQueryGeneral(req, query);
+};
+
+const buildQueryGeneral = <T extends Entity>(
+  requestBuilder: RequestType<T>,
+  query: QueryOptionsGetAll<T>,
+): RequestType<T> => {
+  let req = requestBuilder;
+  const { select, expand } = query;
   if (select) {
     req = req.select(
       ...select.map(
@@ -132,10 +153,33 @@ export const t = <T extends Entity>(
       ),
     );
   }
+  // TODO Fix Types
+  if (expand) {
+    const expands: Expandable<T>[] = [];
+
+    for (const exp of expand) {
+      if (typeof exp !== 'object') {
+        expands.push(getField(requestBuilder, exp) as Expandable<T>);
+      } else {
+        for (const key of Object.keys(exp)) {
+          const field = getField(requestBuilder, key as keyof typeof exp);
+          const result = buildQuery(
+            field as any,
+            exp[key as keyof typeof exp] as any,
+          );
+          expands.push(result as any);
+        }
+      }
+    }
+
+    req = req.expand(...expands);
+  }
+
+  return req;
 };
 
 const buildQueryGetAll = <T extends Entity>(
-  requestBuilderGetAll: GetAllRequestBuilder<T>,
+  requestBuilderGetAll: GetAllRequestBuilderV4<T>,
   { top, skip, orderBy, filter, count }: QueryOptionsGetAll<T>,
 ) => {
   let req = requestBuilderGetAll;
@@ -178,3 +222,16 @@ const buildQueryGetAll = <T extends Entity>(
   }
   return req;
 };
+
+type test = typeof NewsItem;
+
+// TODO Types ?!
+const req = createRequest(NewsItem, {
+  select: ['title', 'id'],
+  filter: {
+    title: {
+      eq: 'TSG Hoffenheim',
+    },
+  },
+  expand: ['*'],
+});

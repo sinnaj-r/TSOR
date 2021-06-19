@@ -1,10 +1,10 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { IDObject } from '../../types/IDObject';
+import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
 import { QueryOptions } from '../JSONQuery/jsonQuery';
 import { CompositionMapType, resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 
-export const createAsyncThunksForAPI = <T extends IDObject, S>(
+export const createAsyncThunksForAPI = <T extends Entity, S>(
   apiName: keyof S,
   apiPrefix: string,
   compositionMap: CompositionMapType,

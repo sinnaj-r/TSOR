@@ -7,11 +7,12 @@ import {
 } from '@reduxjs/toolkit';
 
 import { createAsyncThunksForAPI } from './createAsyncThunksForAPI';
-import { IDObject } from '../../types/IDObject';
 import { GenericSliceState } from '../../types/GenericSliceState';
 import { GenericReducers } from '../../types/GenericReducers';
 import { CompositionMapType } from './compositions';
 import { createExtraReducers } from './createExtraReducers';
+import { QueryOptions } from '../JSONQuery/jsonQuery';
+import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 /**
@@ -23,7 +24,7 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  */
 export const createApiSlice = <
   K extends string,
-  T extends IDObject,
+  T extends Entity,
   S extends Record<string, any>
 >(
   apiName: K,
