@@ -7,6 +7,7 @@ describe('JSON Query Filter', () => {
   it('can use simple eq filters', () => {
     const filter = { num1: 1 };
     const result = '$filter=num1 eq 1';
+
     expect(getQueryForRequest({ filter })).to.include(result);
   });
   it('can use simple gt filters', () => {

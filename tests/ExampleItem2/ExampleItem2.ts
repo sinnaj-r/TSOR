@@ -32,7 +32,7 @@ export class ExampleItem2 extends EntityV4 implements ExampleItem2Type {
   /**
    * Technical entity name for ExampleItem2.
    */
-  static _entityName = 'ExampleItem2';
+  static _entityName = 'ExampleItem2' as const;
 
   /**
    * Default url path for the according service.

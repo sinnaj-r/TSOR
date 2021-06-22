@@ -18,22 +18,22 @@ describe('TSOR Store', () => {
   let applySelector: ReturnType<typeof createApplySelector>;
 
   beforeEach(() => {
-    const routeKey1 = 'exampleItem1' as const;
-    slice1 = new TSOR_SLICE<typeof routeKey1, ExampleItem1, STATE_TYPE>(
+    slice1 = new TSOR_SLICE<ExampleItem1, STATE_TYPE>(
       ExampleItem1,
 
       ExampleCompositions,
     );
 
-    const routeKey2 = 'exampleItem2' as const;
-    slice2 = new TSOR_SLICE<typeof routeKey2, ExampleItem2, STATE_TYPE>(
+    slice2 = new TSOR_SLICE<ExampleItem2, STATE_TYPE>(
       ExampleItem2,
       ExampleCompositions,
     );
 
     const reducer = combineReducers({
-      [routeKey1]: slice1.reducer,
-      [routeKey2]: slice2.reducer,
+      // eslint-disable-next-line no-underscore-dangle
+      [ExampleItem1._entityName]: slice1.reducer,
+      // eslint-disable-next-line no-underscore-dangle
+      [ExampleItem2._entityName]: slice2.reducer,
       settings: createSettingsSlice({ headers: {}, url: 'http://localhost' })
         .reducer,
     });
@@ -42,13 +42,13 @@ describe('TSOR Store', () => {
   });
 
   const expectNoError = () => {
-    expect(store.getState().exampleItem1.error).to.be.undefined;
-    expect(store.getState().exampleItem1.loading).to.equal('idle');
+    expect(store.getState().ExampleItem1.error).to.be.undefined;
+    expect(store.getState().ExampleItem1.loading).to.equal('idle');
   };
 
   const checkForError = (errMsg: string) => {
-    expect(store.getState().exampleItem1.error?.message).to.equal(errMsg);
-    expect(store.getState().exampleItem1.loading).to.equal('rejected');
+    expect(store.getState().ExampleItem1.error?.message).to.equal(errMsg);
+    expect(store.getState().ExampleItem1.loading).to.equal('rejected');
   };
 
   it('can create an store', () => {
@@ -164,4 +164,5 @@ describe('TSOR Store', () => {
   it('uses the authentication magic of the Cloud SDK');
   it('uses normalizr to normalize compositions');
   it("doesn't create errors when using uppercase properties");
+  it('generates const _entityName s');
 });

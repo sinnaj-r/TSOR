@@ -39,7 +39,7 @@ export const makeRequest = async <K, T extends Entity, S>(
   const { url, headers: additionalHeaders } = settings;
   // TODO Dynamic Path
   try {
-    const result = await createRequest<T>(constructable, query)
+    let result = await createRequest<T>(constructable, query)
       .setCustomServicePath('/bp2020.news/')
       .addCustomHeaders({
         ...additionalHeaders,
@@ -49,9 +49,11 @@ export const makeRequest = async <K, T extends Entity, S>(
       throw new RequestError('Count is not implemented yet!');
     }
     if (!Array.isArray(result)) {
-      return [result];
+      result = [result];
     }
-    return result;
+
+    // de-complex data for redux store
+    return JSON.parse(JSON.stringify(result));
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

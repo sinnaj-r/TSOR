@@ -20,11 +20,7 @@ export type TBaseActions<T extends IDObject> = CaseReducerActions<
 
 export type TActions<T extends IDObject> = TAsyncActions<T> & TBaseActions<T>;
 
-export class TSOR_SLICE<
-  K extends string,
-  T extends IDObject,
-  S extends Record<string, any>
-> {
+export class TSOR_SLICE<T extends IDObject, S extends Record<string, any>> {
   private actions: TAsyncActions<T>;
 
   private baseActions: TBaseActions<T>;
@@ -33,15 +29,15 @@ export class TSOR_SLICE<
 
   reducer: Reducer<GenericSliceState<T>, AnyAction>;
 
-  routeKey: K;
+  routeKey: string;
 
   constructor(
     constructable: Constructable<T>,
     compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
   ) {
     // eslint-disable-next-line no-underscore-dangle
-    const routeName = constructable._entityName as K;
-    const { adapter, actions, slice } = createApiSlice<K, T, S>(
+    const routeName = constructable._entityName;
+    const { adapter, actions, slice } = createApiSlice<T, S>(
       constructable,
       undefined,
       compositionMap,

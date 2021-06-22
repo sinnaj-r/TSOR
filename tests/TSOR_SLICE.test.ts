@@ -4,11 +4,8 @@ import { ExampleItem1 } from './ExampleItem1/ExampleItem1';
 
 describe('TSOR Store', () => {
   it('can create an slice', () => {
-    const routeKey = 'exampleItem' as const;
-    const slice = new TSOR_SLICE<typeof routeKey, ExampleItem1, any>(
-      ExampleItem1,
-    );
-    expect(slice.routeKey).to.equal(routeKey);
+    const slice = new TSOR_SLICE<ExampleItem1, any>(ExampleItem1);
+    expect(slice.routeKey).to.equal('ExampleItem1');
     expect(slice.selectors.selectAll).to.be.a('function');
     expect(slice.reducer).to.be.a('function');
   });

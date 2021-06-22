@@ -25,7 +25,6 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  * @returns
  */
 export const createApiSlice = <
-  K extends string,
   T extends IDObject,
   S extends Record<string, any>
 >(
@@ -67,7 +66,7 @@ export const createApiSlice = <
       },
     } as GenericReducers<T>,
     extraReducers: (builder) =>
-      createExtraReducers<K, T, S>(actions, adapter, builder),
+      createExtraReducers<T, S>(actions, adapter, builder),
   });
   return { actions, slice, adapter };
 };
