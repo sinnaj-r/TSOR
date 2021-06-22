@@ -4,17 +4,12 @@ import { combineReducers } from 'redux';
 import { createSettingsSlice } from '../src/redux/settings';
 import { TSOR_SLICE } from '../src/TSOR_SLICE';
 import { resetStoreAction, TSOR_STORE } from '../src/TSOR_STORE';
+import { ExampleItem1 } from './ExampleItem1/ExampleItem1';
+import { ExampleItem2 } from './ExampleItem2/ExampleItem2';
 import { createApplySelector } from './helper';
 import { mock } from './hooks';
 import { ExampleCompositions } from './mockItems';
-import {
-  ExampleItem1Type,
-  ExampleItem2Type,
-  SLICE1_TYPE,
-  SLICE2_TYPE,
-  STATE_TYPE,
-  STORE_TYPE,
-} from './TestTypes';
+import { SLICE1_TYPE, SLICE2_TYPE, STATE_TYPE, STORE_TYPE } from './TestTypes';
 
 describe('TSOR Store', () => {
   let slice1: SLICE1_TYPE;
@@ -24,16 +19,15 @@ describe('TSOR Store', () => {
 
   beforeEach(() => {
     const routeKey1 = 'exampleItem1' as const;
-    slice1 = new TSOR_SLICE<typeof routeKey1, ExampleItem1Type, STATE_TYPE>(
-      routeKey1,
-      'ExampleItem1',
+    slice1 = new TSOR_SLICE<typeof routeKey1, ExampleItem1, STATE_TYPE>(
+      ExampleItem1,
+
       ExampleCompositions,
     );
 
     const routeKey2 = 'exampleItem2' as const;
-    slice2 = new TSOR_SLICE<typeof routeKey2, ExampleItem2Type, STATE_TYPE>(
-      routeKey2,
-      'ExampleItem2',
+    slice2 = new TSOR_SLICE<typeof routeKey2, ExampleItem2, STATE_TYPE>(
+      ExampleItem2,
       ExampleCompositions,
     );
 
@@ -136,6 +130,8 @@ describe('TSOR Store', () => {
     expect(item2Before).to.haveOwnProperty('description', 'Test 2');
 
     await store.dispatch(
+      // TODO
+      // @ts-ignore
       slice1.getActions().setAll([{ ...item2Before, id: '1' }]),
     );
 

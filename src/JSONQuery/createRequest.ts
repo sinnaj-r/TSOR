@@ -8,15 +8,12 @@ import { getAll, getByKey } from './RequestBuilder';
 
 import { buildQuery } from './buildQuery';
 
+import { QueryOptions, RequestType } from './types';
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
 import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
-import { QueryOptions, RequestType } from './types';
 
-export const createRequest = <
-  T extends Constructable<P>,
-  P extends Entity = Entity
->(
-  entity: T,
+export const createRequest = <T extends Entity>(
+  entity: Constructable<T>,
   query: QueryOptions<T>,
 ) => {
   let req: RequestType<T>;
@@ -30,5 +27,5 @@ export const createRequest = <
     req = getAll<T>(entity);
   }
 
-  return buildQuery(req, query);
+  return buildQuery<T>(req, query);
 };

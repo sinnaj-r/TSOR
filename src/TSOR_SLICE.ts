@@ -10,6 +10,7 @@ import { GenericSliceState } from '../types/GenericSliceState';
 import { GenericReducers } from '../types/GenericReducers';
 import { CompositionMapType } from './redux/compositions';
 import { createApiSlice } from './redux/createApiSlice';
+import { Constructable } from '../../cloud-sdk-js/packages/core/dist';
 
 export type TAsyncActions<T extends IDObject> = AsyncActionsType<T, any>;
 
@@ -35,7 +36,7 @@ export class TSOR_SLICE<
   routeKey: K;
 
   constructor(
-    constructable: T,
+    constructable: Constructable<T>,
     compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
   ) {
     // eslint-disable-next-line no-underscore-dangle

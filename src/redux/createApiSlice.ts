@@ -14,6 +14,7 @@ import { createExtraReducers } from './createExtraReducers';
 
 import { IDObject } from '../../types/IDObject';
 import { QueryOptions } from '../JSONQuery/types';
+import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 /**
@@ -28,7 +29,7 @@ export const createApiSlice = <
   T extends IDObject,
   S extends Record<string, any>
 >(
-  constructable: T,
+  constructable: Constructable<T>,
   adapter = createAdapter<T>(),
   compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
 ) => {

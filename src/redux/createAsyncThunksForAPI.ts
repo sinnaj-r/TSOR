@@ -1,4 +1,5 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
 import { IDObject } from '../../types/IDObject';
 import { QueryOptions } from '../JSONQuery/types';
 
@@ -6,7 +7,7 @@ import { CompositionMapType, resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 
 export const createAsyncThunksForAPI = <T extends IDObject, S>(
-  constructable: T,
+  constructable: Constructable<T>,
   compositionMap: CompositionMapType,
   // eslint-disable-next-line no-underscore-dangle
   apiName = constructable._entityName,

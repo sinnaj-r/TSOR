@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import {
   AllFields,
-  Constructable,
   CountRequestBuilder,
   RequestBuilder,
 } from '../../../../cloud-sdk-js/packages/core/dist';
@@ -70,22 +69,15 @@ export const getField = <T extends Entity>(
   )!;
 };
 
-export type QueryOptions<
-  T extends Constructable<P>,
-  P extends Entity = Entity
-> =
-  | QueryOptionsGetAll<InstanceType<T>>
-  | QueryOptionsGetById<InstanceType<T>>
-  | QueryOptionsCount<InstanceType<T>>;
+export type QueryOptions<T extends Entity> =
+  | QueryOptionsGetAll<T>
+  | QueryOptionsGetById<T>
+  | QueryOptionsCount<T>;
 
-export type RequestTypeWithoutCount<
-  T extends Constructable<P>,
-  P extends Entity = Entity
-> =
-  | GetByKeyRequestBuilderV4<InstanceType<T>>
-  | GetAllRequestBuilderV4<InstanceType<T>>;
+export type RequestTypeWithoutCount<T extends Entity> =
+  | GetByKeyRequestBuilderV4<T>
+  | GetAllRequestBuilderV4<T>;
 
-export type RequestType<
-  T extends Constructable<P>,
-  P extends Entity = Entity
-> = RequestTypeWithoutCount<T> | CountRequestBuilder<InstanceType<T>>;
+export type RequestType<T extends Entity> =
+  | RequestTypeWithoutCount<T>
+  | CountRequestBuilder<T>;

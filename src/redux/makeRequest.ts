@@ -1,4 +1,5 @@
-import { IDObject } from '../../types/IDObject';
+import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
+import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
 import { SettingsState } from '../../types/SettingsState';
 import { createRequest } from '../JSONQuery/createRequest';
 import { QueryOptions } from '../JSONQuery/types';
@@ -29,8 +30,8 @@ export type ODataResponse<T> =
  * @returns
  */
 // eslint-disable-next-line unused-imports/no-unused-vars
-export const makeRequest = async <K, T extends IDObject, S>(
-  constructable: T,
+export const makeRequest = async <K, T extends Entity, S>(
+  constructable: Constructable<T>,
   query: QueryOptions<T>,
   settings: SettingsState,
 ): Promise<T[]> => {
@@ -38,7 +39,7 @@ export const makeRequest = async <K, T extends IDObject, S>(
   const { url, headers: additionalHeaders } = settings;
   // TODO Dynamic Path
   try {
-    const result = await createRequest<InstanceType<T>>(constructable, query)
+    const result = await createRequest<T>(constructable, query)
       .setCustomServicePath('/bp2020.news/')
       .addCustomHeaders({
         ...additionalHeaders,
