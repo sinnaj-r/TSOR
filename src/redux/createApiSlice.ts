@@ -11,7 +11,7 @@ import { GenericSliceState } from '../../types/GenericSliceState';
 import { GenericReducers } from '../../types/GenericReducers';
 import { CompositionMapType } from './compositions';
 import { createExtraReducers } from './createExtraReducers';
-import { QueryOptions } from '../JSONQuery/jsonQuery';
+import { QueryOptions } from '../JSONQuery/createRequest';
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});

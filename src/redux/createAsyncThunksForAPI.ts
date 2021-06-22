@@ -1,6 +1,6 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
-import { QueryOptions } from '../JSONQuery/jsonQuery';
+import { QueryOptions } from '../JSONQuery/createRequest';
 import { CompositionMapType, resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 

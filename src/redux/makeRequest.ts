@@ -1,6 +1,6 @@
 import { IDObject } from '../../types/IDObject';
 import { SettingsState } from '../../types/SettingsState';
-import { QueryOptions } from '../JSONQuery/jsonQuery';
+import { QueryOptions } from '../JSONQuery/createRequest';
 
 export class RequestError extends Error {
   errorCode: number | undefined;
