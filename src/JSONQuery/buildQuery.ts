@@ -1,25 +1,26 @@
 import {
   CountRequestBuilder,
-  Expandable,
   GetAllRequestBuilderV4,
 } from '../../../cloud-sdk-js/packages/core/dist';
 import { Selectable } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
 
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
-import {
+import type {
   QueryOptions,
   RequestType,
   QueryOptionsGetAll,
-  getField,
   RequestTypeWithoutCount,
   QueryOptionsCount,
 } from './types';
+
 import {
   buildTop,
   buildSkip,
   buildOrderBy,
   buildFilter,
+  buildExpand,
 } from './buildQueryOptions';
+import { getField } from './helpers';
 
 export const buildQuery = <T extends Entity>(
   requestBuilder: RequestType<T>,
@@ -54,26 +55,7 @@ const buildQueryCommon = <T extends Entity>(
     );
   }
   // TODO Fix Types
-  if (expand) {
-    const expands: Expandable<T>[] = [];
-
-    for (const exp of expand) {
-      if (typeof exp !== 'object') {
-        expands.push(getField(requestBuilder, exp) as Expandable<T>);
-      } else {
-        for (const key of Object.keys(exp)) {
-          const field = getField(requestBuilder, key as keyof typeof exp);
-          const result = buildQuery(
-            field as any,
-            exp[key as keyof typeof exp] as any,
-          );
-          expands.push(result as any);
-        }
-      }
-    }
-
-    req = req.expand(...expands);
-  }
+  req = buildExpand<T>(expand, requestBuilder, req);
 
   return req;
 };
@@ -101,9 +83,10 @@ const buildQueryCount = <T extends Entity>(
   requestBuilderCount: CountRequestBuilder<T>,
   { filter }: QueryOptionsCount<T>,
 ) => {
-  let req = requestBuilderCount;
+  const req = requestBuilderCount;
 
-  req = buildFilter<T, typeof req>(filter, req);
+  // TODO: Filter is not supported ?
+  // req = buildFilter<T, typeof req>(filter, req);
 
   return req;
 };

@@ -1,9 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import {
-  AllFields,
-  CountRequestBuilder,
-  RequestBuilder,
-} from '../../../../cloud-sdk-js/packages/core/dist';
+import { CountRequestBuilder } from '../../../../cloud-sdk-js/packages/core/dist';
 import {
   Entity,
   GetAllRequestBuilderV4,
@@ -55,18 +51,6 @@ export type QueryOptionsGetById<T> = {
 
 export type QueryOptionsCount<T> = {
   filter?: Filter<T>;
-};
-
-export const getField = <T extends Entity>(
-  requestBuilder: RequestBuilder<T>,
-  field: keyof T | '*',
-) => {
-  if (field === '*') {
-    return new AllFields('*', requestBuilder._entityConstructor);
-  }
-  return requestBuilder._entityConstructor._allFields.find(
-    (f) => f._fieldName === field,
-  )!;
 };
 
 export type QueryOptions<T extends Entity> =
