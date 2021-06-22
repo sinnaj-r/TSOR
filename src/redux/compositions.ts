@@ -70,6 +70,9 @@ export const resolveComposition = <
   apiName: K,
   compositionMap: CompositionMapType,
 ) => {
+  return items;
+  // TODO Re-Implement Composition (with normalizr)
+  // eslint-disable-next-line no-unreachable
   const changedItems = produce(items, (draft) => {
     const typeName = Object.entries(compositionMap.apiNames).find(
       ([_, name]) => apiName === name,

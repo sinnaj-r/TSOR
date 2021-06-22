@@ -1,24 +1,52 @@
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import { mockGetRequest } from '../../cloud-sdk-js/packages/core/test/test-util/request-mocker';
 import { ExampleItem1Data, ExampleItem2Data } from './mockItems';
+import { ExampleItem1 } from './ExampleItem1/ExampleItem1';
+import { ExampleItem2 } from './ExampleItem2/ExampleItem2';
+import nock from '../../cloud-sdk-js/node_modules/nock';
 
-// This sets the mock adapter on the default instance
-export const mock = new MockAdapter(axios);
+const destination = {
+  name: 'Testination',
+  url: '',
+};
 
 export const mochaHooks = {
   beforeAll() {
-    console.log('installing moxios');
+    mockGetRequest(
+      {
+        responseBody: ExampleItem1Data[0],
+        destination,
+        path: 'ExampleItem1(id=%271%27)',
+      },
+      ExampleItem1 as any,
+    );
 
-    mock.onGet(/.*ExampleItem1\/.*/).reply(200, {
-      value: ExampleItem1Data,
-    });
+    mockGetRequest(
+      {
+        responseBody: 'Not Found' as any,
+        destination,
+        path: 'ExampleItem1(id=%2742%27)',
+        statusCode: 404,
+      },
+      ExampleItem1 as any,
+    );
+    mockGetRequest(
+      {
+        responseBody: { value: ExampleItem1Data },
+        destination,
+      },
+      ExampleItem1 as any,
+    );
 
-    mock.onGet(/.*ExampleItem2\/.*/).reply(200, {
-      value: ExampleItem2Data,
-    });
+    mockGetRequest(
+      {
+        responseBody: { value: ExampleItem2Data },
+        destination,
+      },
+      ExampleItem2 as any,
+    );
 
-    mock.onGet(/.*ExampleItem1\('1'\).*/).reply(200, ExampleItem1Data[0]);
-
-    mock.onGet(/.*ExampleItem1\('42'\).*/).reply(404, 'Not Found');
+    console.log('Mocks:', nock.activeMocks());
   },
 };
+// http://localhost/tsor.example/ExampleItem1(id=%2742%27)?$format=json
+// http://localhost:80/tsor.example/ExampleItem1(id=%2742%27)

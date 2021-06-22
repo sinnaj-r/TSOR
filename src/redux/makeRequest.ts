@@ -40,7 +40,8 @@ export const makeRequest = async <K, T extends Entity, S>(
   // TODO Dynamic Path
   try {
     let result = await createRequest<T>(constructable, query)
-      .setCustomServicePath('/bp2020.news/')
+      // eslint-disable-next-line no-underscore-dangle
+      .setCustomServicePath(constructable._defaultServicePath || '/')
       .addCustomHeaders({
         ...additionalHeaders,
       })
@@ -57,11 +58,12 @@ export const makeRequest = async <K, T extends Entity, S>(
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
+    const axiosErr = err.rootCause;
     throw new RequestError(
-      typeof err.response.data === 'string'
-        ? err.response.data
-        : err.response.statusText,
-      err.response.status,
+      (typeof axiosErr.response?.data === 'string'
+        ? axiosErr.response?.data
+        : axiosErr.response?.statusText) ?? 'Unknown Error',
+      axiosErr.response?.status ?? 0,
     );
   }
 };

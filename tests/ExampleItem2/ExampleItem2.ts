@@ -37,7 +37,7 @@ export class ExampleItem2 extends EntityV4 implements ExampleItem2Type {
   /**
    * Default url path for the according service.
    */
-  static _defaultServicePath = 'VALUE_IS_UNDEFINED';
+  static _defaultServicePath = '/tsor.example';
 
   /**
    * Id.

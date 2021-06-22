@@ -1,15 +1,15 @@
 /* eslint-disable max-lines */
 import { expect } from 'chai';
 import { combineReducers } from 'redux';
-import { createSettingsSlice } from '../src/redux/settings';
-import { TSOR_SLICE } from '../src/TSOR_SLICE';
-import { resetStoreAction, TSOR_STORE } from '../src/TSOR_STORE';
-import { ExampleItem1 } from './ExampleItem1/ExampleItem1';
-import { ExampleItem2 } from './ExampleItem2/ExampleItem2';
-import { createApplySelector } from './helper';
-import { mock } from './hooks';
-import { ExampleCompositions } from './mockItems';
-import { SLICE1_TYPE, SLICE2_TYPE, STATE_TYPE, STORE_TYPE } from './TestTypes';
+import { createSettingsSlice } from '../../src/redux/settings';
+import { TSOR_SLICE } from '../../src/TSOR_SLICE';
+import { resetStoreAction, TSOR_STORE } from '../../src/TSOR_STORE';
+import { ExampleItem1 } from '../ExampleItem1/ExampleItem1';
+import { ExampleItem2 } from '../ExampleItem2/ExampleItem2';
+import { createApplySelector } from '../helper';
+
+import { ExampleCompositions } from '../mockItems';
+import { SLICE1_TYPE, SLICE2_TYPE, STATE_TYPE, STORE_TYPE } from '../TestTypes';
 
 describe('TSOR Store', () => {
   let slice1: SLICE1_TYPE;
@@ -34,7 +34,7 @@ describe('TSOR Store', () => {
       [ExampleItem1._entityName]: slice1.reducer,
       // eslint-disable-next-line no-underscore-dangle
       [ExampleItem2._entityName]: slice2.reducer,
-      settings: createSettingsSlice({ headers: {}, url: 'http://localhost' })
+      settings: createSettingsSlice({ headers: {}, url: 'http://localhost:80' })
         .reducer,
     });
     store = new TSOR_STORE(reducer);
@@ -96,9 +96,10 @@ describe('TSOR Store', () => {
     );
     await store.dispatch(slice1.getActions().get());
 
-    mock.history.get[mock.history.get.length - 1].url?.includes(
-      "$filter=description eq 'Test'",
-    );
+    // TODO
+    // mock.history.get[mock.history.get.length - 1].url?.includes(
+    //  "$filter=description eq 'Test'",
+    // );
   });
   it('can clear', async () => {
     await store.dispatch(slice1.getActions().get());
