@@ -19,7 +19,6 @@ import { GenericSliceState } from '../../types/GenericSliceState';
  * @param {ActionReducerMapBuilder<GenericSliceState<T>>} builder
  */
 export const createExtraReducers = <K extends string, T extends IDObject, S>(
-  apiName: K,
   thunkActions: AsyncActionsType<T, S>,
   adapter: EntityAdapter<T>,
   builder: ActionReducerMapBuilder<GenericSliceState<T>>,

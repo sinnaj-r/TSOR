@@ -1,0 +1,6 @@
+import { createRequest } from '../../src/JSONQuery/createRequest';
+import { QueryOptions } from '../../src/JSONQuery/types';
+import { ExampleItem1 } from '../ExampleItem1/ExampleItem1';
+
+export const getQueryForRequest = (query: QueryOptions<typeof ExampleItem1>) =>
+  createRequest(ExampleItem1, query).build().query;

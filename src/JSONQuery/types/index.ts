@@ -1,26 +1,16 @@
 /* eslint-disable no-underscore-dangle */
 import {
   AllFields,
+  Constructable,
   CountRequestBuilder,
   RequestBuilder,
-} from '../../../cloud-sdk-js/packages/core/dist';
+} from '../../../../cloud-sdk-js/packages/core/dist';
 import {
   Entity,
   GetAllRequestBuilderV4,
   GetByKeyRequestBuilderV4,
-} from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
-
-const COMPARISON_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'] as const;
-const LOGICAL_OPERATORS = ['and', 'or', 'not'] as const;
-const COLLECTION_OPERATORS = ['any', 'all'] as const;
-const SUPPORTED_EXPAND_PROPERTIES = [
-  'expand',
-  'select',
-  'top',
-  'count',
-  'orderby',
-  'filter',
-] as const;
+} from '../../../../cloud-sdk-js/packages/core/dist/odata-v4';
+import { Filter } from './FilterTypes';
 
 // Select $select
 export type Select<T> = Array<keyof T | '*'>;
@@ -29,17 +19,6 @@ export type Select<T> = Array<keyof T | '*'>;
 export type OrderByObject<T> = keyof T | [keyof T, 'asc' | 'desc'];
 export type OrderBy<T> = Array<OrderByObject<T>>;
 // | { [P in keyof T]?: OrderBy<T[P]> };
-
-// Filter $filter
-export type FilterObject<T> = {
-  [P in keyof T]?: T[P] | { [O in typeof COMPARISON_OPERATORS[number]]?: T[P] };
-} &
-  { [M in typeof COLLECTION_OPERATORS[number]]?: FilterObject<T> } &
-  { [K in typeof LOGICAL_OPERATORS[number]]?: FilterObject<T> };
-
-export type Filter<T> = FilterObject<T> | Array<FilterObject<T>>;
-
-export type FilterKey<T> = keyof FilterObject<T>;
 
 // Expand $expand
 
@@ -91,15 +70,22 @@ export const getField = <T extends Entity>(
   )!;
 };
 
-export type QueryOptions<T extends Entity> =
-  | QueryOptionsGetAll<T>
-  | QueryOptionsGetById<T>
-  | QueryOptionsCount<T>;
+export type QueryOptions<
+  T extends Constructable<P>,
+  P extends Entity = Entity
+> =
+  | QueryOptionsGetAll<InstanceType<T>>
+  | QueryOptionsGetById<InstanceType<T>>
+  | QueryOptionsCount<InstanceType<T>>;
 
-export type RequestTypeWithoutCount<T extends Entity> =
-  | GetByKeyRequestBuilderV4<T>
-  | GetAllRequestBuilderV4<T>;
+export type RequestTypeWithoutCount<
+  T extends Constructable<P>,
+  P extends Entity = Entity
+> =
+  | GetByKeyRequestBuilderV4<InstanceType<T>>
+  | GetAllRequestBuilderV4<InstanceType<T>>;
 
-export type RequestType<T extends Entity> =
-  | RequestTypeWithoutCount<T>
-  | CountRequestBuilder<T>;
+export type RequestType<
+  T extends Constructable<P>,
+  P extends Entity = Entity
+> = RequestTypeWithoutCount<T> | CountRequestBuilder<InstanceType<T>>;

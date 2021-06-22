@@ -6,14 +6,17 @@
 
 import { getAll, getByKey } from './RequestBuilder';
 
-import { QueryOptions, RequestType } from './types';
 import { buildQuery } from './buildQuery';
 
-import { EntityV4 } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
+import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
 import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
+import { QueryOptions, RequestType } from './types';
 
-export const createRequest = <T extends EntityV4>(
-  entity: Constructable<T>,
+export const createRequest = <
+  T extends Constructable<P>,
+  P extends Entity = Entity
+>(
+  entity: T,
   query: QueryOptions<T>,
 ) => {
   let req: RequestType<T>;

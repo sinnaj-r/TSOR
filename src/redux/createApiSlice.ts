@@ -11,8 +11,9 @@ import { GenericSliceState } from '../../types/GenericSliceState';
 import { GenericReducers } from '../../types/GenericReducers';
 import { CompositionMapType } from './compositions';
 import { createExtraReducers } from './createExtraReducers';
-import { QueryOptions } from '../JSONQuery/createRequest';
-import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
+
+import { IDObject } from '../../types/IDObject';
+import { QueryOptions } from '../JSONQuery/types';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 /**
@@ -24,21 +25,17 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  */
 export const createApiSlice = <
   K extends string,
-  T extends Entity,
+  T extends IDObject,
   S extends Record<string, any>
 >(
-  apiName: K,
+  constructable: T,
   adapter = createAdapter<T>(),
-  apiPrefix: string = apiName,
   compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
 ) => {
-  const actions = createAsyncThunksForAPI<T, S>(
-    apiName,
-    apiPrefix,
-    compositionMap,
-  );
+  const actions = createAsyncThunksForAPI<T, S>(constructable, compositionMap);
   const slice = createSlice({
-    name: apiName,
+    // eslint-disable-next-line no-underscore-dangle
+    name: constructable._entityName,
     initialState: {
       ...adapter.getInitialState({
         loading: 'idle',
@@ -69,7 +66,7 @@ export const createApiSlice = <
       },
     } as GenericReducers<T>,
     extraReducers: (builder) =>
-      createExtraReducers<K, T, S>(apiName, actions, adapter, builder),
+      createExtraReducers<K, T, S>(actions, adapter, builder),
   });
   return { actions, slice, adapter };
 };

@@ -5,11 +5,11 @@ import {
 } from '../../../cloud-sdk-js/packages/core/dist';
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
 
-export const getByKey = <T extends Entity>(
-  e: Constructable<T>,
+export const getByKey = <T extends Constructable<P>, P extends Entity = Entity>(
+  e: T,
   id: string,
-): GetByKeyRequestBuilderV4<T> => new GetByKeyRequestBuilderV4(e, { id });
+): GetByKeyRequestBuilderV4<P> => new GetByKeyRequestBuilderV4<P>(e, { id });
 
-export const getAll = <T extends Entity>(
-  e: Constructable<T>,
-): GetAllRequestBuilderV4<T> => new GetAllRequestBuilderV4(e);
+export const getAll = <T extends Constructable<P>, P extends Entity = Entity>(
+  e: T,
+): GetAllRequestBuilderV4<P> => new GetAllRequestBuilderV4<P>(e);

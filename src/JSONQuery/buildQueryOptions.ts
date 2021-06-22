@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   GetAllRequestBuilderV4,
   asc,
@@ -6,7 +7,8 @@ import {
   CountRequestBuilder,
 } from '../../../cloud-sdk-js/packages/core/dist';
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
-import { OrderBy, getField, Filter } from './types';
+import { OrderBy, getField } from './types';
+import { Filter } from './types/FilterTypes';
 
 export const buildTop = <T extends Entity>(
   top: number | undefined,
@@ -59,10 +61,4 @@ export const buildFilter = <
 >(
   filter: Filter<T> | undefined,
   req: B,
-): B => {
-  if (filter) {
-    // TODO Implement Filter
-    return req;
-  }
-  return req;
-};
+): B => req;

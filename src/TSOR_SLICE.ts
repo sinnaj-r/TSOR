@@ -35,14 +35,14 @@ export class TSOR_SLICE<
   routeKey: K;
 
   constructor(
-    routeName: K,
-    routeSuffix: string = routeName,
+    constructable: T,
     compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
   ) {
+    // eslint-disable-next-line no-underscore-dangle
+    const routeName = constructable._entityName as K;
     const { adapter, actions, slice } = createApiSlice<K, T, S>(
-      routeName,
+      constructable,
       undefined,
-      routeSuffix,
       compositionMap,
     );
     this.reducer = slice.reducer;

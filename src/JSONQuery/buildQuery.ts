@@ -3,7 +3,10 @@ import {
   Expandable,
   GetAllRequestBuilderV4,
 } from '../../../cloud-sdk-js/packages/core/dist';
-import { Selectable } from '../../../cloud-sdk-js/packages/core/dist/odata-common';
+import {
+  Constructable,
+  Selectable,
+} from '../../../cloud-sdk-js/packages/core/dist/odata-common';
 
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
 import {
@@ -23,7 +26,7 @@ import {
 
 export const buildQuery = <T extends Entity>(
   requestBuilder: RequestType<T>,
-  query: QueryOptions<T>,
+  query: QueryOptions<Constructable<T>>,
 ) => {
   let req = requestBuilder;
   if (req instanceof GetAllRequestBuilderV4) {
