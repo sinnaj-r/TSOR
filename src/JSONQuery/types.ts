@@ -3,7 +3,6 @@ import {
   AllFields,
   CountRequestBuilder,
   RequestBuilder,
-  StringField,
 } from '../../../cloud-sdk-js/packages/core/dist';
 import {
   Entity,
@@ -87,13 +86,9 @@ export const getField = <T extends Entity>(
   if (field === '*') {
     return new AllFields('*', requestBuilder._entityConstructor);
   }
-  const result = new StringField(
-    field as string,
-    requestBuilder._entityConstructor,
-    'Edm.String',
-  );
-
-  return result;
+  return requestBuilder._entityConstructor._allFields.find(
+    (f) => f._fieldName === field,
+  )!;
 };
 
 export type QueryOptions<T extends Entity> =
