@@ -40,6 +40,8 @@
     }
   ],
   "rules": {
+    // TODO Enable me
+    "import/no-extraneous-dependencies": 0,
     "dot-notation": "warn",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "off",

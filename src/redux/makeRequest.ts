@@ -1,4 +1,4 @@
-import { createRequest, QueryOptions } from '../../../cloud-sdk-json-query/src';
+import { createRequest, QueryOptions } from 'cloud-sdk-json-query/src';
 import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
 import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
 import { SettingsState } from '../../types/SettingsState';

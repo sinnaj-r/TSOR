@@ -6,6 +6,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
+import { QueryOptions } from 'cloud-sdk-json-query/src';
 import { createAsyncThunksForAPI } from './createAsyncThunksForAPI';
 import { GenericSliceState } from '../../types/GenericSliceState';
 import { GenericReducers } from '../../types/GenericReducers';
@@ -15,7 +16,6 @@ import { createExtraReducers } from './createExtraReducers';
 import { IDObject } from '../../types/IDObject';
 
 import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
-import { QueryOptions } from '../../../cloud-sdk-json-query/src';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 /**

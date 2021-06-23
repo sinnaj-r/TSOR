@@ -1,6 +1,6 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { QueryOptions } from 'cloud-sdk-json-query/src';
 import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
-import { QueryOptions } from '../../../cloud-sdk-json-query/src';
 import { IDObject } from '../../types/IDObject';
 
 import { CompositionMapType, resolveComposition } from './compositions';

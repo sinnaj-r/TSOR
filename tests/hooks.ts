@@ -2,7 +2,6 @@ import { mockGetRequest } from '../../cloud-sdk-js/packages/core/test/test-util/
 import { ExampleItem1Data, ExampleItem2Data } from './mockItems';
 import { ExampleItem1 } from './ExampleItem1/ExampleItem1';
 import { ExampleItem2 } from './ExampleItem2/ExampleItem2';
-import nock from '../../cloud-sdk-js/node_modules/nock';
 
 const destination = {
   name: 'Testination',
@@ -44,8 +43,6 @@ export const mochaHooks = {
       },
       ExampleItem2 as any,
     );
-
-    console.log('Mocks:', nock.activeMocks());
   },
 };
 // http://localhost/tsor.example/ExampleItem1(id=%2742%27)?$format=json
