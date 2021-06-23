@@ -4,7 +4,7 @@
   "description": "An TypeScript-ODATA-Redux-Toolkit",
   "main": "index.ts",
   "author": "Jannis Rosenbaum",
-  "license": "All Rights Reserverd",
+  "license": "All Rights Reserved",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",

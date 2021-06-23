@@ -13,8 +13,9 @@ import { CompositionMapType } from './compositions';
 import { createExtraReducers } from './createExtraReducers';
 
 import { IDObject } from '../../types/IDObject';
-import { QueryOptions } from '../JSONQuery/types';
+
 import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
+import { QueryOptions } from '../../../cloud-sdk-json-query/src';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 /**
