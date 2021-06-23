@@ -3,4 +3,6 @@ import { QueryOptions } from '../../src/JSONQuery/types';
 import { ExampleItem1 } from '../ExampleItem1/ExampleItem1';
 
 export const getQueryForRequest = (query: QueryOptions<ExampleItem1>) =>
-  createRequest<ExampleItem1>(ExampleItem1, query).build().query();
+  decodeURIComponent(
+    createRequest<ExampleItem1>(ExampleItem1, query).build().query(),
+  );

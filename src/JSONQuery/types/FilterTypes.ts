@@ -20,15 +20,15 @@ export type StringFilterKeys<
 type s = '' | ' ';
 
 export type FilterStatements<T, P extends string & keyof T> =
-  | `concat(${P},${s}'${string}')`
-  | `contains(${P},${s}'${string}')`
-  | `endswith(${P},${s}'${string}')`
-  | `startswith(${P},${s}'${string}')`
+  | `concat('${P}',${s}'${string}')`
+  | `contains('${P}',${s}'${string}')`
+  | `endswith('${P}',${s}'${string}')`
+  | `startswith('${P}',${s}'${string}')`
   // Allow both quote types
-  | `concat(${P},${s}"${string}")`
-  | `contains(${P},${s}"${string}")`
-  | `endswith(${P},${s}"${string}")`
-  | `startswith(${P},${s}"${string}")`;
+  | `concat("${P}",${s}"${string}")`
+  | `contains("${P}",${s}"${string}")`
+  | `endswith("${P}",${s}"${string}")`
+  | `startswith("${P}",${s}"${string}")`;
 
 export type StringFilter<T> = {
   [P in StringFilterKeys<T>]?: P extends keyof T
@@ -52,7 +52,7 @@ export type NormalFilter<T> = {
     | { [O in 'in']?: T[P][] }
     // Filter in Form of `prop: {any: [...]}`
     | {
-        [M in typeof COLLECTION_OPERATORS[number]]?: FilterObject<T>[];
+        [M in typeof COLLECTION_OPERATORS[number]]?: T[P][];
       };
 };
 
