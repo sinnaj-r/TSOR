@@ -1,6 +1,6 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import buildQuery, { QueryOptions } from 'odata-query';
-import { IDObject } from '../../types/IDObject';
+import { createRequest, QueryOptions } from 'cloud-sdk-json-query/src';
+import { Constructable } from '@sap-cloud-sdk/core/dist';
+import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 import { SettingsState } from '../../types/SettingsState';
 
 export class RequestError extends Error {
@@ -29,46 +29,40 @@ export type ODataResponse<T> =
  * @returns
  */
 // eslint-disable-next-line unused-imports/no-unused-vars
-export const makeRequest = async <K, T extends IDObject, S>(
-  method: AxiosRequestConfig['method'],
-  apiPrefix: string,
-  query: Partial<QueryOptions<T>>,
+export const makeRequest = async <K, T extends Entity, S>(
+  constructable: Constructable<T>,
+  query: QueryOptions<T>,
   settings: SettingsState,
-  data?: any,
-) => {
+): Promise<T[]> => {
   // TODO Types
   const { url, headers: additionalHeaders } = settings;
-  const urlArgs = buildQuery(query);
-  const delimiter = /^[?(]/.test(urlArgs) ? '' : '/';
-
-  const headers: { [key: string]: string } = {
-    'x-requested-with': 'XMLHttpRequest',
-    ...additionalHeaders,
-  };
-
-  const requestUrl = `${url}/${apiPrefix}${delimiter}${urlArgs}`;
+  // TODO Dynamic Path
   try {
-    const result = await axios.request<ODataResponse<T>>({
-      method,
-      url: requestUrl,
-      data,
-      headers,
-    });
+    let result = await createRequest<T>(constructable, query)
+      // eslint-disable-next-line no-underscore-dangle
+      .setCustomServicePath(constructable._defaultServicePath || '/')
+      .addCustomHeaders({
+        ...additionalHeaders,
+      })
+      .execute({ url });
+    if (typeof result === 'number') {
+      throw new RequestError('Count is not implemented yet!');
+    }
+    if (!Array.isArray(result)) {
+      result = [result];
+    }
 
-    if (typeof result.data === 'string') {
-      throw new RequestError(result.data, result.status);
-    }
-    if (!('value' in result.data)) {
-      return [result.data];
-    }
-    return result.data.value;
+    // de-complex data for redux store
+    return JSON.parse(JSON.stringify(result));
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
+    const axiosErr = err.rootCause;
     throw new RequestError(
-      typeof err.response.data === 'string'
-        ? err.response.data
-        : err.response.statusText,
-      err.response.status,
+      (typeof axiosErr.response?.data === 'string'
+        ? axiosErr.response?.data
+        : axiosErr.response?.statusText) ?? 'Unknown Error',
+      axiosErr.response?.status ?? 0,
     );
   }
 };

@@ -4,16 +4,12 @@
   "description": "An TypeScript-ODATA-Redux-Toolkit",
   "main": "index.ts",
   "author": "Jannis Rosenbaum",
-  "license": "All Rights Reserverd",
+  "license": "All Rights Reserved",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
+    "@sap-cloud-sdk/core": "^1.45.0",
     "@types/object-path": "^0.11.0",
-    "axios": "^0.21.1",
-    "axios-mock-adapter": "^1.19.0",
-    "immer": "^9.0.2",
-    "object-path": "^0.11.5",
-    "odata-query": "git+https://gitlab.hpi.de/epicbp2020/jannis-ba-code/odata-query.git#bachelor-thesis",
     "redux": "^4.1.0",
     "redux-persist": "^6.0.0"
   },
@@ -38,11 +34,11 @@
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.4"
   },
   "scripts": {
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register --require tests/hooks.ts tests/**/*.test.ts",
+    "test": "env TS_NODE_PROJECT='tests/tsconfig.json' mocha -r ts-node/register --require tests/hooks.ts tests/**/*.test.ts",
     "coverage": "nyc yarn test",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src --color",
     "lint:all": "yarn lint:strict && yarn lint:ts && yarn lint:depcheck ",

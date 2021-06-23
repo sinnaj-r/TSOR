@@ -1,13 +1,16 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { QueryOptions } from 'odata-query';
+import { Constructable } from '@sap-cloud-sdk/core/dist';
+import { QueryOptions } from 'cloud-sdk-json-query/src';
 import { IDObject } from '../../types/IDObject';
+
 import { CompositionMapType, resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 
 export const createAsyncThunksForAPI = <T extends IDObject, S>(
-  apiName: keyof S,
-  apiPrefix: string,
+  constructable: Constructable<T>,
   compositionMap: CompositionMapType,
+  // eslint-disable-next-line no-underscore-dangle
+  apiName = constructable._entityName,
 ): AsyncActionsType<T, S> => ({
   get: createAsyncThunk<T[], void, { state: S }>(
     `${apiName}/GET`,
@@ -17,11 +20,12 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       const filter = (thunkAPI.getState() as any)[apiName].filter as Partial<
         QueryOptions<T>
       >;
+
       // TODO Types
       const { settings } = thunkAPI.getState() as any;
+
       const result = await makeRequest<typeof apiName, T, S>(
-        'GET',
-        apiPrefix,
+        constructable,
         filter,
         settings as any,
       );
@@ -45,8 +49,7 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       // TODO Types
       const { settings } = thunkAPI.getState() as any;
       const result = await makeRequest<typeof apiName, T, S>(
-        'GET',
-        apiPrefix,
+        constructable,
         { ...filter, key },
         settings,
       );

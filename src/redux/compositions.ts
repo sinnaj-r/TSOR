@@ -1,6 +1,4 @@
-import { produce, current } from 'immer';
 import { Dispatch } from 'redux';
-import objectPath from 'object-path';
 import { IDObject } from '../../types/IDObject';
 
 export type CompositionType = {
@@ -39,6 +37,7 @@ const traverseCompositions = (
     } else {
       usedCompositions = [
         ...usedCompositions,
+        // eslint-disable-next-line unused-imports/no-unused-vars
         ...traverseCompositions(
           `${path}${path ? '.' : ''}${prop}`,
           compositionMap,
@@ -67,9 +66,11 @@ export const resolveComposition = <
 >(
   dispatch: D,
   items: T[],
-  apiName: K,
-  compositionMap: CompositionMapType,
-) => {
+  _apiName: K,
+  _compositionMap: CompositionMapType,
+) => items;
+// TODO Re-Implement Composition (with normalizr)
+/*
   const changedItems = produce(items, (draft) => {
     const typeName = Object.entries(compositionMap.apiNames).find(
       ([_, name]) => apiName === name,
@@ -110,4 +111,4 @@ export const resolveComposition = <
     }
   });
   return changedItems;
-};
+  */

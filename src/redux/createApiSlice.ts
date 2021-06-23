@@ -1,68 +1,23 @@
 /* eslint-disable no-param-reassign */
-import { QueryOptions } from 'odata-query';
 import {
-  ActionReducerMapBuilder,
   createEntityAdapter,
   createSlice,
-  EntityAdapter,
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import {
-  ActionsKeys,
-  AsyncActionsType,
-  ApiActionKeys,
-  createAsyncThunksForAPI,
-} from './HOAsyncThunks';
-import { IDObject } from '../../types/IDObject';
+import { QueryOptions } from 'cloud-sdk-json-query/src';
+
+import { Constructable } from '@sap-cloud-sdk/core/dist';
+import { createAsyncThunksForAPI } from './createAsyncThunksForAPI';
 import { GenericSliceState } from '../../types/GenericSliceState';
 import { GenericReducers } from '../../types/GenericReducers';
 import { CompositionMapType } from './compositions';
+import { createExtraReducers } from './createExtraReducers';
+
+import { IDObject } from '../../types/IDObject';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
-
-/**
- *  This Functions adds the Reducers of our ActionTypes to the HO API Slide.
- *
- * @template T
- * @param {string} apiName
- * @param {AsyncActionsType<T>} thunkActions
- * @param {EntityAdapter<T>} adapter
- * @param {ActionReducerMapBuilder<GenericSliceState<T>>} builder
- */
-const createExtraReducers = <K extends string, T extends IDObject, S>(
-  apiName: K,
-  thunkActions: AsyncActionsType<T, S>,
-  adapter: EntityAdapter<T>,
-  builder: ActionReducerMapBuilder<GenericSliceState<T>>,
-) => {
-  for (const key of ApiActionKeys) {
-    builder.addCase(
-      thunkActions[key as ActionsKeys].fulfilled,
-      (state, action) => {
-        state.loading = 'idle';
-        state.error = undefined;
-        adapter.setAll(state as GenericSliceState<T>, action.payload);
-      },
-    );
-    builder.addCase(
-      thunkActions[key as ActionsKeys].pending,
-      (state, _action) => {
-        state.loading = 'pending';
-        state.error = undefined;
-      },
-    );
-    builder.addCase(
-      thunkActions[key as ActionsKeys].rejected,
-      (state, action) => {
-        state.loading = 'rejected';
-        state.error = action.error;
-      },
-    );
-  }
-};
-
 /**
  * The main HO-Function for creating an Redux-Toolkit Slice for an generic API-Route e.g. product or BuPa
  *
@@ -71,22 +26,17 @@ const createExtraReducers = <K extends string, T extends IDObject, S>(
  * @returns
  */
 export const createApiSlice = <
-  K extends string,
   T extends IDObject,
   S extends Record<string, any>
 >(
-  apiName: K,
+  constructable: Constructable<T>,
   adapter = createAdapter<T>(),
-  apiPrefix: string = apiName,
   compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
 ) => {
-  const actions = createAsyncThunksForAPI<T, S>(
-    apiName,
-    apiPrefix,
-    compositionMap,
-  );
+  const actions = createAsyncThunksForAPI<T, S>(constructable, compositionMap);
   const slice = createSlice({
-    name: apiName,
+    // eslint-disable-next-line no-underscore-dangle
+    name: constructable._entityName,
     initialState: {
       ...adapter.getInitialState({
         loading: 'idle',
@@ -117,7 +67,7 @@ export const createApiSlice = <
       },
     } as GenericReducers<T>,
     extraReducers: (builder) =>
-      createExtraReducers<K, T, S>(apiName, actions, adapter, builder),
+      createExtraReducers<T, S>(actions, adapter, builder),
   });
   return { actions, slice, adapter };
 };

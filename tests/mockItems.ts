@@ -1,7 +1,6 @@
 import { CompositionMapType } from '../src/redux/compositions';
-import { ExampleItem1Type, ExampleItem2Type } from './TestTypes';
 
-export const ExampleItem1Data: ExampleItem1Type[] = [
+export const ExampleItem1Data = [
   {
     id: '1',
     description: 'Test 1',
@@ -27,7 +26,7 @@ export const ExampleItem1Data: ExampleItem1Type[] = [
   },
 ];
 
-export const ExampleItem2Data: ExampleItem2Type[] = [
+export const ExampleItem2Data = [
   {
     id: '1',
     description: 5,

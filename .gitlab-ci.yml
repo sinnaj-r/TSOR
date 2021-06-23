@@ -10,6 +10,10 @@ stages:
 
 before_script:
   - echo -e "machine gitlab.hpi.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc
+  - git clone https://gitlab.hpi.de/epicbp2020/jannis-ba-code/cloud-sdk-js.git ./cloud-sdk-js
+  - cd cloud-sdk-js/packages/core && git checkout bachelor-thesis && yarn && yarn link && cd ../../../ && yarn link "@sap-cloud-sdk/core"
+  - git clone https://gitlab.hpi.de/epicbp2020/jannis-ba-code/sap-cloud-sdk-json-query.git ./sap-cloud-sdk-json-query
+  - cd sap-cloud-sdk-json-query && git checkout master && yarn && yarn link "@sap-cloud-sdk/core" && yarn link && cd ../ && yarn link "cloud-sdk-json-query"
   - yarn install --cache-folder .yarn --network-timeout 100000 --prefer-offline
 
 checkFormat:
