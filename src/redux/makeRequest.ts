@@ -1,6 +1,6 @@
 import { createRequest, QueryOptions } from 'cloud-sdk-json-query/src';
-import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
-import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
+import { Constructable } from '@sap-cloud-sdk/core/dist';
+import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 import { SettingsState } from '../../types/SettingsState';
 
 export class RequestError extends Error {

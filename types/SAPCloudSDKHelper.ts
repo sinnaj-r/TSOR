@@ -6,7 +6,7 @@ import {
   DeleteRequestBuilderV4,
   RequestBuilder,
   EntityV4,
-} from '../../cloud-sdk-js/packages/core/dist';
+} from '@sap-cloud-sdk/core/dist';
 
 export interface RequestBuilderInstance<T extends EntityV4>
   extends RequestBuilder<T> {

@@ -1,4 +1,4 @@
-import { mockGetRequest } from '../../cloud-sdk-js/packages/core/test/test-util/request-mocker';
+import { mockGetRequest } from '@sap-cloud-sdk/core/test/test-util/request-mocker';
 import { ExampleItem1Data, ExampleItem2Data } from './mockItems';
 import { ExampleItem1 } from './ExampleItem1/ExampleItem1';
 import { ExampleItem2 } from './ExampleItem2/ExampleItem2';

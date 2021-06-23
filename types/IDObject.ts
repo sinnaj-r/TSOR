@@ -1,8 +1,5 @@
-import {
-  Constructable,
-  StringField,
-} from '../../cloud-sdk-js/packages/core/dist';
-import { Entity } from '../../cloud-sdk-js/packages/core/dist/odata-v4';
+import { Constructable, StringField } from '@sap-cloud-sdk/core/dist';
+import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 
 export type IDObject = Entity & {
   id: string;

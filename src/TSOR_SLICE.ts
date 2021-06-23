@@ -4,13 +4,13 @@ import {
   EntitySelectors,
   Reducer,
 } from '@reduxjs/toolkit';
+import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { IDObject } from '../types/IDObject';
 import { AsyncActionsType } from './redux/createAsyncThunksForAPI';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { GenericReducers } from '../types/GenericReducers';
 import { CompositionMapType } from './redux/compositions';
 import { createApiSlice } from './redux/createApiSlice';
-import { Constructable } from '../../cloud-sdk-js/packages/core/dist';
 
 export type TAsyncActions<T extends IDObject> = AsyncActionsType<T, any>;
 
