@@ -15,6 +15,8 @@ import {
   endsWith,
   startsWith,
   StringFilterFunction,
+  or,
+  not,
 } from '../../../cloud-sdk-js/packages/core/dist';
 import {
   contains,
@@ -144,7 +146,7 @@ const parseFilterValue = <T extends Entity>(
 
   if (Array.isArray(value)) {
     // Implicit Root-Level And
-    if (path.length === 0 || lastKey === 'and') {
+    if (path.length === 0 || ['and', 'or'].includes(lastKey as any)) {
       const filters: SDKFilter<T, any>[] = [];
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < value.length; i++) {
@@ -156,14 +158,34 @@ const parseFilterValue = <T extends Entity>(
           ),
         );
       }
-      // TODO fix Types
-      return [and(...filters) as any];
+      switch (lastKey) {
+        default:
+        case 'and':
+          return [and(...filters) as any];
+        case 'or':
+          return [or(...filters) as any];
+      }
     }
 
     // Explicit or implicit 'in'
     if (lastKey === 'in') {
       throw new Error('In is not supported by the SDK');
     }
+  }
+
+  if (lastKey === 'not') {
+    // TODO Reduce Duplication
+    const filters: SDKFilter<T, any>[] = [];
+    for (const key of Object.keys(value)) {
+      filters.push(
+        ...parseFilterValue(
+          filter,
+          [...path, key],
+          [...ignoreNKeys, path.length - 1],
+        ),
+      );
+    }
+    return [and(...filters.map((f) => not(f))) as any];
   }
 
   // Complex Query (logic, in, gte, any, ...)

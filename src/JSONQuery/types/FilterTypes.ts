@@ -40,7 +40,9 @@ export type StringFilter<T> = {
 
 // and: [...]
 export type LogicFilter<T> = {
-  [K in typeof LOGICAL_OPERATORS[number]]?: Filter<T>;
+  [K in typeof LOGICAL_OPERATORS[number]]?: K extends 'not'
+    ? FilterObject<T>
+    : Filter<T>;
 };
 
 export type NormalFilter<T> = {
