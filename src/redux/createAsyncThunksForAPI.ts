@@ -1,6 +1,8 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { QueryOptions } from 'cloud-sdk-json-query/src';
+import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
+
 import { IDObject } from '../../types/IDObject';
 
 import { CompositionMapType, resolveComposition } from './compositions';
@@ -40,18 +42,18 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       return data;
     },
   ),
-  getById: createAsyncThunk<T[], string, { state: S }>(
-    `${apiName}/GET_BY_ID`,
-    async (key, thunkAPI) => {
-      const filter = (thunkAPI.getState() as any)[apiName].filter as Partial<
-        QueryOptions<T>
-      >;
-      // TODO Types
+  getWithFilter: createAsyncThunk<T[], Partial<QueryOptions<T>>, { state: S }>(
+    `${apiName}/GET_WITH_FILTER`,
+    async (filter, thunkAPI) => {
+      // eslint-disable-next-line no-debugger
+      const globalFilter = (thunkAPI.getState() as any)[apiName]
+        .filter as Partial<QueryOptions<T>>;
       const { settings } = thunkAPI.getState() as any;
       const result = await makeRequest<typeof apiName, T, S>(
         constructable,
-        { ...filter, key },
-        settings,
+        { ...globalFilter, ...filter },
+
+        settings as any,
       );
 
       const data = resolveComposition(
@@ -80,10 +82,10 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
     },
   ),
 });
-
-export type AsyncActionsType<T, S> = {
+// TODO Get Type more intelligent
+export type AsyncActionsType<T extends Entity, S> = {
   get: AsyncThunk<T[], void, { state: S }>;
-  getById: AsyncThunk<T[], string, { state: S }>;
+  getWithFilter: AsyncThunk<T[], Partial<QueryOptions<T>>, { state: S }>;
   post: AsyncThunk<T[], T, { state: S }>;
   patch: AsyncThunk<
     T[],
@@ -95,10 +97,10 @@ export type AsyncActionsType<T, S> = {
   deleteById: AsyncThunk<T[], string, { state: S }>;
 };
 
-export type ActionsKeys = keyof AsyncActionsType<null, null>;
+export type ActionsKeys = keyof AsyncActionsType<any, null>;
 export const ApiActionKeys: ActionsKeys[] = [
   'get',
-  'getById',
+  'getWithFilter',
   'post',
   'patch',
   'deleteById',

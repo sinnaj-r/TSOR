@@ -6,18 +6,14 @@ import { SettingsState } from '../../types/SettingsState';
 export class RequestError extends Error {
   errorCode: number | undefined;
 
-  constructor(errorBody: string, errorCode?: number) {
+  errorCodeName: string | undefined;
+
+  constructor(errorBody: string, errorCode?: number, errorCodeName?: string) {
     super(`${errorBody} (${errorCode})`);
     this.errorCode = errorCode;
+    this.errorCodeName = errorCodeName;
   }
 }
-
-export type ODataResponse<T> =
-  | string
-  | {
-      value: T[];
-    }
-  | T;
 
 /**
  * Execute a HTTP Request. Directly returns the result data.
@@ -63,6 +59,7 @@ export const makeRequest = async <K, T extends Entity, S>(
         ? axiosErr.response?.data
         : axiosErr.response?.statusText) ?? 'Unknown Error',
       axiosErr.response?.status ?? 0,
+      axiosErr.response?.statusText,
     );
   }
 };

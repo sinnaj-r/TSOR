@@ -18,6 +18,7 @@ import { createExtraReducers } from './createExtraReducers';
 import { IDObject } from '../../types/IDObject';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
+
 /**
  * The main HO-Function for creating an Redux-Toolkit Slice for an generic API-Route e.g. product or BuPa
  *
@@ -60,7 +61,7 @@ export const createApiSlice = <
         adapter.removeAll(state as GenericSliceState<T>);
       },
       setAll(state, action: PayloadAction<T[]>) {
-        adapter.setAll(state as EntityState<T>, action.payload);
+        adapter.upsertMany(state as EntityState<T>, action.payload);
       },
       upsertMany(state, action: PayloadAction<T[]>) {
         adapter.upsertMany(state as EntityState<T>, action.payload);

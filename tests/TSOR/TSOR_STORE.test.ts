@@ -66,18 +66,18 @@ describe('TSOR Store', () => {
     expect(item).to.haveOwnProperty('description', 'Test 1');
   });
   it('can get a single item & add it to the store', async () => {
-    await store.dispatch(slice1.getActions().getById('1'));
+    await store.dispatch(slice1.getActions().getWithFilter({ key: '1' }));
     expectNoError();
     const item = slice1.selectors.selectById(store.getState(), '1');
     expect(item).to.haveOwnProperty('description', 'Test 1');
   });
 
   it('sets correct error', async () => {
-    await store.dispatch(slice1.getActions().getById('42'));
+    await store.dispatch(slice1.getActions().getWithFilter({ key: '42' }));
     checkForError('Not Found (404)');
   });
   it('can dismiss error', async () => {
-    await store.dispatch(slice1.getActions().getById('42'));
+    await store.dispatch(slice1.getActions().getWithFilter({ key: '42' }));
     checkForError('Not Found (404)');
 
     await store.dispatch(slice1.getActions().dismissError());
@@ -129,15 +129,15 @@ describe('TSOR Store', () => {
     expect(item2Before).to.haveOwnProperty('description', 'Test 2');
 
     await store.dispatch(
-      // TODO
-      // @ts-ignore
-      slice1.getActions().setAll([{ ...item2Before, id: '1' }]),
+      // TODO Types
+      slice1.getActions().setAll([{ ...item2Before, id: '1' } as any]),
     );
 
     const item1After = slice1.selectors.selectById(store.getState(), '1')!;
     const item2After = slice1.selectors.selectById(store.getState(), '2')!;
-    expect(item2After).to.be.undefined;
-    expect(item1Before.description).to.not.equal(item1After.description);
+    expect(item2Before).to.deep.equal(item2After);
+    expect(item1After.description).to.equal(item2Before.description);
+    expect(item1After.num1).to.not.equal(item1Before.num1);
   });
   it('can use all http methods');
   it('can resolve compositions - with empty store', async () => {
