@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ValueOf } from '../../types/Helper';
 import { SettingsState } from '../../types/SettingsState';
 
@@ -8,10 +8,18 @@ export const settingsInitialState: SettingsState = {
   headers: {},
 };
 
+// TODO Create TSOR Settings Class
+export const selectSettingByKey = <S extends SettingsState>(
+  key: keyof SettingsState,
+) =>
+  createSelector(
+    (state: { settings: S }) => state.settings,
+    (settings) => settings[key],
+  );
 export const createSettingsSlice = <S extends SettingsState>(initialState: S) =>
   createSlice({
     name: 'settings',
-    initialState: { settingsInitialState, ...initialState } as S,
+    initialState: { ...settingsInitialState, ...initialState } as S,
     reducers: {
       set(
         state,

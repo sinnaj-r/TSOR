@@ -1,4 +1,5 @@
 import { mockGetRequest } from '@sap-cloud-sdk/core/test/test-util/request-mocker';
+
 import { ExampleItem1Data, ExampleItem2Data } from './mocks/mockItems';
 import { ExampleItem1 } from './mocks/ExampleItem1/ExampleItem1';
 import { ExampleItem2 } from './mocks/ExampleItem2/ExampleItem2';
@@ -10,16 +11,27 @@ const destination = {
 
 export const mochaHooks = {
   beforeAll() {
-    mockGetRequest(
+    console.log("I've just added the hooks");
+    this.getByKeyReq = mockGetRequest(
       {
         responseBody: ExampleItem1Data[0],
         destination,
         path: 'ExampleItem1(id=%271%27)',
       },
       ExampleItem1 as any,
-    );
+    ).persist();
 
-    mockGetRequest(
+    this.slowRequest = mockGetRequest(
+      {
+        responseBody: ExampleItem1Data[0],
+        destination,
+        path: 'ExampleItem1(id=%272%27)',
+        delay: 200,
+      },
+      ExampleItem1 as any,
+    ).persist();
+
+    this.getByKeyErrReq = mockGetRequest(
       {
         responseBody: 'Not Found' as any,
         destination,
@@ -27,22 +39,24 @@ export const mochaHooks = {
         statusCode: 404,
       },
       ExampleItem1 as any,
-    );
-    mockGetRequest(
+    ).persist();
+
+    this.get1Req = mockGetRequest(
       {
         responseBody: { value: ExampleItem1Data },
         destination,
+        path: 'ExampleItem1',
       },
       ExampleItem1 as any,
-    );
+    ).persist();
 
-    mockGetRequest(
+    this.get2Req = mockGetRequest(
       {
         responseBody: { value: ExampleItem2Data },
         destination,
       },
       ExampleItem2 as any,
-    );
+    ).persist();
   },
 };
 // http://localhost/tsor.example/ExampleItem1(id=%2742%27)?$format=json

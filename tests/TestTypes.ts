@@ -1,4 +1,5 @@
 import { AnyAction } from 'redux';
+import { createSettingsSlice } from '../src/redux/settings';
 import { TSOR_SLICE } from '../src/TSOR_SLICE';
 import { TSOR_STORE } from '../src/TSOR_STORE';
 import { GenericSliceState } from '../types/GenericSliceState';
@@ -14,3 +15,4 @@ export type STATE_TYPE = {
 export type STORE_TYPE = TSOR_STORE<STATE_TYPE, AnyAction>;
 export type SLICE1_TYPE = TSOR_SLICE<ExampleItem1, STATE_TYPE>;
 export type SLICE2_TYPE = TSOR_SLICE<ExampleItem2, STATE_TYPE>;
+export type SETTINGSSLICE_TYPE = ReturnType<typeof createSettingsSlice>;
