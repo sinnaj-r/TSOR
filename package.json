@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "author": "Jannis Rosenbaum",
   "license": "All Rights Reserved",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@epicbp2020/cloud-sdk-json-query": "^1.0.1",
     "@reduxjs/toolkit": "^1.5.1",
