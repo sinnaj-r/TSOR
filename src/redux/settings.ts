@@ -5,7 +5,7 @@ import {
   Draft,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { Function } from 'ts-toolbelt';
+import { Function, Object as TSObject, String } from 'ts-toolbelt';
 import op from 'object-path';
 import { ValueOf } from '../types/Helper';
 import { SettingsState } from '../types/SettingsState';
@@ -16,13 +16,19 @@ export const settingsInitialState: SettingsState = {
 };
 
 // TODO Create TSOR Settings Class
-export const selectSettingByKey = <S extends SettingsState>(
-  key: keyof SettingsState,
+// TODO Use Path Types for select Settings By Key
+export const selectSettingByPath = <
+  S extends SettingsState,
+  Path extends string,
+>(
+  path: Function.AutoPath<S, Path>,
 ) =>
   createSelector(
     (state: { settings: S }) => state.settings,
-    (settings) => settings[key],
+    (settings): TSObject.Path<S, String.Split<Path, '.'>> =>
+      op.get(settings, path),
   );
+
 export const createSettingsSlice = <S extends SettingsState>(initialState: S) =>
   createSlice({
     name: 'settings',

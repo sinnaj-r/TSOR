@@ -63,7 +63,8 @@
     "format:precommit": "pretty-quick --staged --ignore-path .editorconfig",
     "build": "tsc",
     "prepare": "yarn build",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "isready": "yarn lint:all && yarn format:check && yarn test"
   },
   "publishConfig": {
     "access": "public"

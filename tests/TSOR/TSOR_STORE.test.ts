@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import { combineReducers } from 'redux';
 import {
   createSettingsSlice,
-  selectSettingByKey,
+  selectSettingByPath,
 } from '../../src/redux/settings';
 import { TSOR_SLICE } from '../../src/TSOR_SLICE';
 import { resetStoreAction, TSOR_STORE } from '../../src/TSOR_STORE';
@@ -186,7 +186,7 @@ describe('TSOR Store', function () {
     expect(item).to.haveOwnProperty('description', 'Test 2');
   });
   it('can set settings', async function () {
-    const selectURL = selectSettingByKey('url');
+    const selectURL = selectSettingByPath('url');
     const oldUrl = selectURL(store.getState());
     const value = 'NOT_A_URL';
     await store.dispatch(settingsSlice.actions.set({ path: 'url', value }));
@@ -243,4 +243,6 @@ describe('TSOR Store', function () {
   // - Create "getX" functions on TSOR Slice for everything else as well
   // - Move Normalizr Config to Store
   // - Make Settings Slice Nice
+  // - Konzept für react-redux überlegen; Exportieren wir den `Provider` ?
+  // - SEHR WICHTIG: `| null` von den Typen entfernen!
 });
