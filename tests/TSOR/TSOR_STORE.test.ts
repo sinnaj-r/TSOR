@@ -189,7 +189,7 @@ describe('TSOR Store', function () {
     const selectURL = selectSettingByKey('url');
     const oldUrl = selectURL(store.getState());
     const value = 'NOT_A_URL';
-    await store.dispatch(settingsSlice.actions.set({ key: 'url', value }));
+    await store.dispatch(settingsSlice.actions.set({ path: 'url', value }));
     const newUrl = selectURL(store.getState());
     expect(newUrl).to.equal(value);
     expect(newUrl).to.not.equal(oldUrl);
@@ -238,4 +238,9 @@ describe('TSOR Store', function () {
   it("doesn't create errors when using uppercase properties");
   it('generates const _entityName s');
   it('can generate documentation for the API');
+
+  // TODO General Stuff
+  // - Create "getX" functions on TSOR Slice for everything else as well
+  // - Move Normalizr Config to Store
+  // - Make Settings Slice Nice
 });

@@ -1,5 +1,12 @@
 /* eslint-disable no-param-reassign */
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  Draft,
+  PayloadAction,
+} from '@reduxjs/toolkit';
+import { Function } from 'ts-toolbelt';
+import op from 'object-path';
 import { ValueOf } from '../types/Helper';
 import { SettingsState } from '../types/SettingsState';
 
@@ -21,15 +28,15 @@ export const createSettingsSlice = <S extends SettingsState>(initialState: S) =>
     name: 'settings',
     initialState: { ...settingsInitialState, ...initialState } as S,
     reducers: {
-      set(
-        state,
+      set<Path extends string>(
+        state: Draft<S>,
         action: PayloadAction<{
-          key: keyof typeof state;
+          path: Function.AutoPath<S, Path>;
           value: ValueOf<typeof state>;
         }>,
       ) {
-        const { key, value } = action.payload;
-        state[key] = value;
+        const { path, value } = action.payload;
+        op.set(state, path, value);
       },
       setMultiple(state, action: PayloadAction<Partial<typeof state>>) {
         const keys = Object.keys(action.payload) as (keyof typeof state)[];
