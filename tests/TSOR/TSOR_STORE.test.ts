@@ -218,10 +218,21 @@ describe('TSOR Store', function () {
       store.dispatch(slice2.getActions().deleteById('1')),
     ).to.be.rejectedWith('Not Implemented!');
   });
+
+  it('throws when using count', async function () {
+    expect(
+      store.dispatch(
+        slice1.getActions().getWithFilter({
+          count: true,
+        }),
+      ),
+    ).to.be.rejectedWith('Count is not implemented yet!');
+  });
+
   // TODO: Not Tested yet
   it('uses the authentication magic of the Cloud SDK');
   // TODO: Not Implemented yet
-
+  it('saves a $count result somewhere in the state (thereby supporting count)');
   it('caches only IDs for a filter');
   it('invalidates the cache (by being smart)');
   it("doesn't create errors when using uppercase properties");

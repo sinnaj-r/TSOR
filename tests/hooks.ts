@@ -1,4 +1,7 @@
-import { mockGetRequest } from '@sap-cloud-sdk/core/test/test-util/request-mocker';
+import {
+  mockCountRequest,
+  mockGetRequest,
+} from '@sap-cloud-sdk/core/test/test-util/request-mocker';
 
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -44,6 +47,12 @@ export const mochaHooks = {
       },
       ExampleItem1 as any,
     ).persist();
+
+    this.countReq = mockCountRequest(
+      destination,
+      5,
+      ExampleItem1.requestBuilder().getAll() as any,
+    );
 
     this.get1Req = mockGetRequest(
       {
