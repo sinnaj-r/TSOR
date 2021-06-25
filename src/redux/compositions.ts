@@ -1,6 +1,6 @@
 import { normalize, schema } from 'normalizr';
 import { Dispatch } from 'redux';
-import { IDObject } from '../../types/IDObject';
+import { IDObject } from '../types/IDObject';
 
 export type CompositionMapType = Record<string, schema.Entity>;
 

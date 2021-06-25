@@ -1,9 +1,9 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
-import { QueryOptions } from 'cloud-sdk-json-query/src';
+import { QueryOptions } from '@epicbp2020/cloud-sdk-json-query';
 import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 
-import { IDObject } from '../../types/IDObject';
+import { IDObject } from '../types/IDObject';
 
 import { CompositionMapType, resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';

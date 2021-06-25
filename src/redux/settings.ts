@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ValueOf } from '../../types/Helper';
-import { SettingsState } from '../../types/SettingsState';
+import { ValueOf } from '../types/Helper';
+import { SettingsState } from '../types/SettingsState';
 
 export const settingsInitialState: SettingsState = {
   url: `https://example.com`,

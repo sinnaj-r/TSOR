@@ -1,12 +1,13 @@
 {
-  "name": "tsor",
+  "name": "@epicbp2020/tsor",
   "version": "0.0.1",
   "description": "An TypeScript-ODATA-Redux-Toolkit",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "author": "Jannis Rosenbaum",
   "license": "All Rights Reserved",
   "private": true,
   "dependencies": {
+    "@epicbp2020/cloud-sdk-json-query": "^1.0.1",
     "@reduxjs/toolkit": "^1.5.1",
     "@sap-cloud-sdk/core": "^1.45.0",
     "@types/object-path": "^0.11.0",
@@ -16,6 +17,9 @@
   },
   "module": "index.ts",
   "devDependencies": {
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/gitlab": "^6.2.1",
+    "@semantic-release/npm": "^7.1.3",
     "@types/chai": "^4.2.17",
     "@types/chai-as-promised": "^7.1.4",
     "@types/mocha": "^8.2.2",
@@ -37,6 +41,7 @@
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
+    "semantic-release": "^17.4.4",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.4"
   },
@@ -53,6 +58,12 @@
     "lint:strict": "eslint --ext .js,.jsx,.ts,.tsx src --color --max-warnings=0",
     "format": "prettier --no-editorconfig --ignore-unknown --write '**/(*.js|*.ts|*.jsx|*.tsx|*.md)'",
     "format:check": "prettier -c --no-editorconfig --ignore-unknown --write '**/(*.js|*.ts|*.jsx|*.tsx|*.md)'",
-    "format:precommit": "pretty-quick --staged --ignore-path .editorconfig"
+    "format:precommit": "pretty-quick --staged --ignore-path .editorconfig",
+    "build": "tsc",
+    "prepare": "yarn build",
+    "semantic-release": "semantic-release"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,5 +1,5 @@
 import { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-import { QueryOptions } from 'cloud-sdk-json-query/src';
+import { QueryOptions } from '@epicbp2020/cloud-sdk-json-query';
 import { GenericSliceState } from './GenericSliceState';
 import { IDObject } from './IDObject';
 

@@ -1,7 +1,7 @@
-import { createRequest, QueryOptions } from 'cloud-sdk-json-query/src';
+import { createRequest, QueryOptions } from '@epicbp2020/cloud-sdk-json-query';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
-import { SettingsState } from '../../types/SettingsState';
+import { SettingsState } from '../types/SettingsState';
 
 export class RequestError extends Error {
   errorCode: number | undefined;

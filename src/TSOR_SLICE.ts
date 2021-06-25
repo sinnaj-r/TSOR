@@ -5,10 +5,10 @@ import {
   Reducer,
 } from '@reduxjs/toolkit';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
-import { IDObject } from '../types/IDObject';
+import { IDObject } from './types/IDObject';
 import { AsyncActionsType } from './redux/createAsyncThunksForAPI';
-import { GenericSliceState } from '../types/GenericSliceState';
-import { GenericReducers } from '../types/GenericReducers';
+import { GenericSliceState } from './types/GenericSliceState';
+import { GenericReducers } from './types/GenericReducers';
 import { CompositionMapType } from './redux/compositions';
 import { createApiSlice } from './redux/createApiSlice';
 

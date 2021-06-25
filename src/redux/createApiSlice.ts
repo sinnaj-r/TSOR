@@ -6,16 +6,16 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { QueryOptions } from 'cloud-sdk-json-query/src';
+import { QueryOptions } from '@epicbp2020/cloud-sdk-json-query';
 
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { createAsyncThunksForAPI } from './createAsyncThunksForAPI';
-import { GenericSliceState } from '../../types/GenericSliceState';
-import { GenericReducers } from '../../types/GenericReducers';
+import { GenericSliceState } from '../types/GenericSliceState';
+import { GenericReducers } from '../types/GenericReducers';
 import { CompositionMapType } from './compositions';
 import { createExtraReducers } from './createExtraReducers';
 
-import { IDObject } from '../../types/IDObject';
+import { IDObject } from '../types/IDObject';
 
 const createAdapter = <T>() => createEntityAdapter<T>({});
 

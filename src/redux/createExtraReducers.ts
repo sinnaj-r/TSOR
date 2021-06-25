@@ -6,8 +6,8 @@ import {
   AsyncActionsType,
   ApiActionKeys,
 } from './createAsyncThunksForAPI';
-import { IDObject } from '../../types/IDObject';
-import { GenericSliceState } from '../../types/GenericSliceState';
+import { IDObject } from '../types/IDObject';
+import { GenericSliceState } from '../types/GenericSliceState';
 
 /**
  *  This Functions adds the Reducers of our ActionTypes to the HO API Slide.
