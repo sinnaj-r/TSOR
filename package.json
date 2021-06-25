@@ -1,6 +1,6 @@
 {
   "name": "@epicbp2020/tsor",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "An TypeScript-ODATA-Redux-Toolkit",
   "main": "dist/index.js",
   "author": "Jannis Rosenbaum",
