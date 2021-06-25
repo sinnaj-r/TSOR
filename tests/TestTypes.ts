@@ -3,8 +3,8 @@ import { TSOR_SLICE } from '../src/TSOR_SLICE';
 import { TSOR_STORE } from '../src/TSOR_STORE';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { SettingsState } from '../types/SettingsState';
-import { ExampleItem1 } from './ExampleItem1/ExampleItem1';
-import { ExampleItem2 } from './ExampleItem2/ExampleItem2';
+import { ExampleItem1 } from './mocks/ExampleItem1/ExampleItem1';
+import { ExampleItem2 } from './mocks/ExampleItem2/ExampleItem2';
 
 export type STATE_TYPE = {
   ExampleItem1: GenericSliceState<ExampleItem1>;

@@ -27,11 +27,11 @@ const createAdapter = <T>() => createEntityAdapter<T>({});
  */
 export const createApiSlice = <
   T extends IDObject,
-  S extends Record<string, any>
+  S extends Record<string, any>,
 >(
   constructable: Constructable<T>,
   adapter = createAdapter<T>(),
-  compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
+  compositionMap: CompositionMapType = {},
 ) => {
   const actions = createAsyncThunksForAPI<T, S>(constructable, compositionMap);
   const slice = createSlice({

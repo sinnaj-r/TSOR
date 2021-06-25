@@ -4,11 +4,10 @@ import { combineReducers } from 'redux';
 import { createSettingsSlice } from '../../src/redux/settings';
 import { TSOR_SLICE } from '../../src/TSOR_SLICE';
 import { resetStoreAction, TSOR_STORE } from '../../src/TSOR_STORE';
-import { ExampleItem1 } from '../ExampleItem1/ExampleItem1';
-import { ExampleItem2 } from '../ExampleItem2/ExampleItem2';
+import { ExampleItem1 } from '../mocks/ExampleItem1/ExampleItem1';
+import { ExampleItem2 } from '../mocks/ExampleItem2/ExampleItem2';
 import { createApplySelector } from '../helper';
-
-import { ExampleCompositions } from '../mockItems';
+import { normalizrEntities } from '../mocks/normalizrEntities';
 import { SLICE1_TYPE, SLICE2_TYPE, STATE_TYPE, STORE_TYPE } from '../TestTypes';
 
 describe('TSOR Store', () => {
@@ -20,13 +19,12 @@ describe('TSOR Store', () => {
   beforeEach(() => {
     slice1 = new TSOR_SLICE<ExampleItem1, STATE_TYPE>(
       ExampleItem1,
-
-      ExampleCompositions,
+      normalizrEntities,
     );
 
     slice2 = new TSOR_SLICE<ExampleItem2, STATE_TYPE>(
       ExampleItem2,
-      ExampleCompositions,
+      normalizrEntities,
     );
 
     const reducer = combineReducers({
@@ -143,30 +141,33 @@ describe('TSOR Store', () => {
   });
   it('can use all http methods');
   it('can resolve compositions - with empty store', async () => {
-    // TODO Fix me !
-    /* await store.dispatch(slice1.getActions().get());
-    const item = slice2.selectors.selectById(store.getState(), '1');
-    expect(item).to.haveOwnProperty('description', 12); */
-  });
-  it('can resolve compositions - with full store', async () => {
-    // TODO Fix me !
-    /* await store.dispatch(slice2.getActions().get());
     await store.dispatch(slice1.getActions().get());
     const item = slice2.selectors.selectById(store.getState(), '1');
-    expect(item).to.haveOwnProperty('description', 12); */
+    expect(item).to.haveOwnProperty('description', 12);
+  });
+  it('can resolve compositions - with full store', async () => {
+    await store.dispatch(slice2.getActions().get());
+    await store.dispatch(slice1.getActions().get());
+    const item = slice2.selectors.selectById(store.getState(), '1');
+    expect(item).to.haveOwnProperty('description', 12);
   });
   it('can resolve compositions - with 1:1 composition', async () => {
-    // TODO Fix me !
-    /* await store.dispatch(slice2.getActions().get());
+    await store.dispatch(slice2.getActions().get());
     const item = slice1.selectors.selectById(store.getState(), '2');
-    expect(item).to.haveOwnProperty('description', 'Test 2'); */
+    expect(item).to.haveOwnProperty('description', 'Test 2');
   });
+  // TODO: Not Tested yet
   it('can interact with settings');
-  // To Implement
-  it('caches only IDs for a filter');
-  it('invalidates the cache (by being smart)');
   it('uses the authentication magic of the Cloud SDK');
   it('uses normalizr to normalize compositions');
+
+  // TODO: Not Implemented yet
+  it('caches only IDs for a filter');
+  it('invalidates the cache (by being smart)');
   it("doesn't create errors when using uppercase properties");
   it('generates const _entityName s');
+  it('could use redux-mock-store to better do redux tests');
+  it(
+    'can use GetByFilter, because I merged the 360 Dashboard Version in this one!',
+  );
 });

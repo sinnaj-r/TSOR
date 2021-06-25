@@ -33,7 +33,7 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any>> {
 
   constructor(
     constructable: Constructable<T>,
-    compositionMap: CompositionMapType = { compositions: {}, apiNames: {} },
+    compositionMap: CompositionMapType = {},
   ) {
     // eslint-disable-next-line no-underscore-dangle
     const routeName = constructable._entityName;

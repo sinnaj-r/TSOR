@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { TSOR_SLICE } from '../../src/TSOR_SLICE';
-import { ExampleItem1 } from '../ExampleItem1/ExampleItem1';
+import { ExampleItem1 } from '../mocks/ExampleItem1/ExampleItem1';
 
 describe('TSOR Store', () => {
   it('can create an slice', () => {
