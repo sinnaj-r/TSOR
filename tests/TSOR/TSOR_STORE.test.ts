@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 /* eslint-disable func-names */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable max-lines */
@@ -206,16 +207,24 @@ describe('TSOR Store', function () {
     expect(store.getState().ExampleItem1.loading).to.equal('pending');
     await req;
   });
+  it('throws errors on writing http methods', async function () {
+    expect(
+      store.dispatch(slice2.getActions().patch({ id: '1' })),
+    ).to.be.rejectedWith('Not Implemented!');
+    expect(
+      store.dispatch(slice2.getActions().post({} as any)),
+    ).to.be.rejectedWith('Not Implemented!');
+    expect(
+      store.dispatch(slice2.getActions().deleteById('1')),
+    ).to.be.rejectedWith('Not Implemented!');
+  });
   // TODO: Not Tested yet
   it('uses the authentication magic of the Cloud SDK');
-  it('can use GetByFilter');
-
   // TODO: Not Implemented yet
-  it('can use all http methods');
+
   it('caches only IDs for a filter');
   it('invalidates the cache (by being smart)');
   it("doesn't create errors when using uppercase properties");
   it('generates const _entityName s');
-  it('could use redux-mock-store to better do redux tests');
   it('can generate documentation for the API');
 });
