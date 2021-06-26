@@ -243,6 +243,16 @@
     "@types/object-path" "^0.11.0"
     object-path "^0.11.5"
 
+"@epicbp2020/cloud-sdk-normalizr@^1.0.0":
+  version "1.0.0"
+  resolved "https://gitlab.hpi.de/api/v4/projects/4511/packages/npm/@epicbp2020/cloud-sdk-normalizr/-/@epicbp2020/cloud-sdk-normalizr-1.0.0.tgz#e6531f1236d1b09384afc3cec1bf00eb56467f80"
+  integrity sha1-5lMfEjbRsJOEr8POwb8A61ZGf4A=
+  dependencies:
+    "@sap-cloud-sdk/core" "^1.45.0"
+    "@types/node" "^15.12.4"
+    "@types/object-path" "^0.11.0"
+    normalizr "^3.6.1"
+
 "@eslint/eslintrc@^0.4.2":
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.4.2.tgz#f63d0ef06f5c0c57d76c4ab5f63d3835c51b0179"

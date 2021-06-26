@@ -47,9 +47,9 @@ describe('TSOR Store', function () {
 
     const reducer = combineReducers({
       // eslint-disable-next-line no-underscore-dangle
-      [ExampleItem1._entityName]: slice1.reducer,
+      [ExampleItem1._entityName]: slice1._reducer,
       // eslint-disable-next-line no-underscore-dangle
-      [ExampleItem2._entityName]: slice2.reducer,
+      [ExampleItem2._entityName]: slice2._reducer,
       settings: settingsSlice.reducer,
     });
     store = new TSOR_STORE(reducer);
@@ -79,13 +79,13 @@ describe('TSOR Store', function () {
   it('can get items & add them to the store', async function () {
     await store.dispatch(slice1.getActions().get());
     expectNoError();
-    const item = slice1.selectors.selectById(store.getState(), '1');
+    const item = slice1.getSelectors().selectById(store.getState(), '1');
     expect(item).to.haveOwnProperty('description', 'Test 1');
   });
   it('can get a single item & add it to the store', async function () {
     await store.dispatch(slice1.getActions().getWithFilter({ key: '1' }));
     expectNoError();
-    const item = slice1.selectors.selectById(store.getState(), '1');
+    const item = slice1.getSelectors().selectById(store.getState(), '1');
     expect(item).to.haveOwnProperty('description', 'Test 1');
   });
   it('sets correct error', async function () {
@@ -152,8 +152,8 @@ describe('TSOR Store', function () {
   it('can setAll', async function () {
     await store.dispatch(slice1.getActions().get());
     expectNoError();
-    const item1Before = slice1.selectors.selectById(store.getState(), '1')!;
-    const item2Before = slice1.selectors.selectById(store.getState(), '2')!;
+    const item1Before = slice1._selectors.selectById(store.getState(), '1')!;
+    const item2Before = slice1._selectors.selectById(store.getState(), '2')!;
     expect(item1Before).to.haveOwnProperty('description', 'Test 1');
     expect(item2Before).to.haveOwnProperty('description', 'Test 2');
 
@@ -162,8 +162,8 @@ describe('TSOR Store', function () {
       slice1.getActions().setAll([{ ...item2Before, id: '1' } as any]),
     );
 
-    const item1After = slice1.selectors.selectById(store.getState(), '1')!;
-    const item2After = slice1.selectors.selectById(store.getState(), '2')!;
+    const item1After = slice1._selectors.selectById(store.getState(), '1')!;
+    const item2After = slice1._selectors.selectById(store.getState(), '2')!;
     expect(item2Before).to.deep.equal(item2After);
     expect(item1After.description).to.equal(item2Before.description);
     expect(item1After.num1).to.not.equal(item1Before.num1);
@@ -171,18 +171,18 @@ describe('TSOR Store', function () {
 
   it('can resolve compositions - with empty store', async function () {
     await store.dispatch(slice1.getActions().get());
-    const item = slice2.selectors.selectById(store.getState(), '1');
+    const item = slice2._selectors.selectById(store.getState(), '1');
     expect(item).to.haveOwnProperty('description', 12);
   });
   it('can resolve compositions - with full store', async function () {
     await store.dispatch(slice2.getActions().get());
     await store.dispatch(slice1.getActions().get());
-    const item = slice2.selectors.selectById(store.getState(), '1');
+    const item = slice2._selectors.selectById(store.getState(), '1');
     expect(item).to.haveOwnProperty('description', 12);
   });
   it('can resolve compositions - with 1:1 composition', async function () {
     await store.dispatch(slice2.getActions().get());
-    const item = slice1.selectors.selectById(store.getState(), '2');
+    const item = slice1._selectors.selectById(store.getState(), '2');
     expect(item).to.haveOwnProperty('description', 'Test 2');
   });
   it('can set settings', async function () {
@@ -244,9 +244,14 @@ describe('TSOR Store', function () {
   // - Move Normalizr Config to Store
   // - Make Settings Slice Nice
   // - Konzept für react-redux überlegen; Exportieren wir den `Provider` ?
-  // - SEHR WICHTIG: `| null` von den Typen entfernen!
-  // - SEHR WICHTIG: Selectoren bereitstellen, die denormalisieren! (Uff)
-  // - Override des Entity Names erlauben (zumindest für den State-Namen)
   // - Automatisches composen des States (möglich u.A. über die Entity Name)
+  // - moment & big number deaktivierbar machen!
+
+  // - SEHR WICHTIG: Selectoren bereitstellen, die denormalisieren! (Uff)
+  // - SEHR WICHTIG - Override des Entity Names erlauben (zumindest für den State-Namen)
   // - SEHR WICHTIG: _defaultServicePath mit dem richtigen Pfad füllen!
+  // - SEHR WICHTIG: Normalizr nur für typen im State! (Idee: Generierung der Config in den TSOR Store verschieben!)
+
+  // DONE
+  // - SEHR WICHTIG: `| null` von den Typen entfernen!
 });

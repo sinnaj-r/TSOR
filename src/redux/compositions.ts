@@ -26,7 +26,13 @@ export const resolveComposition = <
 ) => {
   const normalizedData = normalize(
     items,
-    new schema.Array(compositionMap[apiName]),
+    new schema.Array(
+      compositionMap[apiName],
+      (value: any, parent: any, key: string) => {
+        console.log(value, parent, key);
+        return key;
+      },
+    ),
   );
   for (const [key, value] of Object.entries(normalizedData.entities)) {
     dispatch({

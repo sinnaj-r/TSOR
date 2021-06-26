@@ -37,7 +37,8 @@ export const createSettingsSlice = <S extends SettingsState>(initialState: S) =>
       set<Path extends string>(
         state: Draft<S>,
         action: PayloadAction<{
-          path: Function.AutoPath<S, Path>;
+          // TODO Use Autopath
+          path: Path; // Function.AutoPath<S, Path>;
           value: ValueOf<typeof state>;
         }>,
       ) {

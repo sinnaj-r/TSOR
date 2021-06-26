@@ -1,8 +1,10 @@
 import {
   Action,
+  combineReducers,
   configureStore,
   getDefaultMiddleware,
   Reducer,
+  ReducersMapObject,
   Store,
   ThunkDispatch,
 } from '@reduxjs/toolkit';
@@ -19,13 +21,29 @@ import {
 import { PersistPartial } from 'redux-persist/es/persistReducer';
 import { Persistor } from 'redux-persist/es/types';
 import storage from 'redux-persist/lib/storage';
+import { SliceMapObject } from './types/TSOR-Types';
 
 const persistConfig = {
   key: 'root',
   storage,
 };
 
-export class TSOR_STORE<S, A extends Action<any>> {
+const sliceMapToReducer = <
+  S extends Record<string, any>,
+  A extends Action<any>,
+>(
+  slices: SliceMapObject<S, A>,
+): ReducersMapObject<S, A> => {
+  const sliceEntries = Object.keys(slices) as (keyof S)[];
+
+  // TODO Fix Type
+  const reducerMap = Object.fromEntries(
+    sliceEntries.map((k) => [k, slices[k].getReducer()]),
+  ) as unknown as ReducersMapObject<S, A>;
+  return reducerMap;
+};
+
+export class TSOR_STORE<S extends Record<string, any>, A extends Action<any>> {
   persistor: Persistor;
 
   reducer: Reducer<S & PersistPartial, A>;
@@ -34,7 +52,9 @@ export class TSOR_STORE<S, A extends Action<any>> {
 
   dispatch: ThunkDispatch<S, void, A>;
 
-  constructor(reducer: Reducer<S, A>) {
+  constructor(slices: SliceMapObject<S, A>) {
+    const reducer = combineReducers(sliceMapToReducer<S, A>(slices));
+
     const resettableRootReducer = (state: any, action: any) => {
       if (action.type === 'store/reset') {
         storage.removeItem('persist:root');
