@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr';
 import { Dispatch } from 'redux';
 import { createSchema } from '@epicbp2020/cloud-sdk-normalizr';
-import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
+import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { IDObject } from '../types/IDObject';
 
 /**
@@ -16,6 +16,7 @@ import { IDObject } from '../types/IDObject';
  */
 export const resolveComposition = <
   T extends IDObject,
+  // eslint-disable-next-line unused-imports/no-unused-vars
   K extends string,
   D extends Dispatch,
 >(

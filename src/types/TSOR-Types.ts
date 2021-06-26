@@ -4,6 +4,7 @@ import { AsyncActionsType } from '../redux/createAsyncThunksForAPI';
 import { GenericReducers } from './GenericReducers';
 import { IDObject } from './IDObject';
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 export type SliceMapObject<S = any, A extends Action = Action> = {
   [K in keyof S]: I_TSOR_SLICE<any, S, S[K]>;
 };
