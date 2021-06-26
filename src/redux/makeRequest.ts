@@ -20,7 +20,7 @@ export class RequestError extends Error {
  * @template T
  * @param {AxiosRequestConfig['method']} method The HTTP Method
  * @param {RouteKeyType} route The Route (see the ROUTES-Object)
- * @param {Partial<QueryOptions<T>>} query An Query-Object in the format of the 'odata-query' package
+ * @param {QueryOptions<T>} query An Query-Object in the format of the 'odata-query' package
  * @param {*} [data]
  * @returns
  */

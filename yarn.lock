@@ -232,12 +232,13 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@epicbp2020/cloud-sdk-json-query@^1.0.1":
-  version "1.0.1"
-  resolved "https://gitlab.hpi.de/api/v4/projects/4505/packages/npm/@epicbp2020/cloud-sdk-json-query/-/@epicbp2020/cloud-sdk-json-query-1.0.1.tgz#cd732e48d577a059f891c62a6e523fe11acbb4df"
-  integrity sha1-zXMuSNV3oFn4kcYqblI/4RrLtN8=
+"@epicbp2020/cloud-sdk-json-query@^1.0.2":
+  version "1.0.2"
+  resolved "https://gitlab.hpi.de/api/v4/projects/4505/packages/npm/@epicbp2020/cloud-sdk-json-query/-/@epicbp2020/cloud-sdk-json-query-1.0.2.tgz#a11713b63ffdaebcf044a0ec8adb6db5948e3724"
+  integrity sha1-oRcTtj/9rrzwRKDsittttZSONyQ=
   dependencies:
     "@sap-cloud-sdk/core" "^1.45.0"
+    "@sap-cloud-sdk/util" "^1.46.0"
     "@types/node" "^15.12.4"
     "@types/object-path" "^0.11.0"
     object-path "^0.11.5"
@@ -577,6 +578,18 @@
   version "1.45.0"
   resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/util/-/util-1.45.0.tgz#2d17f1f0b467af74d3293fb1a8078b29de86e601"
   integrity sha512-Y2+p3zhx3nPPre16FS4ywxDaKLyUj3NgEkvWBPzrLxi6OWkvtmEBWVHAaz/bW2ipivUjuvPQB9j3vyBbYrIolQ==
+  dependencies:
+    axios "^0.21.1"
+    chalk "^4.1.0"
+    logform "^2.2.0"
+    promise.allsettled "^1.0.4"
+    voca "^1.4.0"
+    winston "^3.3.3"
+
+"@sap-cloud-sdk/util@^1.46.0":
+  version "1.46.0"
+  resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/util/-/util-1.46.0.tgz#7f2b84ad5f6fea172aebc8d831c011a7c1706bad"
+  integrity sha512-33nvfRQayZXNog3JLfhnJXW+EbX5V/OF4n7gdLy2rOPAw/SWPzOXIrVq9duIxpCgCXrE88l/nI1HvzUPofiCzw==
   dependencies:
     axios "^0.21.1"
     chalk "^4.1.0"

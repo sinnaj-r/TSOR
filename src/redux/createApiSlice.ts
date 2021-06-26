@@ -48,7 +48,7 @@ export const createApiSlice = <
       setFilter(state, action: PayloadAction<GenericSliceState<T>['filter']>) {
         // eslint-disable-next-line no-param-reassign
         // eslint-disable-next-line no-undef
-        (state.filter as Partial<QueryOptions<T>>) = action.payload;
+        (state.filter as QueryOptions<T>) = action.payload;
       },
       dismissError(state) {
         state.error = undefined;

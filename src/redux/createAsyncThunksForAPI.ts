@@ -42,12 +42,12 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       return data;
     },
   ),
-  getWithFilter: createAsyncThunk<T[], Partial<QueryOptions<T>>, { state: S }>(
+  getWithFilter: createAsyncThunk<T[], QueryOptions<T>, { state: S }>(
     `${apiName}/GET_WITH_FILTER`,
     async (filter, thunkAPI) => {
       // eslint-disable-next-line no-debugger
       const globalFilter = (thunkAPI.getState() as any)[apiName]
-        .filter as Partial<QueryOptions<T>>;
+        .filter as QueryOptions<T>;
       const { settings } = thunkAPI.getState() as any;
       const result = await makeRequest<typeof apiName, T, S>(
         constructable,
@@ -85,7 +85,7 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
 // TODO Get Type more intelligent
 export type AsyncActionsType<T extends Entity, S> = {
   get: AsyncThunk<T[], void, { state: S }>;
-  getWithFilter: AsyncThunk<T[], Partial<QueryOptions<T>>, { state: S }>;
+  getWithFilter: AsyncThunk<T[], QueryOptions<T>, { state: S }>;
   post: AsyncThunk<T[], T, { state: S }>;
   patch: AsyncThunk<
     T[],
