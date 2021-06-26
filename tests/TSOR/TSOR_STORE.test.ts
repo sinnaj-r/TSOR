@@ -245,4 +245,8 @@ describe('TSOR Store', function () {
   // - Make Settings Slice Nice
   // - Konzept für react-redux überlegen; Exportieren wir den `Provider` ?
   // - SEHR WICHTIG: `| null` von den Typen entfernen!
+  // - SEHR WICHTIG: Selectoren bereitstellen, die denormalisieren! (Uff)
+  // - Override des Entity Names erlauben (zumindest für den State-Namen)
+  // - Automatisches composen des States (möglich u.A. über die Entity Name)
+  // - SEHR WICHTIG: _defaultServicePath mit dem richtigen Pfad füllen!
 });
