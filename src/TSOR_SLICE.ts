@@ -28,9 +28,10 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
   constructor(
     constructable: Constructable<T>,
     compositionMap: CompositionMapType = {},
+    routeName = constructable._entityName,
   ) {
     // eslint-disable-next-line no-underscore-dangle
-    const routeName = constructable._entityName;
+
     const { adapter, actions, slice } = createApiSlice<T, S>(
       constructable,
       undefined,
