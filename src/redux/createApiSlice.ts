@@ -12,7 +12,6 @@ import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { createAsyncThunksForAPI } from './createAsyncThunksForAPI';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { GenericReducers } from '../types/GenericReducers';
-import { CompositionMapType } from './compositions';
 import { createExtraReducers } from './createExtraReducers';
 
 import { IDObject } from '../types/IDObject';
@@ -32,9 +31,8 @@ export const createApiSlice = <
 >(
   constructable: Constructable<T>,
   adapter = createAdapter<T>(),
-  compositionMap: CompositionMapType = {},
 ) => {
-  const actions = createAsyncThunksForAPI<T, S>(constructable, compositionMap);
+  const actions = createAsyncThunksForAPI<T, S>(constructable);
   const slice = createSlice({
     // eslint-disable-next-line no-underscore-dangle
     name: constructable._entityName,

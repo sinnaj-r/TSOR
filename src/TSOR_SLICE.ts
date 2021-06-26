@@ -2,7 +2,6 @@
 import { AnyAction, EntitySelectors, Reducer } from '@reduxjs/toolkit';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { IDObject } from './types/IDObject';
-import { CompositionMapType } from './redux/compositions';
 import { createApiSlice } from './redux/createApiSlice';
 import type {
   I_TSOR_SLICE,
@@ -27,7 +26,6 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
 
   constructor(
     constructable: Constructable<T>,
-    compositionMap: CompositionMapType = {},
     routeName = constructable._entityName,
   ) {
     // eslint-disable-next-line no-underscore-dangle
@@ -35,7 +33,6 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
     const { adapter, actions, slice } = createApiSlice<T, S>(
       constructable,
       undefined,
-      compositionMap,
     );
     this._reducer = slice.reducer;
     this._actions = actions;

@@ -3,17 +3,13 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable max-lines */
 import { expect } from 'chai';
-import { combineReducers } from 'redux';
-import {
-  createSettingsSlice,
-  selectSettingByPath,
-} from '../../src/redux/settings';
+import { selectSettingByPath } from '../../src/redux/settings';
+import { TSOR_SETTINGSLICE } from '../../src/TSOR_SETTINGSLICE';
 import { TSOR_SLICE } from '../../src/TSOR_SLICE';
 import { resetStoreAction, TSOR_STORE } from '../../src/TSOR_STORE';
 import { ExampleItem1 } from '../mocks/ExampleItem1/ExampleItem1';
 import { ExampleItem2 } from '../mocks/ExampleItem2/ExampleItem2';
 import { createApplySelector, expectRequestedUrlToInclude } from '../helper';
-import { normalizrEntities } from '../mocks/normalizrEntities';
 import {
   SETTINGSSLICE_TYPE,
   SLICE1_TYPE,
@@ -30,28 +26,22 @@ describe('TSOR Store', function () {
   let applySelector: ReturnType<typeof createApplySelector>;
 
   beforeEach(function () {
-    slice1 = new TSOR_SLICE<ExampleItem1, STATE_TYPE>(
-      ExampleItem1,
-      normalizrEntities,
-    );
+    slice1 = new TSOR_SLICE<ExampleItem1, STATE_TYPE>(ExampleItem1);
 
-    slice2 = new TSOR_SLICE<ExampleItem2, STATE_TYPE>(
-      ExampleItem2,
-      normalizrEntities,
-    );
+    slice2 = new TSOR_SLICE<ExampleItem2, STATE_TYPE>(ExampleItem2);
 
-    settingsSlice = createSettingsSlice({
+    settingsSlice = new TSOR_SETTINGSLICE({
       headers: {},
       url: 'http://localhost:80',
     });
 
-    const reducer = combineReducers({
+    const reducer = {
       // eslint-disable-next-line no-underscore-dangle
-      [ExampleItem1._entityName]: slice1._reducer,
+      [ExampleItem1._entityName]: slice1,
       // eslint-disable-next-line no-underscore-dangle
-      [ExampleItem2._entityName]: slice2._reducer,
-      settings: settingsSlice.reducer,
-    });
+      [ExampleItem2._entityName]: slice2,
+      settings: settingsSlice,
+    };
     store = new TSOR_STORE(reducer);
     applySelector = createApplySelector(store, slice1, slice2);
   });
@@ -132,19 +122,19 @@ describe('TSOR Store', function () {
     await store.dispatch(slice1.getActions().get());
     await store.dispatch(slice2.getActions().get());
 
-    expect(applySelector('selectTotal')).to.be.equal(2);
-    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(2);
+    expect(applySelector('selectTotal')).to.be.equal(3);
+    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(3);
     await store.dispatch(slice1.getActions().clear());
     expect(applySelector('selectTotal')).to.be.equal(0);
-    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(2);
+    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(3);
   });
 
   it('can reset store', async function () {
     await store.dispatch(slice1.getActions().get());
     await store.dispatch(slice2.getActions().get());
 
-    expect(applySelector('selectTotal')).to.be.equal(2);
-    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(2);
+    expect(applySelector('selectTotal')).to.be.equal(3);
+    expect(applySelector('selectTotal', undefined, 2)).to.be.equal(3);
     await store.dispatch(resetStoreAction());
     expect(applySelector('selectTotal')).to.be.equal(0);
     expect(applySelector('selectTotal', undefined, 2)).to.be.equal(0);
@@ -152,8 +142,12 @@ describe('TSOR Store', function () {
   it('can setAll', async function () {
     await store.dispatch(slice1.getActions().get());
     expectNoError();
-    const item1Before = slice1._selectors.selectById(store.getState(), '1')!;
-    const item2Before = slice1._selectors.selectById(store.getState(), '2')!;
+    const item1Before = slice1
+      .getSelectors()
+      .selectById(store.getState(), '1')!;
+    const item2Before = slice1
+      .getSelectors()
+      .selectById(store.getState(), '2')!;
     expect(item1Before).to.haveOwnProperty('description', 'Test 1');
     expect(item2Before).to.haveOwnProperty('description', 'Test 2');
 
@@ -162,8 +156,8 @@ describe('TSOR Store', function () {
       slice1.getActions().setAll([{ ...item2Before, id: '1' } as any]),
     );
 
-    const item1After = slice1._selectors.selectById(store.getState(), '1')!;
-    const item2After = slice1._selectors.selectById(store.getState(), '2')!;
+    const item1After = slice1.getSelectors().selectById(store.getState(), '1')!;
+    const item2After = slice1.getSelectors().selectById(store.getState(), '2')!;
     expect(item2Before).to.deep.equal(item2After);
     expect(item1After.description).to.equal(item2Before.description);
     expect(item1After.num1).to.not.equal(item1Before.num1);
@@ -171,25 +165,27 @@ describe('TSOR Store', function () {
 
   it('can resolve compositions - with empty store', async function () {
     await store.dispatch(slice1.getActions().get());
-    const item = slice2._selectors.selectById(store.getState(), '1');
-    expect(item).to.haveOwnProperty('description', 12);
+    const item = slice2.getSelectors().selectById(store.getState(), '1');
+    expect(item).to.haveOwnProperty('description', '12');
   });
   it('can resolve compositions - with full store', async function () {
     await store.dispatch(slice2.getActions().get());
     await store.dispatch(slice1.getActions().get());
-    const item = slice2._selectors.selectById(store.getState(), '1');
-    expect(item).to.haveOwnProperty('description', 12);
+    const item = slice2.getSelectors().selectById(store.getState(), '1');
+    expect(item).to.haveOwnProperty('description', '12');
   });
   it('can resolve compositions - with 1:1 composition', async function () {
     await store.dispatch(slice2.getActions().get());
-    const item = slice1._selectors.selectById(store.getState(), '2');
+    const item = slice1.getSelectors().selectById(store.getState(), '2');
     expect(item).to.haveOwnProperty('description', 'Test 2');
   });
   it('can set settings', async function () {
     const selectURL = selectSettingByPath('url');
     const oldUrl = selectURL(store.getState());
     const value = 'NOT_A_URL';
-    await store.dispatch(settingsSlice.actions.set({ path: 'url', value }));
+    await store.dispatch(
+      settingsSlice.getActions().set({ path: 'url', value }),
+    );
     const newUrl = selectURL(store.getState());
     expect(newUrl).to.equal(value);
     expect(newUrl).to.not.equal(oldUrl);
@@ -197,7 +193,7 @@ describe('TSOR Store', function () {
   it('can set multiple settings', async function () {
     const oldState = store.getState().settings;
     const value = { url: 'NOT_A_URL', headers: { test: 1 } };
-    await store.dispatch(settingsSlice.actions.setMultiple(value));
+    await store.dispatch(settingsSlice.getActions().setMultiple(value));
     const newState = store.getState().settings;
     expect(newState).to.deep.equal(value);
     expect(newState).to.not.deep.equal(oldState);

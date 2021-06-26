@@ -14,7 +14,7 @@ export const createApplySelector =
     } else {
       slice = slice2;
     }
-    const selector = slice.selectors[selectorName];
+    const selector = slice.getSelectors()[selectorName];
     const state = store.getState();
     return selector(state, id!);
   };

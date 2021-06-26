@@ -1,7 +1,8 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable global-require */
 /* eslint-disable import/export */
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable no-redeclare */
 /*
  * Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
  *
@@ -14,15 +15,22 @@ import {
   EntityV4,
   Field,
   NumberField,
+  OneToOneLink,
+  RequestBuilder,
   StringField,
 } from '@sap-cloud-sdk/core';
-import { ExampleItem2RequestBuilder } from './ExampleItem2RequestBuilder';
+import type {
+  ExampleItem1,
+  ExampleItem1Type,
+} from '../ExampleItem1/ExampleItem1';
 
 export interface ExampleItem2Type {
   id: string;
-  description?: string | null;
-  num1?: number | null;
-  num2?: number | null;
+  description?: string;
+  num1?: number;
+  num2?: number;
+  extraField?: string;
+  parent?: ExampleItem1Type | null;
 }
 
 /**
@@ -32,12 +40,12 @@ export class ExampleItem2 extends EntityV4 implements ExampleItem2Type {
   /**
    * Technical entity name for ExampleItem2.
    */
-  static _entityName = 'ExampleItem2' as const;
+  static readonly _entityName = 'ExampleItem2';
 
   /**
    * Default url path for the according service.
    */
-  static _defaultServicePath = '/tsor.example';
+  static readonly _defaultServicePath = '/tsor.example';
 
   /**
    * Id.
@@ -63,6 +71,17 @@ export class ExampleItem2 extends EntityV4 implements ExampleItem2Type {
   num2?: number;
 
   /**
+   * Extra Field.
+   * @nullable
+   */
+  extraField?: string;
+
+  /**
+   * One-to-one navigation property to the [[ExampleItem1]] entity.
+   */
+  parent?: ExampleItem1 | null;
+
+  /**
    * Returns an entity builder to construct instances of `ExampleItem2`.
    * @returns A builder that constructs instances of entity type `ExampleItem2`.
    */
@@ -70,12 +89,8 @@ export class ExampleItem2 extends EntityV4 implements ExampleItem2Type {
     return EntityV4.entityBuilder(ExampleItem2);
   }
 
-  /**
-   * Returns a request builder to construct requests for operations on the `ExampleItem2` entity type.
-   * @returns A `ExampleItem2` request builder.
-   */
-  static requestBuilder(): ExampleItem2RequestBuilder {
-    return new ExampleItem2RequestBuilder();
+  static requestBuilder(): RequestBuilder<ExampleItem2> {
+    throw new Error('RequestBuilder was not generated!');
   }
 
   /**
@@ -134,15 +149,38 @@ export namespace ExampleItem2 {
     'Edm.Int32',
   );
   /**
+   * Static representation of the [[extraField]] property for query construction.
+   * Use to reference this property in query operations such as 'select' in the fluent request API.
+   */
+  export const EXTRA_FIELD: StringField<ExampleItem2> = new StringField(
+    'extraField',
+    ExampleItem2,
+    'Edm.String',
+  );
+  /**
+   * Static representation of the one-to-one navigation property [[parent]] for query construction.
+   * Use to reference this property in query operations such as 'select' in the fluent request API.
+   */
+  export const PARENT: OneToOneLink<ExampleItem2, ExampleItem1> =
+    new OneToOneLink(
+      'parent',
+      ExampleItem2,
+      require('../ExampleItem1/ExampleItem1').ExampleItem1,
+    );
+  /**
    * All fields of the ExampleItem2 entity.
    */
   export const _allFields: Array<
-    StringField<ExampleItem2> | NumberField<ExampleItem2>
+    | StringField<ExampleItem2>
+    | NumberField<ExampleItem2>
+    | OneToOneLink<ExampleItem2, ExampleItem1>
   > = [
     ExampleItem2.ID,
     ExampleItem2.DESCRIPTION,
     ExampleItem2.NUM_1,
     ExampleItem2.NUM_2,
+    ExampleItem2.EXTRA_FIELD,
+    ExampleItem2.PARENT,
   ];
   /**
    * All fields selector.
@@ -158,16 +196,15 @@ export namespace ExampleItem2 {
   /**
    * Mapping of all key field names to the respective static field property ExampleItem2.
    */
-  export const _keys: {
-    [keys: string]: Field<ExampleItem2>;
-  } = ExampleItem2._keyFields.reduce(
-    (
-      acc: { [keys: string]: Field<ExampleItem2> },
-      field: Field<ExampleItem2>,
-    ) => {
-      acc[field._fieldName] = field;
-      return acc;
-    },
-    {},
-  );
+  export const _keys: { [keys: string]: Field<ExampleItem2> } =
+    ExampleItem2._keyFields.reduce(
+      (
+        acc: { [keys: string]: Field<ExampleItem2> },
+        field: Field<ExampleItem2>,
+      ) => {
+        acc[field._fieldName] = field;
+        return acc;
+      },
+      {},
+    );
 }

@@ -5,12 +5,11 @@ import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 
 import { IDObject } from '../types/IDObject';
 
-import { CompositionMapType, resolveComposition } from './compositions';
+import { resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 
 export const createAsyncThunksForAPI = <T extends IDObject, S>(
   constructable: Constructable<T>,
-  compositionMap: CompositionMapType,
   // eslint-disable-next-line no-underscore-dangle
   apiName = constructable._entityName,
 ): AsyncActionsType<T, S> => ({
@@ -35,9 +34,8 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       const data = resolveComposition(
         thunkAPI.dispatch,
         result,
-        // TODO Type
-        apiName as string,
-        compositionMap,
+        constructable,
+        Object.keys(thunkAPI.getState()),
       );
       return data;
     },
@@ -59,9 +57,8 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       const data = resolveComposition(
         thunkAPI.dispatch,
         result,
-        // TODO Type
-        apiName as string,
-        compositionMap,
+        constructable,
+        Object.keys(thunkAPI.getState()),
       );
       return data;
     },

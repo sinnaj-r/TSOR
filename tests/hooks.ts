@@ -5,6 +5,7 @@ import {
 
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import { GetAllRequestBuilderV4 } from '@sap-cloud-sdk/core';
 import { ExampleItem1Data, ExampleItem2Data } from './mocks/mockItems';
 import { ExampleItem1 } from './mocks/ExampleItem1/ExampleItem1';
 import { ExampleItem2 } from './mocks/ExampleItem2/ExampleItem2';
@@ -18,7 +19,6 @@ const destination = {
 
 export const mochaHooks = {
   beforeAll() {
-    console.log("I've just added the hooks");
     this.getByKeyReq = mockGetRequest(
       {
         responseBody: ExampleItem1Data[0],
@@ -51,7 +51,7 @@ export const mochaHooks = {
     this.countReq = mockCountRequest(
       destination,
       5,
-      ExampleItem1.requestBuilder().getAll() as any,
+      new GetAllRequestBuilderV4(ExampleItem1 as any) as any,
     );
 
     this.get1Req = mockGetRequest(
@@ -70,6 +70,7 @@ export const mochaHooks = {
       },
       ExampleItem2 as any,
     ).persist();
+    console.log("I've just added the hooks");
   },
 };
 // http://localhost/tsor.example/ExampleItem1(id=%2742%27)?$format=json

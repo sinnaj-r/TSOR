@@ -1,8 +1,8 @@
-import { normalize, schema } from 'normalizr';
+import { normalize } from 'normalizr';
 import { Dispatch } from 'redux';
+import { createSchema } from '@epicbp2020/cloud-sdk-normalizr';
+import { Constructable } from '../../../cloud-sdk-js/packages/core/dist';
 import { IDObject } from '../types/IDObject';
-
-export type CompositionMapType = Record<string, schema.Entity>;
 
 /**
  * Resolve all compositions for a route.
@@ -21,24 +21,19 @@ export const resolveComposition = <
 >(
   dispatch: D,
   items: T[],
-  apiName: K,
-  compositionMap: CompositionMapType,
+  constructable: Constructable<T>,
+  entities: string[],
 ) => {
-  const normalizedData = normalize(
-    items,
-    new schema.Array(
-      compositionMap[apiName],
-      (value: any, parent: any, key: string) => {
-        console.log(value, parent, key);
-        return key;
-      },
-    ),
-  );
+  const schema = createSchema(constructable, entities);
+  const normalizedData = normalize(items, schema);
   for (const [key, value] of Object.entries(normalizedData.entities)) {
     dispatch({
       type: `${key}/upsertMany`,
       payload: value,
     });
   }
-  return Object.values(normalizedData.entities[apiName] ?? {}) as T[];
+  return Object.values(
+    // eslint-disable-next-line no-underscore-dangle
+    normalizedData.entities[constructable._entityName] ?? {},
+  ) as T[];
 };
