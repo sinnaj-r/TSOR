@@ -243,10 +243,10 @@
     "@types/object-path" "^0.11.0"
     object-path "^0.11.5"
 
-"@epicbp2020/cloud-sdk-normalizr@^1.0.0":
-  version "1.0.0"
-  resolved "https://gitlab.hpi.de/api/v4/projects/4511/packages/npm/@epicbp2020/cloud-sdk-normalizr/-/@epicbp2020/cloud-sdk-normalizr-1.0.0.tgz#e6531f1236d1b09384afc3cec1bf00eb56467f80"
-  integrity sha1-5lMfEjbRsJOEr8POwb8A61ZGf4A=
+"@epicbp2020/cloud-sdk-normalizr@^1.0.1":
+  version "1.0.1"
+  resolved "https://gitlab.hpi.de/api/v4/projects/4511/packages/npm/@epicbp2020/cloud-sdk-normalizr/-/@epicbp2020/cloud-sdk-normalizr-1.0.1.tgz#10f09fa2ff4ed487e7efccaf0489c19ef707cf92"
+  integrity sha1-EPCfov9O1Ifn78yvBInBnvcHz5I=
   dependencies:
     "@sap-cloud-sdk/core" "^1.45.0"
     "@types/node" "^15.12.4"
