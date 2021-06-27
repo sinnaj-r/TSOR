@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { normalize } from 'normalizr';
 import { Dispatch } from 'redux';
 import { createSchema } from '@epicbp2020/cloud-sdk-normalizr';
@@ -30,13 +31,16 @@ export const resolveComposition = <
   const schema = createSchema(constructable, entities);
   const normalizedData = normalize(items, schema);
   for (const [key, value] of Object.entries(normalizedData.entities)) {
+    // Dont push the entitiy we are parsing right now
+    if (key === constructable._entityName) {
+      continue;
+    }
     dispatch({
       type: `${key}/upsertMany`,
       payload: value,
     });
   }
   return Object.values(
-    // eslint-disable-next-line no-underscore-dangle
     normalizedData.entities[constructable._entityName] ?? {},
   ) as T[];
 };
