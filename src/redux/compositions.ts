@@ -4,6 +4,8 @@ import { createSchema } from '@epicbp2020/cloud-sdk-normalizr';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { IDObject } from '../types/IDObject';
 
+// TODO: I should remember my calls to createSchema, as they are quite expensive!
+
 /**
  * Resolve all compositions for a route.
  *
