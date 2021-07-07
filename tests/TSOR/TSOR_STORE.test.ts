@@ -120,6 +120,28 @@ describe('TSOR Store', function () {
     );
     expect(await result).to.be.true;
   });
+  it('can use getWithFilter with merged filter', async function () {
+    await store.dispatch(
+      slice1.getActions().setFilter({
+        filter: {
+          num1: 5,
+        },
+      }),
+    );
+    const result = expectRequestedUrlToInclude(
+      this.get1Req,
+      "$filter=(num1 eq 5 and description eq 'A Description')",
+    );
+
+    await store.dispatch(
+      slice1.getActions().getWithFilter({
+        filter: {
+          description: 'A Description',
+        },
+      }),
+    );
+    expect(await result).to.be.true;
+  });
   it('can clear', async function () {
     await store.dispatch(slice1.getActions().get());
     await store.dispatch(slice2.getActions().get());

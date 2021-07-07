@@ -7,6 +7,7 @@ import { IDObject } from '../types/IDObject';
 
 import { resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
+import { mergeFilter } from './mergeFilter';
 
 export const createAsyncThunksForAPI = <T extends IDObject, S>(
   constructable: Constructable<T>,
@@ -47,10 +48,12 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
       const globalFilter = (thunkAPI.getState() as any)[apiName]
         .filter as QueryOptions<T>;
       const { settings } = thunkAPI.getState() as any;
+
+      const mergedFilter = mergeFilter(globalFilter, filter);
+
       const result = await makeRequest<typeof apiName, T, S>(
         constructable,
-        { ...globalFilter, ...filter },
-
+        mergedFilter,
         settings as any,
       );
 
