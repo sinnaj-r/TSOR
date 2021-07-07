@@ -47,13 +47,15 @@ describe('TSOR Store', function () {
   });
 
   const expectNoError = function () {
-    expect(store.getState().ExampleItem1.error).to.be.undefined;
-    expect(store.getState().ExampleItem1.loading).to.equal('idle');
+    expect(slice1.getSelectors().selectError(store.getState())).to.be.undefined;
+    expect(slice1.getSelectors().selectIsIdling(store.getState())).to.be.true;
   };
 
   const checkForError = (errMsg: string) => {
-    expect(store.getState().ExampleItem1.error?.message).to.equal(errMsg);
-    expect(store.getState().ExampleItem1.loading).to.equal('rejected');
+    expect(
+      slice1.getSelectors().selectError(store.getState())?.message,
+    ).to.equal(errMsg);
+    expect(slice1.getSelectors().selectIsRejected(store.getState())).to.be.true;
   };
 
   it('can create an store', function () {
@@ -200,7 +202,7 @@ describe('TSOR Store', function () {
   });
   it('sets pending correct', async function () {
     const req = store.dispatch(slice1.getActions().getWithFilter({ key: '2' }));
-    expect(store.getState().ExampleItem1.loading).to.equal('pending');
+    expect(slice1.getSelectors().selectIsPending(store.getState())).to.be.true;
     await req;
   });
   it('throws errors on writing http methods', async function () {
@@ -247,6 +249,8 @@ describe('TSOR Store', function () {
   // - SEHR WICHTIG - Override des Entity Names erlauben (zumindest für den State-Namen)
   // - SEHR WICHTIG: _defaultServicePath mit dem richtigen Pfad füllen!
   // - SEHR WICHTIG: Normalizr nur für typen im State! (Idee: Generierung der Config in den TSOR Store verschieben!)
+  // - loading, ... als Enum Verpacken
+  // - Loading Selektoren
 
   // DONE
   // - SEHR WICHTIG: `| null` von den Typen entfernen!

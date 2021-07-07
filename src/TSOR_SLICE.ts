@@ -1,5 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import { AnyAction, EntitySelectors, Reducer } from '@reduxjs/toolkit';
+import {
+  AnyAction,
+  createSelector,
+  EntitySelectors,
+  Reducer,
+} from '@reduxjs/toolkit';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { IDObject } from './types/IDObject';
 import { createApiSlice } from './redux/createApiSlice';
@@ -50,6 +55,38 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
   }
 
   getSelectors() {
-    return this._selectors;
+    const selectLoadingStatus = createSelector(
+      (state: S) => (state[this.routeKey] as GenericSliceState<T>).loading,
+      (loading) => loading,
+    );
+
+    const selectIsPending = createSelector(
+      selectLoadingStatus,
+      (loading) => loading === 'pending',
+    );
+
+    const selectIsRejected = createSelector(
+      selectLoadingStatus,
+      (loading) => loading === 'rejected',
+    );
+
+    const selectIsIdling = createSelector(
+      selectLoadingStatus,
+      (loading) => loading === 'idle',
+    );
+
+    const selectError = createSelector(
+      (state: S) => (state[this.routeKey] as GenericSliceState<T>).error,
+      (error) => error,
+    );
+
+    return {
+      ...this._selectors,
+      selectIsPending,
+      selectError,
+      selectIsRejected,
+      selectIsIdling,
+      selectLoadingStatus,
+    };
   }
 }

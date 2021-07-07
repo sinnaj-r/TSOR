@@ -1,7 +1,12 @@
-import { CaseReducerActions, EntitySelectors } from '@reduxjs/toolkit';
+import {
+  CaseReducerActions,
+  EntitySelectors,
+  SerializedError,
+} from '@reduxjs/toolkit';
 import { Action, ActionCreator, AnyAction, Reducer } from 'redux';
 import { AsyncActionsType } from '../redux/createAsyncThunksForAPI';
 import { GenericReducers } from './GenericReducers';
+import { GenericSliceState } from './GenericSliceState';
 import { IDObject } from './IDObject';
 
 // eslint-disable-next-line unused-imports/no-unused-vars
@@ -12,6 +17,17 @@ export interface Selectors<G> {
   [key: string]: (state: G, ...args: any[]) => any;
 }
 export type Actions<A> = Record<string, ActionCreator<A>>;
+
+export interface I_TSOR_SELECTORS<
+  T extends IDObject,
+  S extends Record<string, any>,
+> {
+  selectIsPending: (state: S) => boolean;
+  selectIsRejected: (state: S) => boolean;
+  selectIsIdling: (state: S) => boolean;
+  selectLoadingStatus: (state: S) => GenericSliceState<T>['loading'];
+  selectError: (state: S) => SerializedError | undefined;
+}
 
 export interface I_TSOR_SLICE<
   T extends IDObject,
@@ -29,7 +45,9 @@ export interface I_TSOR_SLICE<
   routeKey: string;
   getActions(): Record<string, ActionCreator<any>>;
   getReducer(): I_TSOR_SLICE<T, S, G>['_reducer'];
-  getSelectors(): I_TSOR_SLICE<T, S, G>['_selectors'];
+  getSelectors():
+    | (I_TSOR_SLICE<T, S, G>['_selectors'] & I_TSOR_SELECTORS<T, S>)
+    | {};
 }
 
 export type TAsyncActions<T extends IDObject> = AsyncActionsType<T, any>;
