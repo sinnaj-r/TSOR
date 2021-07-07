@@ -1,6 +1,6 @@
 import { QueryOptions } from '@epicbp2020/cloud-sdk-json-query';
 import merge from 'deepmerge';
-import { Entity } from '../../../cloud-sdk-js/packages/core/dist/odata-v4';
+import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 
 export const mergeFilter = <T extends Entity>(
   f1: QueryOptions<T>,
