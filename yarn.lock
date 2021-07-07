@@ -232,10 +232,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@epicbp2020/cloud-sdk-json-query@^1.0.3":
-  version "1.0.3"
-  resolved "https://gitlab.hpi.de/api/v4/projects/4505/packages/npm/@epicbp2020/cloud-sdk-json-query/-/@epicbp2020/cloud-sdk-json-query-1.0.3.tgz#bc0259850efabfbe05de35282d4d159b21701f2f"
-  integrity sha1-vAJZhQ76v74F3jUoLU0VmyFwHy8=
+"@epicbp2020/cloud-sdk-json-query@^1.0.4":
+  version "1.0.4"
+  resolved "https://gitlab.hpi.de/api/v4/projects/4505/packages/npm/@epicbp2020/cloud-sdk-json-query/-/@epicbp2020/cloud-sdk-json-query-1.0.4.tgz#6ea4f64cd7cb1558d60dcabea4fab75d66970f3a"
+  integrity sha1-bqT2TNfLFVjWDcq+pPq3XWaXDzo=
   dependencies:
     "@sap-cloud-sdk/core" "^1.45.0"
     "@sap-cloud-sdk/util" "^1.46.0"

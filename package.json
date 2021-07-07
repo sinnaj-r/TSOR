@@ -7,7 +7,7 @@
   "license": "All Rights Reserved",
   "private": false,
   "dependencies": {
-    "@epicbp2020/cloud-sdk-json-query": "^1.0.3",
+    "@epicbp2020/cloud-sdk-json-query": "^1.0.4",
     "@epicbp2020/cloud-sdk-normalizr": "^1.0.1",
     "@reduxjs/toolkit": "^1.5.1",
     "@sap-cloud-sdk/core": "^1.45.0",
