@@ -29,7 +29,7 @@ export const createExtraReducers = <T extends IDObject, S>(
       (state, action) => {
         state.loading = 'idle';
         state.error = undefined;
-        adapter.setAll(state as GenericSliceState<T>, action.payload);
+        adapter.upsertMany(state as GenericSliceState<T>, action.payload);
       },
     );
     builder.addCase(
