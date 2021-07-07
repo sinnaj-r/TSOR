@@ -80,6 +80,11 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
       (error) => error,
     );
 
+    const selectFilter = createSelector(
+      (state: S) => (state[this.routeKey] as GenericSliceState<T>).filter,
+      (filter) => filter,
+    );
+
     return {
       ...this._selectors,
       selectIsPending,
@@ -87,6 +92,7 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
       selectIsRejected,
       selectIsIdling,
       selectLoadingStatus,
+      selectFilter,
     };
   }
 }

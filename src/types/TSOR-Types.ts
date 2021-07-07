@@ -27,6 +27,7 @@ export interface I_TSOR_SELECTORS<
   selectIsIdling: (state: S) => boolean;
   selectLoadingStatus: (state: S) => GenericSliceState<T>['loading'];
   selectError: (state: S) => SerializedError | undefined;
+  selectFilter: (state: S) => GenericSliceState<T>['filter'];
 }
 
 export interface I_TSOR_SLICE<
