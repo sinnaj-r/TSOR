@@ -55,7 +55,6 @@ export const createApiSlice = <
       clear(state) {
         state.error = undefined;
         state.loading = 'idle';
-        state.filter = {};
         adapter.removeAll(state as GenericSliceState<T>);
       },
       setAll(state, action: PayloadAction<T[]>) {
