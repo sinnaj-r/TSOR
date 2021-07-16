@@ -6,12 +6,12 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { Reducer, AnyAction } from 'redux';
-import { createSettingsSlice } from './redux/settings';
+import { createSettingsSlice, selectSettingByPath } from './redux/settings';
 import { ValueOf } from './types/Helper';
 
 import { IDObject } from './types/IDObject';
 import { SettingsState } from './types/SettingsState';
-import { I_TSOR_SLICE } from './types/TSOR-Types';
+import { ITSORSlice } from './types/TSOR-Types';
 
 export type SettingsReducerType<G extends SettingsState> = {
   set: CaseReducer<
@@ -28,18 +28,18 @@ export type SettingsActionType<G extends SettingsState> = CaseReducerActions<
   SettingsReducerType<G>
 >;
 
-export class TSOR_SETTINGSLICE<T extends IDObject, S, G extends SettingsState>
-  implements I_TSOR_SLICE<T, S, G>
+export class TSORSettingsSlice<T extends IDObject, S, G extends SettingsState>
+  implements ITSORSlice<T, S, G>
 {
   _actions: SettingsActionType<G>;
 
   _baseActions: {};
 
-  _selectors: {};
+  _selectors: { selectSettingByPath: typeof selectSettingByPath };
 
   _reducer: Reducer<G, AnyAction>;
 
-  routeKey: string;
+  routeName: string;
 
   constructor(initalState: G) {
     // eslint-disable-next-line no-underscore-dangle
@@ -49,8 +49,10 @@ export class TSOR_SETTINGSLICE<T extends IDObject, S, G extends SettingsState>
     this._reducer = slice.reducer;
     this._actions = slice.actions;
     this._baseActions = {};
-    this._selectors = {};
-    this.routeKey = routeName;
+    this._selectors = {
+      selectSettingByPath,
+    };
+    this.routeName = routeName;
   }
 
   getActions() {

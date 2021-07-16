@@ -43,10 +43,10 @@ const sliceMapToReducer = <
   return reducerMap;
 };
 
-export class TSOR_STORE<S extends Record<string, any>, A extends Action<any>> {
+export class TSORStore<S extends Record<string, any>, A extends Action<any>> {
   persistor: Persistor;
 
-  reducer: Reducer<S & PersistPartial, A>;
+  private reducer: Reducer<S & PersistPartial, A>;
 
   store: Store<ReturnType<Reducer<S & PersistPartial, A>>>;
 

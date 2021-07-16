@@ -4,9 +4,9 @@
 /* eslint-disable max-lines */
 import { expect } from 'chai';
 import { selectSettingByPath } from '../../src/redux/settings';
-import { TSOR_SETTINGSLICE } from '../../src/TSOR_SETTINGSLICE';
-import { TSOR_SLICE } from '../../src/TSOR_SLICE';
-import { resetStoreAction, TSOR_STORE } from '../../src/TSOR_STORE';
+import { TSORSettingsSlice } from '../../src/TSORSettingsSlice';
+import { TSORSlice } from '../../src/TSORSlice';
+import { resetStoreAction, TSORStore } from '../../src/TSORStore';
 import { ExampleItem1 } from '../mocks/ExampleItem1/ExampleItem1';
 import { ExampleItem2 } from '../mocks/ExampleItem2/ExampleItem2';
 import { createApplySelector, expectRequestedUrlToInclude } from '../helper';
@@ -26,11 +26,11 @@ describe('TSOR Store', function () {
   let applySelector: ReturnType<typeof createApplySelector>;
 
   beforeEach(function () {
-    slice1 = new TSOR_SLICE<ExampleItem1, STATE_TYPE>(ExampleItem1);
+    slice1 = new TSORSlice<ExampleItem1, STATE_TYPE>(ExampleItem1);
 
-    slice2 = new TSOR_SLICE<ExampleItem2, STATE_TYPE>(ExampleItem2);
+    slice2 = new TSORSlice<ExampleItem2, STATE_TYPE>(ExampleItem2);
 
-    settingsSlice = new TSOR_SETTINGSLICE({
+    settingsSlice = new TSORSettingsSlice({
       headers: {},
       url: 'http://localhost:80',
     });
@@ -42,7 +42,7 @@ describe('TSOR Store', function () {
       [ExampleItem2._entityName]: slice2,
       settings: settingsSlice,
     };
-    store = new TSOR_STORE(reducer);
+    store = new TSORStore(reducer);
     applySelector = createApplySelector(store, slice1, slice2);
   });
 
@@ -59,7 +59,7 @@ describe('TSOR Store', function () {
   };
 
   it('can create an store', function () {
-    expect(store).to.be.instanceOf(TSOR_STORE);
+    expect(store).to.be.instanceOf(TSORStore);
   });
   it('can use the selectors on an empty set', function () {
     expect(applySelector('selectAll')).to.be.empty;
@@ -270,10 +270,10 @@ describe('TSOR Store', function () {
   // - SEHR WICHTIG: Selectoren bereitstellen, die denormalisieren! (Uff)
   // - SEHR WICHTIG - Override des Entity Names erlauben (zumindest für den State-Namen)
   // - SEHR WICHTIG: _defaultServicePath mit dem richtigen Pfad füllen!
-  // - SEHR WICHTIG: Normalizr nur für typen im State! (Idee: Generierung der Config in den TSOR Store verschieben!)
   // - loading, ... als Enum Verpacken
-  // - Loading Selektoren
 
   // DONE
   // - SEHR WICHTIG: `| null` von den Typen entfernen!
+  // - SEHR WICHTIG: Normalizr nur für typen im State! (Idee: Generierung der Config in den TSOR Store verschieben!)
+  // - Loading Selektoren
 });

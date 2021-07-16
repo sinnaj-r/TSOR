@@ -5,13 +5,14 @@ import {
 } from '@reduxjs/toolkit';
 import { Action, ActionCreator, AnyAction, Reducer } from 'redux';
 import { AsyncActionsType } from '../redux/createAsyncThunksForAPI';
+import { selectSettingByPath } from '../redux/settings';
 import { GenericReducers } from './GenericReducers';
 import { GenericSliceState } from './GenericSliceState';
 import { IDObject } from './IDObject';
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 export type SliceMapObject<S = any, A extends Action = Action> = {
-  [K in keyof S]: I_TSOR_SLICE<any, S, S[K]>;
+  [K in keyof S]: ITSORSlice<any, S, S[K]>;
 };
 export interface Selectors<G> {
   [key: string]: (state: G, ...args: any[]) => any;
@@ -30,7 +31,7 @@ export interface I_TSOR_SELECTORS<
   selectFilter: (state: S) => GenericSliceState<T>['filter'];
 }
 
-export interface I_TSOR_SLICE<
+export interface ITSORSlice<
   T extends IDObject,
   S extends Record<string, any>,
   G,
@@ -43,12 +44,12 @@ export interface I_TSOR_SLICE<
 
   _reducer: Reducer<G, AnyAction>;
 
-  routeKey: string;
+  routeName: string;
   getActions(): Record<string, ActionCreator<any>>;
-  getReducer(): I_TSOR_SLICE<T, S, G>['_reducer'];
+  getReducer(): ITSORSlice<T, S, G>['_reducer'];
   getSelectors():
-    | (I_TSOR_SLICE<T, S, G>['_selectors'] & I_TSOR_SELECTORS<T, S>)
-    | {};
+    | (ITSORSlice<T, S, G>['_selectors'] & I_TSOR_SELECTORS<T, S>)
+    | { selectSettingByPath: typeof selectSettingByPath };
 }
 
 export type TAsyncActions<T extends IDObject> = AsyncActionsType<T, any>;

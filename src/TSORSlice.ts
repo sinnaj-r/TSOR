@@ -9,15 +9,15 @@ import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { IDObject } from './types/IDObject';
 import { createApiSlice } from './redux/createApiSlice';
 import type {
-  I_TSOR_SLICE,
+  ITSORSlice,
   TAsyncActions,
   TBaseActions,
   TActions,
 } from './types/TSOR-Types';
 import { GenericSliceState } from './types/GenericSliceState';
 
-export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
-  implements I_TSOR_SLICE<T, S, GenericSliceState<T>>
+export class TSORSlice<T extends IDObject, S extends Record<string, any> = any>
+  implements ITSORSlice<T, S, GenericSliceState<T>>
 {
   _actions: TAsyncActions<T>;
 
@@ -27,7 +27,7 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
 
   _reducer: Reducer<GenericSliceState<T>, AnyAction>;
 
-  routeKey: string;
+  routeName: string;
 
   constructor(
     constructable: Constructable<T>,
@@ -43,7 +43,7 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
     this._actions = actions;
     this._baseActions = slice.actions;
     this._selectors = adapter.getSelectors((state) => state[routeName]);
-    this.routeKey = routeName;
+    this.routeName = routeName;
   }
 
   getActions(): TActions<T> {
@@ -56,7 +56,7 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
 
   getSelectors() {
     const selectLoadingStatus = createSelector(
-      (state: S) => (state[this.routeKey] as GenericSliceState<T>).loading,
+      (state: S) => (state[this.routeName] as GenericSliceState<T>).loading,
       (loading) => loading,
     );
 
@@ -76,12 +76,12 @@ export class TSOR_SLICE<T extends IDObject, S extends Record<string, any> = any>
     );
 
     const selectError = createSelector(
-      (state: S) => (state[this.routeKey] as GenericSliceState<T>).error,
+      (state: S) => (state[this.routeName] as GenericSliceState<T>).error,
       (error) => error,
     );
 
     const selectFilter = createSelector(
-      (state: S) => (state[this.routeKey] as GenericSliceState<T>).filter,
+      (state: S) => (state[this.routeName] as GenericSliceState<T>).filter,
       (filter) => filter,
     );
 

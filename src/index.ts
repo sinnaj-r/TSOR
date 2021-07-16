@@ -1,5 +1,5 @@
-export { TSOR_SLICE } from './TSOR_SLICE';
-export { TSOR_SETTINGSLICE } from './TSOR_SETTINGSLICE';
-export { TSOR_STORE } from './TSOR_STORE';
+export { TSORSlice } from './TSORSlice';
+export { TSORSettingsSlice } from './TSORSettingsSlice';
+export { TSORStore } from './TSORStore';
 export { PersistGate } from 'redux-persist/integration/react';
 export { SettingsState } from './types/SettingsState';

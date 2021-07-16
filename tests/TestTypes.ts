@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
-import { TSOR_SLICE } from '../src/TSOR_SLICE';
-import { TSOR_SETTINGSLICE } from '../src/TSOR_SETTINGSLICE';
-import { TSOR_STORE } from '../src/TSOR_STORE';
+import { TSORSlice } from '../src/TSORSlice';
+import { TSORSettingsSlice } from '../src/TSORSettingsSlice';
+import { TSORStore } from '../src/TSORStore';
 import { GenericSliceState } from '../types/GenericSliceState';
 import { SettingsState } from '../types/SettingsState';
 import { ExampleItem1 } from './mocks/ExampleItem1/ExampleItem1';
@@ -12,10 +12,10 @@ export type STATE_TYPE = {
   ExampleItem2: GenericSliceState<ExampleItem2>;
   settings: SettingsState;
 };
-export type STORE_TYPE = TSOR_STORE<STATE_TYPE, AnyAction>;
-export type SLICE1_TYPE = TSOR_SLICE<ExampleItem1, STATE_TYPE>;
-export type SLICE2_TYPE = TSOR_SLICE<ExampleItem2, STATE_TYPE>;
-export type SETTINGSSLICE_TYPE = TSOR_SETTINGSLICE<
+export type STORE_TYPE = TSORStore<STATE_TYPE, AnyAction>;
+export type SLICE1_TYPE = TSORSlice<ExampleItem1, STATE_TYPE>;
+export type SLICE2_TYPE = TSORSlice<ExampleItem2, STATE_TYPE>;
+export type SETTINGSSLICE_TYPE = TSORSettingsSlice<
   any,
   STATE_TYPE,
   SettingsState
