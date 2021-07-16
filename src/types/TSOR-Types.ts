@@ -1,11 +1,11 @@
 import {
   CaseReducerActions,
   EntitySelectors,
+  OutputSelector,
   SerializedError,
 } from '@reduxjs/toolkit';
 import { Action, ActionCreator, AnyAction, Reducer } from 'redux';
 import { AsyncActionsType } from '../redux/createAsyncThunksForAPI';
-import { selectSettingByPath } from '../redux/settings';
 import { GenericReducers } from './GenericReducers';
 import { GenericSliceState } from './GenericSliceState';
 import { IDObject } from './IDObject';
@@ -40,7 +40,13 @@ export interface ITSORSlice<
 
   _baseActions: Actions<any>;
 
-  _selectors: EntitySelectors<T, S> | {};
+  _selectors:
+    | EntitySelectors<T, S>
+    | {
+        selectSettingByPath: (
+          path: any,
+        ) => OutputSelector<{ settings: G }, any, (res: G) => any>;
+      };
 
   _reducer: Reducer<G, AnyAction>;
 
@@ -49,7 +55,7 @@ export interface ITSORSlice<
   getReducer(): ITSORSlice<T, S, G>['_reducer'];
   getSelectors():
     | (ITSORSlice<T, S, G>['_selectors'] & I_TSOR_SELECTORS<T, S>)
-    | { selectSettingByPath: typeof selectSettingByPath };
+    | ITSORSlice<T, S, G>['_selectors'];
 }
 
 export type TAsyncActions<T extends IDObject> = AsyncActionsType<T, any>;

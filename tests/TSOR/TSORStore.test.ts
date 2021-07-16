@@ -3,7 +3,6 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable max-lines */
 import { expect } from 'chai';
-import { selectSettingByPath } from '../../src/redux/settings';
 import { TSORSettingsSlice } from '../../src/TSORSettingsSlice';
 import { TSORSlice } from '../../src/TSORSlice';
 import { resetStoreAction, TSORStore } from '../../src/TSORStore';
@@ -204,7 +203,7 @@ describe('TSOR Store', function () {
     expect(item).to.haveOwnProperty('description', 'Test 2');
   });
   it('can set settings', async function () {
-    const selectURL = selectSettingByPath('url');
+    const selectURL = settingsSlice.getSelectors().selectSettingByPath('url');
     const oldUrl = selectURL(store.getState());
     const value = 'NOT_A_URL';
     await store.dispatch(

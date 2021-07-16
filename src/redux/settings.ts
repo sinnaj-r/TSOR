@@ -15,19 +15,15 @@ export const settingsInitialState: SettingsState = {
   headers: {},
 };
 
-// TODO Create TSOR Settings Class
 // TODO Use Path Types for select Settings By Key
-export const selectSettingByPath = <
-  S extends SettingsState,
-  Path extends string,
->(
-  path: Function.AutoPath<S, Path>,
-) =>
-  createSelector(
-    (state: { settings: S }) => state.settings,
-    (settings): TSObject.Path<S, String.Split<Path, '.'>> =>
-      op.get(settings, path),
-  );
+export const createSelectSettingByPath =
+  <S extends SettingsState>() =>
+  <Path extends string>(path: Function.AutoPath<S, Path>) =>
+    createSelector(
+      (state: { settings: S }) => state.settings,
+      (settings): TSObject.Path<S, String.Split<Path, '.'>> =>
+        op.get(settings, path),
+    );
 
 export const createSettingsSlice = <S extends SettingsState>(initialState: S) =>
   createSlice({

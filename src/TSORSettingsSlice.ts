@@ -6,7 +6,11 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { Reducer, AnyAction } from 'redux';
-import { createSettingsSlice, selectSettingByPath } from './redux/settings';
+
+import {
+  createSelectSettingByPath,
+  createSettingsSlice,
+} from './redux/settings';
 import { ValueOf } from './types/Helper';
 
 import { IDObject } from './types/IDObject';
@@ -35,7 +39,9 @@ export class TSORSettingsSlice<T extends IDObject, S, G extends SettingsState>
 
   _baseActions: {};
 
-  _selectors: { selectSettingByPath: typeof selectSettingByPath };
+  _selectors = {
+    selectSettingByPath: createSelectSettingByPath<G>(),
+  };
 
   _reducer: Reducer<G, AnyAction>;
 
@@ -49,9 +55,6 @@ export class TSORSettingsSlice<T extends IDObject, S, G extends SettingsState>
     this._reducer = slice.reducer;
     this._actions = slice.actions;
     this._baseActions = {};
-    this._selectors = {
-      selectSettingByPath,
-    };
     this.routeName = routeName;
   }
 
