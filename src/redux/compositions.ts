@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import { normalize } from 'normalizr';
 import { Dispatch } from 'redux';
-import { createSchema } from '@epicbp2020/cloud-sdk-normalizr';
+import { createSchema, normalize } from 'cloud-sdk-normalizr';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { IDObject } from '../types/IDObject';
 
@@ -28,7 +27,7 @@ export const resolveComposition = <
   constructable: Constructable<T>,
   entities: string[],
 ) => {
-  const schema = createSchema(constructable, entities);
+  const schema = createSchema<T>(constructable, entities);
   const normalizedData = normalize(items, schema);
   for (const [key, value] of Object.entries(normalizedData.entities)) {
     // Dont push the entitiy we are parsing right now
