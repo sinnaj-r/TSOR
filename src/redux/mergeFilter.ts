@@ -1,4 +1,4 @@
-import { QueryOptions } from '@epicbp2020/cloud-sdk-json-query';
+import { QueryOptions } from 'cloud-sdk-json-query';
 import merge from 'deepmerge';
 import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 

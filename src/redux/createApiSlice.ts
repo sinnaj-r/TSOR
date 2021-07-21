@@ -6,7 +6,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { QueryOptions } from '@epicbp2020/cloud-sdk-json-query';
+import { QueryOptions } from 'cloud-sdk-json-query';
 
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { createAsyncThunksForAPI } from './createAsyncThunksForAPI';

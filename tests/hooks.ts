@@ -1,14 +1,10 @@
-import {
-  mockCountRequest,
-  mockGetRequest,
-} from '@sap-cloud-sdk/core/test/test-util/request-mocker';
-
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { GetAllRequestBuilderV4 } from '@sap-cloud-sdk/core';
 import { ExampleItem1Data, ExampleItem2Data } from './mocks/mockItems';
 import { ExampleItem1 } from './mocks/ExampleItem1/ExampleItem1';
 import { ExampleItem2 } from './mocks/ExampleItem2/ExampleItem2';
+import { mockCountRequest, mockGetRequest } from './RequestMocker';
 
 chai.use(chaiAsPromised);
 
