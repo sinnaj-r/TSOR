@@ -1,14 +1,19 @@
 import {
+  CaseReducer,
   CaseReducerActions,
+  Draft,
   EntitySelectors,
   OutputSelector,
+  PayloadAction,
   SerializedError,
 } from '@reduxjs/toolkit';
 import { Action, ActionCreator, AnyAction, Reducer } from 'redux';
 import { AsyncActionsType } from '../redux/createAsyncThunksForAPI';
 import { GenericReducers } from './GenericReducers';
 import { GenericSliceState } from './GenericSliceState';
+import { ValueOf } from './Helper';
 import { IDObject } from './IDObject';
+import { SettingsState } from './SettingsState';
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 export type SliceMapObject<S = any, A extends Action = Action> = {
@@ -65,3 +70,18 @@ export type TBaseActions<T extends IDObject> = CaseReducerActions<
 >;
 
 export type TActions<T extends IDObject> = TAsyncActions<T> & TBaseActions<T>;
+
+export type SettingsReducerType<G extends SettingsState> = {
+  set: CaseReducer<
+    Draft<G>,
+    PayloadAction<{
+      path: string;
+      value: ValueOf<Draft<G>>;
+    }>
+  >;
+  setMultiple: CaseReducer<G, PayloadAction<Partial<Draft<G>>>>;
+};
+
+export type SettingsActionType<G extends SettingsState> = CaseReducerActions<
+  SettingsReducerType<G>
+>;

@@ -105,6 +105,18 @@ describe('TSOR Store', function () {
     await store.dispatch(slice1.getActions().get());
     expect(await result).to.be.true;
   });
+  it('can select filter', async function () {
+    const filter = {
+      filter: {
+        description: 'Test',
+      },
+    };
+    await store.dispatch(slice1.getActions().setFilter(filter));
+
+    expect(slice1.getSelectors().selectFilter(store.getState())).to.deep.equal(
+      filter,
+    );
+  });
   it('can use getWithFilter', async function () {
     const result = expectRequestedUrlToInclude(
       this.get1Req,
@@ -257,22 +269,4 @@ describe('TSOR Store', function () {
   it("doesn't create errors when using uppercase properties");
   it('generates const _entityName s');
   it('can generate documentation for the API');
-
-  // TODO General Stuff
-  // - Create "getX" functions on TSOR Slice for everything else as well
-  // - Move Normalizr Config to Store
-  // - Make Settings Slice Nice
-  // - Konzept für react-redux überlegen; Exportieren wir den `Provider` ?
-  // - Automatisches composen des States (möglich u.A. über die Entity Name)
-  // - moment & big number deaktivierbar machen!
-
-  // - SEHR WICHTIG: Selectoren bereitstellen, die denormalisieren! (Uff)
-  // - SEHR WICHTIG - Override des Entity Names erlauben (zumindest für den State-Namen)
-  // - SEHR WICHTIG: _defaultServicePath mit dem richtigen Pfad füllen!
-  // - loading, ... als Enum Verpacken
-
-  // DONE
-  // - SEHR WICHTIG: `| null` von den Typen entfernen!
-  // - SEHR WICHTIG: Normalizr nur für typen im State! (Idee: Generierung der Config in den TSOR Store verschieben!)
-  // - Loading Selektoren
 });

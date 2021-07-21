@@ -1,8 +1,15 @@
+/* eslint-disable no-underscore-dangle */
 import { createRequest, QueryOptions } from 'cloud-sdk-json-query';
 import { Constructable } from '@sap-cloud-sdk/core/dist';
 import { Entity } from '@sap-cloud-sdk/core/dist/odata-v4';
 import { SettingsState } from '../types/SettingsState';
-
+/**
+ * A Custom Error Class, to be used if a Request Fails.
+ *
+ * @export
+ * @class RequestError
+ * @extends {Error}
+ */
 export class RequestError extends Error {
   errorCode: number | undefined;
 
@@ -16,13 +23,15 @@ export class RequestError extends Error {
 }
 
 /**
- * Execute a HTTP Request. Directly returns the result data.
- * @template T
- * @param {AxiosRequestConfig['method']} method The HTTP Method
- * @param {RouteKeyType} route The Route (see the ROUTES-Object)
- * @param {QueryOptions<T>} query An Query-Object in the format of the 'odata-query' package
- * @param {*} [data]
- * @returns
+ * Execute a HTTP Request via the SAP Cloud SDK
+ *
+ * @template K not used & deprecated
+ * @template T Type of the Entity
+ * @template S Type of the full State
+ * @param {Constructable<T>} constructable The SDK Entity
+ * @param {QueryOptions<T>} query The JSON-Query
+ * @param {SettingsState} settings The Settings used for the request
+ * @returns {Promise<T[]>} the resulting data as array (even if there's only one result)
  */
 // eslint-disable-next-line unused-imports/no-unused-vars
 export const makeRequest = async <K, T extends Entity, S>(
@@ -30,12 +39,9 @@ export const makeRequest = async <K, T extends Entity, S>(
   query: QueryOptions<T>,
   settings: SettingsState,
 ): Promise<T[]> => {
-  // TODO Types
   const { url, headers: additionalHeaders } = settings;
-  // TODO Dynamic Path
   try {
     let result = await createRequest<T>(constructable, query)
-      // eslint-disable-next-line no-underscore-dangle
       .setCustomServicePath(constructable._defaultServicePath || '/')
       .addCustomHeaders({
         ...additionalHeaders,
@@ -48,7 +54,7 @@ export const makeRequest = async <K, T extends Entity, S>(
       result = [result];
     }
 
-    // de-complex data for redux store
+    // A Somewhat hacky way, to remove all remaining complex types from response
     return JSON.parse(JSON.stringify(result));
   } catch (err) {
     // eslint-disable-next-line no-console

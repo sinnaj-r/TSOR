@@ -15,7 +15,16 @@ import type {
   TActions,
 } from './types/TSOR-Types';
 import { GenericSliceState } from './types/GenericSliceState';
-
+/**
+ * The TSORSlice contains all the data, a global filter and last error for a SDK Entity.
+ * It provides selectors and action for interacting with the entity.
+ *
+ * @export
+ * @class TSORSlice
+ * @implements {ITSORSlice<T, S, GenericSliceState<T>>}
+ * @template T The SDK Entity Type
+ * @template S The Type of the full State
+ */
 export class TSORSlice<T extends IDObject, S extends Record<string, any> = any>
   implements ITSORSlice<T, S, GenericSliceState<T>>
 {

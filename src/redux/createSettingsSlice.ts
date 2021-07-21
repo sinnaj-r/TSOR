@@ -24,7 +24,12 @@ export const createSelectSettingByPath =
       (settings): TSObject.Path<S, String.Split<Path, '.'>> =>
         op.get(settings, path),
     );
-
+/**
+ * Creates a Settings Slice
+ *
+ * @template S The Type of SettingsState
+ * @param {S} initialState The initial State
+ */
 export const createSettingsSlice = <S extends SettingsState>(initialState: S) =>
   createSlice({
     name: 'settings',

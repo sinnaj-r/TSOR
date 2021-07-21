@@ -8,7 +8,15 @@ import { IDObject } from '../types/IDObject';
 import { resolveComposition } from './compositions';
 import { makeRequest } from './makeRequest';
 import { mergeFilter } from './mergeFilter';
-
+/**
+ * Creates the Async Thunks (aka. async action creators) for the different HTTP Methods
+ *
+ * @template T The SDK Entity
+ * @template S The State Type
+ * @param {Constructable<T>} constructable The SDK Entity
+ * @param {*} [apiName=constructable._entityName] An optional apiName (if the Slice is not saved at the Entity Name)
+ * @returns {AsyncActionsType<T, S>}
+ */
 export const createAsyncThunksForAPI = <T extends IDObject, S>(
   constructable: Constructable<T>,
   // eslint-disable-next-line no-underscore-dangle
@@ -17,7 +25,6 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
   get: createAsyncThunk<T[], void, { state: S }>(
     `${apiName}/GET`,
     async (_, thunkAPI) => {
-      // eslint-disable-next-line no-debugger
       // TODO Types
       const filter = (thunkAPI.getState() as any)[apiName].filter as Partial<
         QueryOptions<T>
@@ -44,7 +51,6 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
   getWithFilter: createAsyncThunk<T[], QueryOptions<T>, { state: S }>(
     `${apiName}/GET_WITH_FILTER`,
     async (filter, thunkAPI) => {
-      // eslint-disable-next-line no-debugger
       const globalFilter = (thunkAPI.getState() as any)[apiName]
         .filter as QueryOptions<T>;
       const { settings } = thunkAPI.getState() as any;
@@ -82,7 +88,7 @@ export const createAsyncThunksForAPI = <T extends IDObject, S>(
     },
   ),
 });
-// TODO Get Type more intelligent
+
 export type AsyncActionsType<T extends Entity, S> = {
   get: AsyncThunk<T[], void, { state: S }>;
   getWithFilter: AsyncThunk<T[], QueryOptions<T>, { state: S }>;

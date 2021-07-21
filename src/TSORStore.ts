@@ -42,7 +42,14 @@ const sliceMapToReducer = <
   ) as unknown as ReducersMapObject<S, A>;
   return reducerMap;
 };
-
+/**
+ * The TSORStore is basicly a wrapper around a Redux Store, for easy usage with TSORSlices
+ *
+ * @export
+ * @class TSORStore
+ * @template S The State Type
+ * @template A The Actions Type
+ */
 export class TSORStore<S extends Record<string, any>, A extends Action<any>> {
   persistor: Persistor;
 

@@ -10,7 +10,7 @@ import { IDObject } from '../types/IDObject';
 import { GenericSliceState } from '../types/GenericSliceState';
 
 /**
- *  This Functions adds the Reducers of our ActionTypes to the HO API Slide.
+ *  This Functions adds the Reducers of the Thunks to the Higher Order API Slide.
  *
  * @template T
  * @param {string} apiName
